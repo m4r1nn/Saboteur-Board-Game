@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Saboteur</string>
+    <string name="host_button_text">HOST</string>
+    <string name="join_button_text">JOIN</string>
+    <string name="tutorial_button_text">TUTORIAL</string>
+    <string name="single_button_text">SINGLE PLAYER</string>
+    <string name="settings_button_text">SETTINGS</string>
+    <string name="exit_button_text">EXIT</string>
+    <string name="saboteur_image_description">saboteur image</string>
+    <string name="main_name_text">S\nA\nB\nO\nT\nE\nU\nR</string>
+</resources>
