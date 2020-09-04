@@ -3,5 +3,5 @@
     <color name="colorPrimary">#A0522D</color>
     <color name="colorPrimaryDark">#8B4513</color>
     <color name="colorAccent">#000000</color>
-    <color name="pale_rod">#EEE8AA</color>
+    <color name="colorPaleRod">#EEE8AA</color>
 </resources>
