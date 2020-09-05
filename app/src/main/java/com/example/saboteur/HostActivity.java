@@ -30,7 +30,7 @@ import java.util.Random;
 public class HostActivity extends AppCompatActivity {
 
     private final int HostCode = 4;
-    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String LOG_TAG = HostActivity.class.getSimpleName();
     private final String DATABASE_NAME = "users";
     private final String COLLECTION_NAME = "test";
     TextView hostUserView;
