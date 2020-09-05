@@ -1,17 +1,31 @@
 package com.example.saboteur;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -25,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "exitApp");
         showExitDialog();
     }
+
 
     public void showExitDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -50,5 +65,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         showExitDialog();
+    }
+
+    public void hostApp(View view) {
+        Toast.makeText(this, "host", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, HostActivity.class);
+        startActivity(intent);
+    }
+
+    public void joinApp(View view) {
+        Toast.makeText(this, "join", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, JoinActivity.class);
+        startActivity(intent);
     }
 }

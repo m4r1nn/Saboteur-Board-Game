@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "671987246891",
+    "firebase_url": "https://saboteur-boardgame.firebaseio.com",
+    "project_id": "saboteur-boardgame",
+    "storage_bucket": "saboteur-boardgame.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671987246891:android:9647b277eeac936fcb076e",
+        "android_client_info": {
+          "package_name": "com.example.saboteur"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671987246891-848voaeg25kr5i5t2707sd3dtcheik9k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1jUjQrwdmhDKmoC9mEosMkHdP38aa3Bw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671987246891-848voaeg25kr5i5t2707sd3dtcheik9k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
