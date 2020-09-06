@@ -49,8 +49,12 @@ public class JoinActivity extends AppCompatActivity {
         final Map<String, Object> join_user = new HashMap<>();
         join_user.put("user", username);
 
+
+        // get a reference to database and document
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final DocumentReference docRef = db.collection(DATABASE_NAME).document(code);
+
+        // checks if there is a room with the code and if so, add the player to the room;
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

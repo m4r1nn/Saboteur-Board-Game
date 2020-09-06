@@ -78,12 +78,15 @@ public class HostActivity extends AppCompatActivity {
             codeRoomView.setText(codeRoom.replaceAll(".(?!$)", "$0\n"));
             codeRoomView.setVisibility(View.VISIBLE);
 
-            FirebaseFirestore players = FirebaseFirestore.getInstance();
+
+            // get a reference to the db
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
             Map<String, Object> host_user = new HashMap<>();
             host_user.put("user", username);
 
-            players.collection(DATABASE_NAME).document(codeRoom).collection(COLLECTION_NAME).add(host_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            // create a room (document) for the host on the Cloud Firestore
+            db.collection(DATABASE_NAME).document(codeRoom).collection(COLLECTION_NAME).add(host_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
                     Log.d(LOG_TAG, "Document written with id:" + documentReference.getId());
@@ -95,7 +98,8 @@ public class HostActivity extends AppCompatActivity {
                 }
             });
 
-            players.collection(DATABASE_NAME).document(codeRoom).collection(COLLECTION_NAME).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            // event listener to wait for the rest of the players. When there's a new player, data will come
+            db.collection(DATABASE_NAME).document(codeRoom).collection(COLLECTION_NAME).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                     if (error != null) {
