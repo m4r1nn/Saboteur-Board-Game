@@ -50,7 +50,9 @@
         android:layout_height="32dp"
         android:layout_marginStart="64dp"
         android:background="@drawable/button_background"
+        android:inputType="textCapCharacters"
         android:hint="@string/join_text_code_prompt"
+        android:maxLength="4"
         android:textAlignment="center"
 
         app:layout_constraintBottom_toTopOf="@+id/join_text_user_view"
