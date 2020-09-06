@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -30,11 +31,14 @@ public class HostActivity extends AppCompatActivity {
     private final String LOG_TAG = AppCompatActivity.class.getSimpleName();
     private final String DATABASE_NAME = "users";
     private final String COLLECTION_NAME = "test";
-    TextView hostUserView;
-    TextView codeRoomView;
-    EditText usernameView;
-    Button createRoomButton;
-    Button playButton;
+    private TextView hostUserView;
+    private TextView codeRoomView;
+    private EditText usernameView;
+    private Button createRoomButton;
+    private Button playButton;
+
+    private ArrayList<TextView> playerNames;
+    private int playersCount = 1; // increment every time a player joins
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,19 @@ public class HostActivity extends AppCompatActivity {
         createRoomButton = findViewById(R.id.host_button);
         codeRoomView = findViewById(R.id.room_code_text);
         playButton = findViewById(R.id.play_button);
+
+        playerNames = new ArrayList<>();
+        playerNames.add(hostUserView);
+        playerNames.add((TextView) findViewById(R.id.player1_view));
+        playerNames.add((TextView) findViewById(R.id.player2_view));
+        playerNames.add((TextView) findViewById(R.id.player3_view));
+        playerNames.add((TextView) findViewById(R.id.player4_view));
+        playerNames.add((TextView) findViewById(R.id.player5_view));
+        playerNames.add((TextView) findViewById(R.id.player6_view));
+        playerNames.add((TextView) findViewById(R.id.player7_view));
+        playerNames.add((TextView) findViewById(R.id.player8_view));
+        playerNames.add((TextView) findViewById(R.id.player9_view));
+        playerNames.add((TextView) findViewById(R.id.player10_view));
     }
 
     public static String generateRandomString(int length) {
