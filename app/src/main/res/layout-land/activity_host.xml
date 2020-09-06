@@ -41,9 +41,11 @@
 
     <EditText
         android:id="@+id/host_text_view"
-        android:layout_width="512dp"
+        android:layout_width="400dp"
         android:layout_height="32dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="80dp"
+        android:layout_marginEnd="16dp"
         android:autofillHints=""
         android:background="@drawable/button_background"
         android:hint="@string/host_text_prompt"

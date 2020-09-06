@@ -46,12 +46,12 @@
 
     <EditText
         android:id="@+id/join_text_code_value"
-        android:layout_width="512dp"
+        android:layout_width="400dp"
         android:layout_height="32dp"
         android:layout_marginStart="64dp"
         android:background="@drawable/button_background"
-        android:inputType="textCapCharacters"
         android:hint="@string/join_text_code_prompt"
+        android:inputType="textCapCharacters"
         android:maxLength="4"
         android:textAlignment="center"
 
