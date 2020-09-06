@@ -114,8 +114,8 @@ public class HostActivity extends AppCompatActivity {
                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                     if (error != null) {
                         Log.d(LOG_TAG, "Listen failed.", error);
-                        return;
                     } else {
+                        assert value != null;
                         for (DocumentSnapshot document : value.getDocuments()) {
                             Log.d(LOG_TAG, String.valueOf(document.getData()));
                         }
