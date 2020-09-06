@@ -12,78 +12,81 @@
         android:id="@+id/join_button"
         android:layout_width="256dp"
         android:layout_height="64dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="48dp"
         android:background="@drawable/button_background"
         android:fontFamily="casual"
-        android:text="@string/join_create_room"
         android:onClick="joinRoom"
+        android:text="@string/join_create_room"
         android:textSize="@dimen/button_text_size"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.544"
-        app:layout_constraintStart_toEndOf="@+id/main_name"
-        app:layout_constraintTop_toBottomOf="@+id/host_text_view" />
-
+        app:layout_constraintEnd_toStartOf="@+id/room_code_text"
+        app:layout_constraintStart_toEndOf="@+id/main_name" />
 
 
     <EditText
         android:id="@+id/join_text_user_view"
-        android:layout_width="512dp"
+        android:layout_width="400dp"
         android:layout_height="32dp"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:background="@drawable/button_background"
         android:hint="@string/join_text_user_prompt"
+        android:inputType="textPersonName"
+        android:maxLength="6"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.547"
+        app:layout_constraintEnd_toStartOf="@+id/room_code_text"
         app:layout_constraintStart_toEndOf="@+id/main_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.166" />
+        app:layout_constraintTop_toBottomOf="@+id/join_text_code_value" />
 
     <EditText
         android:id="@+id/join_text_code_value"
-        android:layout_width="512dp"
+        android:layout_width="400dp"
         android:layout_height="32dp"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints=""
+
         android:background="@drawable/button_background"
         android:hint="@string/join_text_code_prompt"
+
+        android:inputType="textPersonName"
+        android:maxLength="4"
         android:textAlignment="center"
-
-        app:layout_constraintBottom_toTopOf="@+id/join_text_user_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.547"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.166" />
+        app:layout_constraintEnd_toStartOf="@+id/room_code_text"
+        app:layout_constraintStart_toEndOf="@+id/main_name"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/room_code_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="casual"
-        android:visibility="invisible"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#CDDC39"
         android:textSize="50sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/join_button"
+        app:layout_constraintEnd_toStartOf="@+id/room_code_text"
+        app:layout_constraintStart_toEndOf="@+id/main_name"
+        app:layout_constraintTop_toBottomOf="@+id/join_text_user_view" />
 
 
     <TextView
         android:id="@+id/main_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="casual"
@@ -100,8 +103,8 @@
         android:id="@+id/room_code_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="64dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="casual"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -110,8 +113,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

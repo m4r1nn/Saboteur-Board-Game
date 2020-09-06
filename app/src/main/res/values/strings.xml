@@ -9,7 +9,7 @@
     <string name="saboteur_image_description">saboteur image</string>
     <string name="main_name_text">S\nA\nB\nO\nT\nE\nU\nR</string>
     <string name="host_username">Username </string>
-    <string name="host_text_prompt">Choose a name:</string>
+    <string name="host_text_prompt">Choose a username:</string>
     <string name="host_create_room">Create room</string>
     <string name="play_game">Play</string>
     <string name="join_create_room">Join Room</string>
