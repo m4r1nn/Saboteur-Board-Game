@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bgd_main"
+    tools:context=".JoinActivity">
+
+
+    <Button
+        android:id="@+id/join_button"
+        android:layout_width="256dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button_background"
+        android:fontFamily="casual"
+        android:text="@string/join_create_room"
+        android:onClick="joinRoom"
+        android:textSize="@dimen/button_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.544"
+        app:layout_constraintStart_toEndOf="@+id/main_name"
+        app:layout_constraintTop_toBottomOf="@+id/host_text_view" />
+
+
+
+    <EditText
+        android:id="@+id/join_text_user_view"
+        android:layout_width="512dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="64dp"
+        android:background="@drawable/button_background"
+        android:hint="@string/join_text_user_prompt"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.547"
+        app:layout_constraintStart_toEndOf="@+id/main_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.166" />
+
+    <EditText
+        android:id="@+id/join_text_code_value"
+        android:layout_width="400dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="64dp"
+        android:background="@drawable/button_background"
+        android:hint="@string/join_text_code_prompt"
+        android:inputType="textCapCharacters"
+        android:maxLength="4"
+        android:textAlignment="center"
+
+        app:layout_constraintBottom_toTopOf="@+id/join_text_user_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.547"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.166" />
+
+    <TextView
+        android:id="@+id/room_code_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="casual"
+        android:visibility="invisible"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#CDDC39"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/main_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="casual"
+        android:text="@string/main_name_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#CDDC39"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/room_code_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="casual"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#CDDC39"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
