@@ -52,7 +52,8 @@ public class HostActivity extends AppCompatActivity {
     Button playButton;
 
     private ArrayList<TextView> playerNames;
-    private int playersCount = 1; // increment every time a player joins
+    private int playersCount = 0; // increment every time a player joins
+    private boolean hostNameRemoved = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,6 @@ public class HostActivity extends AppCompatActivity {
         playButton = findViewById(R.id.play_button);
 
         playerNames = new ArrayList<>();
-        playerNames.add(hostUserView);
         playerNames.add((TextView) findViewById(R.id.player1_view));
         playerNames.add((TextView) findViewById(R.id.player2_view));
         playerNames.add((TextView) findViewById(R.id.player3_view));
@@ -115,13 +115,21 @@ public class HostActivity extends AppCompatActivity {
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
                     Log.d(LOG_TAG, "Listen failed.", error);
-                    return;
                 } else {
+                    assert value != null;
                     for (DocumentChange document : value.getDocumentChanges()) {
                         Log.d(LOG_TAG, String.valueOf(document.getDocument().getData()));
                         // TODO : call the function to add player to vector
-                        Map <String, Object> user = document.getDocument().getData();
-                      //  Log.d(LOG_TAG, (String) Objects.requireNonNull(user.get("user")));
+                        Map<String, Object> user = document.getDocument().getData();
+                        if (!hostNameRemoved) {
+                            hostNameRemoved = true;
+                            return;
+                        }
+                        if (playersCount == 10) {
+                            Log.d(LOG_TAG, "No room");
+                            return;
+                        }
+                        playerNames.get(playersCount++).setText(Objects.requireNonNull(user.get("user")).toString());
                     }
                 }
             }

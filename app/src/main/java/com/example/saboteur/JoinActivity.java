@@ -20,6 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class JoinActivity extends AppCompatActivity {
@@ -62,7 +63,7 @@ public class JoinActivity extends AppCompatActivity {
         docRef.collection(COLLECTION_NAME).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.getResult().size() > 0) {
+                if (Objects.requireNonNull(task.getResult()).size() > 0 && task.getResult().size() <= 10) {
                     docRef.collection(COLLECTION_NAME).add(join_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
