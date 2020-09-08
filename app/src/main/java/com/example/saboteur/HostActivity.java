@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.saboteur.utils.Sound;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,6 +52,7 @@ public class HostActivity extends AppCompatActivity {
     EditText usernameView;
     Button createRoomButton;
     Button playButton;
+    private Sound buttonSound = null;
 
     private ArrayList<TextView> playerNames;
     private int playersCount = 0; // increment every time a player joins
@@ -59,6 +62,8 @@ public class HostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host);
+
+        buttonSound = new Sound(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.button_sound));
 
         hostUserView = findViewById(R.id.room_code_view);
         usernameView = findViewById(R.id.host_text_view);
@@ -139,6 +144,8 @@ public class HostActivity extends AppCompatActivity {
     public void createRoom(View view) {
 
         String username = usernameView.getText().toString();
+        buttonSound.initSound();
+        buttonSound.start();
 
         if (!username.equals("")) {
             hostUserView.setText(username);
@@ -157,5 +164,21 @@ public class HostActivity extends AppCompatActivity {
 
     public void playGame(View view) {
         // TODO
+        buttonSound.initSound();
+        buttonSound.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        buttonSound.initSound();
+        buttonSound.start();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(LOG_TAG, "onStop");
+        buttonSound.stopSound();
     }
 }
