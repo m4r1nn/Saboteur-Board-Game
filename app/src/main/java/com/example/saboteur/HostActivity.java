@@ -28,6 +28,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
@@ -53,6 +54,7 @@ public class HostActivity extends AppCompatActivity {
     Button createRoomButton;
     Button playButton;
     private Sound buttonSound = null;
+    private ListenerRegistration listener = null;
 
     private ArrayList<TextView> playerNames;
     private int playersCount = 0; // increment every time a player joins
@@ -115,7 +117,7 @@ public class HostActivity extends AppCompatActivity {
 
     public void waitForPlayers(String codeRoom) {
         // event listener to wait for the rest of the players. When there's a new player, data will come
-        db.collection(DATABASE_NAME).document(codeRoom).collection(COLLECTION_NAME).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        listener = db.collection(DATABASE_NAME).document(codeRoom).collection(COLLECTION_NAME).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -170,9 +172,48 @@ public class HostActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (usernameView.getVisibility() == View.INVISIBLE) {
+            cancelHost();
+        } else {
+            super.onBackPressed();
+        }
         buttonSound.initSound();
         buttonSound.start();
+    }
+
+    public void removeFromDB(final String roomCode) {
+        // TODO!!!
+        db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                    db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).document(documentSnapshot.getId()).delete();
+                }
+                Log.d(LOG_TAG, "empty db");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(LOG_TAG, "fail empty db");
+            }
+        });
+    }
+
+    public void cancelHost() {
+        for (TextView player : playerNames) {
+            player.setText("");
+        }
+        playersCount = 0;
+        hostNameRemoved = false;
+        removeFromDB(usernameView.getText().toString());
+        listener.remove();
+
+        hostUserView.setVisibility(View.INVISIBLE);
+        createRoomButton.setVisibility(View.VISIBLE);
+        usernameView.setText("");
+        usernameView.setVisibility(View.VISIBLE);
+        playButton.setVisibility(View.INVISIBLE);
+        codeRoomView.setVisibility(View.INVISIBLE);
     }
 
     @Override
