@@ -31,8 +31,9 @@ public class JoinActivity extends AppCompatActivity {
     EditText joinCodeVIew;
     Button joinButton;
 
-    final private String DATABASE_NAME = "users";
+    final private int MAX_PLAYERS = 10;
     final private String COLLECTION_NAME = "test";
+    final private String DATABASE_NAME = "users";
     private final String LOG_TAG = JoinActivity.class.getSimpleName();
 
     private Sound buttonSound = null;
@@ -65,13 +66,15 @@ public class JoinActivity extends AppCompatActivity {
         // get a reference to database and document
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Log.d(LOG_TAG, code);
+
         final DocumentReference docRef = db.collection(DATABASE_NAME).document(code);
 
         // TODO : maybe refactor this in the future
-        docRef.collection(COLLECTION_NAME).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        docRef.collection(COLLECTION_NAME).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (Objects.requireNonNull(task.getResult()).size() > 0 && task.getResult().size() <= 10) {
+                Log.d(LOG_TAG, String.valueOf(task.getResult().size()));
+                if (task.getResult().size() > 0 && task.getResult().size() < MAX_PLAYERS) {
                     docRef.collection(COLLECTION_NAME).add(join_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
