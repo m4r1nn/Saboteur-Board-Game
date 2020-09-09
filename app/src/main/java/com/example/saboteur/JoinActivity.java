@@ -3,6 +3,7 @@ package com.example.saboteur;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.saboteur.utils.Sound;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,6 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class JoinActivity extends AppCompatActivity {
@@ -32,6 +35,7 @@ public class JoinActivity extends AppCompatActivity {
     final private String COLLECTION_NAME = "test";
     private final String LOG_TAG = JoinActivity.class.getSimpleName();
 
+    private Sound buttonSound = null;
 
 
     @Override
@@ -41,11 +45,16 @@ public class JoinActivity extends AppCompatActivity {
         joinUserView = findViewById(R.id.join_text_user_view);
         joinCodeVIew = findViewById(R.id.join_text_code_value);
         joinButton = findViewById(R.id.join_button);
+
+        buttonSound = new Sound(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.button_sound));
     }
 
 
 
     public void joinRoom(View view) {
+        buttonSound.initSound();
+        buttonSound.start();
+
         String username = joinUserView.getText().toString();
         String code = joinCodeVIew.getText().toString();
 
@@ -62,7 +71,7 @@ public class JoinActivity extends AppCompatActivity {
         docRef.collection(COLLECTION_NAME).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.getResult().size() > 0) {
+                if (Objects.requireNonNull(task.getResult()).size() > 0 && task.getResult().size() <= 10) {
                     docRef.collection(COLLECTION_NAME).add(join_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
@@ -75,11 +84,25 @@ public class JoinActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    Toast.makeText(JoinActivity.this, "Codul nu exista",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(JoinActivity.this, "Codul nu exista", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        buttonSound.initSound();
+        buttonSound.start();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(LOG_TAG, "onStop");
+        buttonSound.stopSound();
     }
 }

@@ -10,10 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".GameActivity"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".JoinActivity"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="landscape"
-            />
+            android:screenOrientation="landscape" />
         <activity
             android:name=".HostActivity"
             android:parentActivityName=".MainActivity"
