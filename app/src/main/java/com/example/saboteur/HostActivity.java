@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -165,9 +166,10 @@ public class HostActivity extends AppCompatActivity {
     }
 
     public void playGame(View view) {
-        // TODO
         buttonSound.initSound();
         buttonSound.start();
+        // TODO send to other players message to start game
+        startActivity(new Intent(this, GameActivity.class));
     }
 
     @Override
