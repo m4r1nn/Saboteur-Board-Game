@@ -182,11 +182,11 @@ public class HostActivity extends AppCompatActivity {
     }
 
     public void removeFromDB(final String roomCode) {
-        // TODO!!!
         db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                    Log.d(LOG_TAG, "Delete document with id:" + documentSnapshot.getId() + "\n") ;
                     db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).document(documentSnapshot.getId()).delete();
                 }
                 Log.d(LOG_TAG, "empty db");
@@ -205,7 +205,7 @@ public class HostActivity extends AppCompatActivity {
         }
         playersCount = 0;
         hostNameRemoved = false;
-        removeFromDB(usernameView.getText().toString());
+        removeFromDB(codeRoomView.getText().toString().replaceAll("\n", ""));
         listener.remove();
 
         hostUserView.setVisibility(View.INVISIBLE);
