@@ -3,6 +3,7 @@ package com.example.saboteur;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,7 +51,12 @@ public class JoinActivity extends AppCompatActivity {
         buttonSound = new Sound(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.button_sound));
     }
 
-
+    public Intent prepareIntent(Intent intent) {
+        Bundle bundle = new Bundle();
+        bundle.putString("roomCode", joinCodeVIew.getText().toString());
+        intent.putExtras(bundle);
+        return intent;
+    }
 
     public void joinRoom(View view) {
         buttonSound.initSound();
@@ -73,7 +79,7 @@ public class JoinActivity extends AppCompatActivity {
         docRef.collection(COLLECTION_NAME).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Log.d(LOG_TAG, String.valueOf(task.getResult().size()));
+                Log.d(LOG_TAG, String.valueOf(Objects.requireNonNull(task.getResult()).size()));
                 if (task.getResult().size() > 0 && task.getResult().size() < MAX_PLAYERS) {
                     docRef.collection(COLLECTION_NAME).add(join_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
@@ -91,8 +97,6 @@ public class JoinActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     @Override

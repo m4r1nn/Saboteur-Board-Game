@@ -165,11 +165,19 @@ public class HostActivity extends AppCompatActivity {
         }
     }
 
+    public Intent prepareIntent(Intent intent) {
+        Bundle bundle = new Bundle();
+        bundle.putString("roomCode", codeRoomView.getText().toString().replaceAll("\n", ""));
+        bundle.putString("username", usernameView.getText().toString());
+        intent.putExtras(bundle);
+        return intent;
+    }
+
     public void playGame(View view) {
         buttonSound.initSound();
         buttonSound.start();
         // TODO send to other players message to start game
-        startActivity(new Intent(this, GameActivity.class));
+        startActivity(prepareIntent(new Intent(this, GameActivity.class)));
     }
 
     @Override
