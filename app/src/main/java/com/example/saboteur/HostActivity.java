@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.AtomicFile;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,9 +33,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -165,10 +169,31 @@ public class HostActivity extends AppCompatActivity {
         }
     }
 
+    private ArrayList<Uri> prepareIcons() {
+        ArrayList<String> fileNames = new ArrayList<>();
+        ArrayList<Uri> icons = new ArrayList<>();
+        for (int i = 1; i <= 49; i++) {
+            fileNames.add("icon_" + i);
+        }
+        Collections.shuffle(fileNames);
+        for (int i = 0; i <= playersCount; i++) {
+            Log.d(LOG_TAG, fileNames.get(i));
+            icons.add(Uri.parse("android.resource://" + getPackageName() + "/"
+                    + getResources().getIdentifier(fileNames.get(i), "drawable", getPackageName())));
+        }
+        Log.d(LOG_TAG, "Fisierele:");
+        for (Uri uri : icons) {
+            Log.d(LOG_TAG, uri.toString());
+        }
+        return icons;
+    }
+
     public Intent prepareIntent(Intent intent) {
         Bundle bundle = new Bundle();
         bundle.putString("roomCode", codeRoomView.getText().toString().replaceAll("\n", ""));
         bundle.putString("username", usernameView.getText().toString());
+        bundle.putBoolean("existIcons", true);
+        bundle.putParcelableArrayList("icons", prepareIcons());
         intent.putExtras(bundle);
         return intent;
     }

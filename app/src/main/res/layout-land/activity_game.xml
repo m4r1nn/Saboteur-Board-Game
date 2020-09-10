@@ -36,7 +36,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/textView3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_bear"
+                app:srcCompat="@drawable/icon_3"
                 tools:ignore="NestedWeights" />
 
             <TextView
