@@ -44,7 +44,7 @@ import java.util.Random;
 
 public class HostActivity extends AppCompatActivity {
 
-    private final int HostCode = 4;
+    private final int MAX_PLAYERS = 10;
     private final String LOG_TAG = HostActivity.class.getSimpleName();
     private final String DATABASE_NAME = "users";
     private final String COLLECTION_NAME = "test";
@@ -84,7 +84,6 @@ public class HostActivity extends AppCompatActivity {
         playerNames.add((TextView) findViewById(R.id.player7_view));
         playerNames.add((TextView) findViewById(R.id.player8_view));
         playerNames.add((TextView) findViewById(R.id.player9_view));
-        playerNames.add((TextView) findViewById(R.id.player10_view));
     }
 
     public static String generateRandomString(int length) {
@@ -133,7 +132,7 @@ public class HostActivity extends AppCompatActivity {
                             hostNameRemoved = true;
                             return;
                         }
-                        if (playersCount == 10) {
+                        if (playersCount == MAX_PLAYERS - 1) {
                             Log.d(LOG_TAG, "No room");
                             return;
                         }
@@ -156,7 +155,8 @@ public class HostActivity extends AppCompatActivity {
             createRoomButton.setVisibility(View.INVISIBLE);
             usernameView.setVisibility(View.INVISIBLE);
             playButton.setVisibility(View.VISIBLE);
-            String codeRoom = generateRandomString(HostCode);
+            int hostCode = 4;
+            String codeRoom = generateRandomString(hostCode);
             codeRoomView.setText(codeRoom.replaceAll(".(?!$)", "$0\n"));
             codeRoomView.setVisibility(View.VISIBLE);
 
