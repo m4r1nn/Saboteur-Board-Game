@@ -92,6 +92,8 @@ public class HostActivity extends AppCompatActivity {
         playerNames.add((TextView) findViewById(R.id.player7_view));
         playerNames.add((TextView) findViewById(R.id.player8_view));
         playerNames.add((TextView) findViewById(R.id.player9_view));
+
+        icons = prepareIcons();
     }
 
     public static String generateRandomString(int length) {
@@ -199,26 +201,49 @@ public class HostActivity extends AppCompatActivity {
         buttonSound.initSound();
         buttonSound.start();
 
+        Log.d(LOG_TAG, codeRoomView.getText().toString().replaceAll("\n", ""));
+
+        listener.remove(); // TODO : RADU
+
         db.collection(DATABASE_NAME).document(codeRoomView.getText().toString().replaceAll("\n", ""))
                 .collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                Log.d(LOG_TAG, "Avem" + queryDocumentSnapshots.getDocuments().size());
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                     DocumentReference documentReference = db.collection(DATABASE_NAME)
                             .document(codeRoomView.getText().toString().replaceAll("\n", ""))
                             .collection(COLLECTION_NAME).document(documentSnapshot.getId());
-                    documentReference.update("photo", icons.get(index++));
+                   documentReference.update("photo", String.valueOf(icons.get(index++)));
+
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Log.d(LOG_TAG, "EROAARE", e);
+            }
+        });
 
+//        db.collection(DATABASE_NAME).document(codeRoomView.getText().toString().replaceAll("\n", "")).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+//                    Log.d(LOG_TAG, String.valueOf(documentSnapshot.getData()));
+//                }
+//            }
+//        });
+
+
+        db.collection(DATABASE_NAME).document("DA09").collection(COLLECTION_NAME).document("jUGdb9jPtaBWo5XVj59G").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d(LOG_TAG, String.valueOf(documentSnapshot.getData()));
             }
         });
 
         // TODO send to other players message to start game
-        startActivity(prepareIntent(new Intent(this, GameActivity.class)));
+       startActivity(prepareIntent(new Intent(this, GameActivity.class)));
     }
 
     @Override

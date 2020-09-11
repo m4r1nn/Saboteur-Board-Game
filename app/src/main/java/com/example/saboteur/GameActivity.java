@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -46,19 +47,29 @@ public class GameActivity extends AppCompatActivity {
         assert roomCode != null;
         Log.d(LOG_TAG, roomCode);
 
+//        db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+//                    Log.d(LOG_TAG, String.valueOf(documentSnapshot.get("user")));
+//                    Log.d(LOG_TAG, String.valueOf(documentSnapshot.get("photo")));
+//                   // Log.d(LOG_TAG, Objects.requireNonNull(documentSnapshot.get("photo")).toString());
+//                   // names.add(Objects.requireNonNull(documentSnapshot.get("user")).toString());
+//                }
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.d(LOG_TAG, "Error", e);
+//            }
+//        });
+
         db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-                    Log.d(LOG_TAG, Objects.requireNonNull(documentSnapshot.get("user")).toString());
-                    Log.d(LOG_TAG, Objects.requireNonNull(documentSnapshot.get("photo")).toString());
-                    names.add(Objects.requireNonNull(documentSnapshot.get("user")).toString());
+                for (DocumentChange documentSnapshot : queryDocumentSnapshots.getDocumentChanges()) {
+                    Log.d(LOG_TAG, String.valueOf(documentSnapshot.getDocument().getData()));
                 }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(LOG_TAG, "Error", e);
             }
         });
 
