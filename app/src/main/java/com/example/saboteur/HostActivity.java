@@ -169,21 +169,20 @@ public class HostActivity extends AppCompatActivity {
         }
     }
 
-    private ArrayList<Uri> prepareIcons() {
+    private ArrayList<Integer> prepareIcons() {
         ArrayList<String> fileNames = new ArrayList<>();
-        ArrayList<Uri> icons = new ArrayList<>();
+        ArrayList<Integer> icons = new ArrayList<>();
         for (int i = 1; i <= 49; i++) {
             fileNames.add("icon_" + i);
         }
         Collections.shuffle(fileNames);
         for (int i = 0; i <= playersCount; i++) {
             Log.d(LOG_TAG, fileNames.get(i));
-            icons.add(Uri.parse("android.resource://" + getPackageName() + "/"
-                    + getResources().getIdentifier(fileNames.get(i), "drawable", getPackageName())));
+            icons.add(getResources().getIdentifier(fileNames.get(i), "drawable", getPackageName()));
         }
         Log.d(LOG_TAG, "Fisierele:");
-        for (Uri uri : icons) {
-            Log.d(LOG_TAG, uri.toString());
+        for (Integer id : icons) {
+            Log.d(LOG_TAG, id.toString());
         }
         return icons;
     }
@@ -193,7 +192,7 @@ public class HostActivity extends AppCompatActivity {
         bundle.putString("roomCode", codeRoomView.getText().toString().replaceAll("\n", ""));
         bundle.putString("username", usernameView.getText().toString());
         bundle.putBoolean("existIcons", true);
-        bundle.putParcelableArrayList("icons", prepareIcons());
+        bundle.putIntegerArrayList("icons", prepareIcons());
         intent.putExtras(bundle);
         return intent;
     }

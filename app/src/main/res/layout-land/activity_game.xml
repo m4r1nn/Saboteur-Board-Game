@@ -20,6 +20,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
+            android:id="@+id/name_layout_1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -52,10 +53,14 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/name_layout_2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"></androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
