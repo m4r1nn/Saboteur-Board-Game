@@ -55,7 +55,6 @@ public class JoinActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("roomCode", joinCodeVIew.getText().toString());
         bundle.putString("username", joinUserView.getText().toString());
-        bundle.putBoolean("existIcons", false);
         intent.putExtras(bundle);
         return intent;
     }

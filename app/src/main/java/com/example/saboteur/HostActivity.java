@@ -31,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Collection;
@@ -64,6 +65,9 @@ public class HostActivity extends AppCompatActivity {
     private ArrayList<TextView> playerNames;
     private int playersCount = 0; // increment every time a player joins
     private boolean hostNameRemoved = false;
+
+    private ArrayList<Integer> icons;
+    private int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +175,7 @@ public class HostActivity extends AppCompatActivity {
 
     private ArrayList<Integer> prepareIcons() {
         ArrayList<String> fileNames = new ArrayList<>();
-        ArrayList<Integer> icons = new ArrayList<>();
+        icons = new ArrayList<>();
         for (int i = 1; i <= 49; i++) {
             fileNames.add("icon_" + i);
         }
@@ -180,10 +184,6 @@ public class HostActivity extends AppCompatActivity {
             Log.d(LOG_TAG, fileNames.get(i));
             icons.add(getResources().getIdentifier(fileNames.get(i), "drawable", getPackageName()));
         }
-        Log.d(LOG_TAG, "Fisierele:");
-        for (Integer id : icons) {
-            Log.d(LOG_TAG, id.toString());
-        }
         return icons;
     }
 
@@ -191,8 +191,6 @@ public class HostActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("roomCode", codeRoomView.getText().toString().replaceAll("\n", ""));
         bundle.putString("username", usernameView.getText().toString());
-        bundle.putBoolean("existIcons", true);
-        bundle.putIntegerArrayList("icons", prepareIcons());
         intent.putExtras(bundle);
         return intent;
     }
@@ -200,6 +198,25 @@ public class HostActivity extends AppCompatActivity {
     public void playGame(View view) {
         buttonSound.initSound();
         buttonSound.start();
+
+        db.collection(DATABASE_NAME).document(codeRoomView.getText().toString().replaceAll("\n", ""))
+                .collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                    DocumentReference documentReference = db.collection(DATABASE_NAME)
+                            .document(codeRoomView.getText().toString().replaceAll("\n", ""))
+                            .collection(COLLECTION_NAME).document(documentSnapshot.getId());
+                    documentReference.update("photo", icons.get(index++));
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
         // TODO send to other players message to start game
         startActivity(prepareIntent(new Intent(this, GameActivity.class)));
     }
