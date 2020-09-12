@@ -6,4 +6,6 @@
     <color name="colorPaleRod">#EEE8AA</color>
     <color name="yellow">#CDDC39</color>
     <color name="forestGreen">#556B2F</color>
+    <color name="seaGreen">#2E8B57</color>
+    <color name="darkGreen">#006400</color>
 </resources>

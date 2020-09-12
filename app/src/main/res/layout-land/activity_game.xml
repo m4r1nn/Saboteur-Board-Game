@@ -8,16 +8,16 @@
     tools:context=".GameActivity">
 
     <LinearLayout
-        android:layout_width="200dp"
+        android:layout_width="85dp"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
+        android:background="@drawable/players_layout_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:id="@+id/name_layout_1"
@@ -27,30 +27,25 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/icon_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
+                android:layout_marginStart="2dp"
                 android:layout_weight="4"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_3"
                 tools:ignore="NestedWeights" />
 
             <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
+                android:id="@+id/name_1"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
+                android:layout_marginStart="4dp"
                 android:gravity="center_vertical"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_weight="1"
+                android:fontFamily="casual"
+                android:textStyle="bold" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -60,48 +55,441 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
+            <ImageView
+                android:id="@+id/icon_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="4"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:id="@+id/name_2"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:fontFamily="casual"
+                android:gravity="center_vertical"
+                android:textStyle="bold" />
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/name_layout_3"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"></androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/icon_3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="4"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:id="@+id/name_3"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:fontFamily="casual"
+                android:gravity="center_vertical"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/name_layout_4"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"></androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/icon_4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="4"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:id="@+id/name_4"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:fontFamily="casual"
+                android:gravity="center_vertical"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/name_layout_5"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"></androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/icon_5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="4"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:id="@+id/name_5"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:fontFamily="casual"
+                android:gravity="center_vertical"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/name_layout_6"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"></androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/icon_6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="4"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:id="@+id/name_6"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:fontFamily="casual"
+                android:gravity="center_vertical"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/name_layout_7"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"></androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/icon_7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="4"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:id="@+id/name_7"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:fontFamily="casual"
+                android:gravity="center_vertical"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/name_layout_8"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"></androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/icon_8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="4"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:id="@+id/name_8"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:fontFamily="casual"
+                android:gravity="center_vertical"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/name_layout_9"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"></androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/icon_9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="4"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:id="@+id/name_9"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:fontFamily="casual"
+                android:gravity="center_vertical"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/name_layout_10"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"></androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
+            <ImageView
+                android:id="@+id/icon_10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="4"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:id="@+id/name_10"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:fontFamily="casual"
+                android:gravity="center_vertical"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="85dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/exit_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.45"
+            android:background="@drawable/exit_button_selector"
+            android:fontFamily="casual"
+            android:onClick="exitGame"
+            android:text="@string/exit_button_text"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1.25"
+            android:background="@drawable/players_layout_background"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/card_back_normal"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:fontFamily="casual"
+                android:gravity="center_vertical"
+                android:text="56"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1.25"
+            android:background="@drawable/players_layout_background"
+            android:columnCount="2"
+            android:rowCount="2">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_row="0"
+                android:layout_rowWeight="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:srcCompat="@drawable/mini_pickaxe" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_row="0"
+                android:layout_rowWeight="1"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:srcCompat="@drawable/mini_cart" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_row="1"
+                android:layout_rowWeight="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:srcCompat="@drawable/mini_lamp" />
+
+        </GridLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:layout_weight="0.9"
+            android:background="@drawable/players_layout_background"
+            android:columnCount="2"
+            android:rowCount="3">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_row="0"
+                android:layout_rowWeight="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                app:srcCompat="@drawable/card_road_cross" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_row="0"
+                android:layout_rowWeight="1"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                app:srcCompat="@drawable/card_action_unblock_lamp_cart" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_row="1"
+                android:layout_rowWeight="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                app:srcCompat="@drawable/card_action_map" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_row="1"
+                android:layout_rowWeight="1"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                app:srcCompat="@drawable/card_block_corner_right" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_row="2"
+                android:layout_rowWeight="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                app:srcCompat="@drawable/card_road_vertical_2" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_row="2"
+                android:layout_rowWeight="1"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                app:srcCompat="@drawable/card_action_avalanche" />
+
+        </GridLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

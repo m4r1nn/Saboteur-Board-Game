@@ -215,7 +215,7 @@ public class HostActivity extends AppCompatActivity {
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                     String docId = documentSnapshot.getId();
                     Log.d(LOG_TAG, String.valueOf(index));
-                    db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).document(docId).update("photo", icons.get(index++)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).document(docId).update("photo", String.valueOf(icons.get(index++))).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d(LOG_TAG, "Updated the photo in the database");

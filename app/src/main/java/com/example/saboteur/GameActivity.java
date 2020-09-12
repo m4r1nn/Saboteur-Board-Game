@@ -26,6 +26,8 @@ import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity {
 
+    private static final int MAX_PLAYERS = 10;
+
     private final String LOG_TAG = GameActivity.class.getSimpleName();
     private final String DATABASE_NAME = "users";
     private final String COLLECTION_NAME = "test";
@@ -33,11 +35,18 @@ public class GameActivity extends AppCompatActivity {
 
     private String username;
     ArrayList<String> names = new ArrayList<>();
+    ArrayList<Integer> icons = new ArrayList<>();
+    ArrayList<ImageView> images = new ArrayList<>();
+    ArrayList<TextView> texts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        for (int i = 1; i <= MAX_PLAYERS; i++) {
+            images.add((ImageView) findViewById(getResources().getIdentifier("icon_" + i, "id", getPackageName())));
+            texts.add((TextView) findViewById(getResources().getIdentifier("name_" + i, "id", getPackageName())));
+        }
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -53,25 +62,27 @@ public class GameActivity extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentChange documentSnapshot : queryDocumentSnapshots.getDocumentChanges()) {
                     Log.d(LOG_TAG, String.valueOf(documentSnapshot.getDocument().getData()));
+                    names.add(Objects.requireNonNull(documentSnapshot.getDocument().get("user")).toString());
+                    icons.add(Integer.parseInt(Objects.requireNonNull(documentSnapshot.getDocument().get("photo")).toString()));
                 }
+                fillPlayersNames();
             }
         });
+    }
 
-        ArrayList<Integer> icons = new ArrayList<>();
+    private void fillPlayersNames() {
+        Log.d(LOG_TAG, "size " + names.size());
+        for (int i = 0; i < names.size(); i++) {
+            Log.d(LOG_TAG, i + " " + icons.get(i) + " " + names.get(i));
+            ImageView image = images.get(i);
+            image.setImageResource(icons.get(i));
 
-        LinearLayout name_layout_2 = findViewById(R.id.name_layout_2);
+            TextView text = texts.get(i);
+            text.setText(names.get(i));
+        }
+    }
 
-        ImageView image = new ImageView(this);
-//        image.setImageResource(icons.get(0));
-        image.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        name_layout_2.addView(image);
-
-        TextView text = new TextView(this);
-        Log.d(LOG_TAG, String.valueOf(names.size()));
-//            text.setText(names.get(0));
-        text.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        name_layout_2.addView(text);
+    public void exitGame(View view) {
+        // TODO Radu :)
     }
 }
