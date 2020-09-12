@@ -1,6 +1,7 @@
 package com.example.saboteur;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -17,8 +18,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
@@ -35,6 +39,7 @@ public class JoinActivity extends AppCompatActivity {
     final private int MAX_PLAYERS = 10;
     final private String COLLECTION_NAME = "test";
     final private String DATABASE_NAME = "users";
+    private final String START_PATH = "start";
     private final String LOG_TAG = JoinActivity.class.getSimpleName();
 
     private Sound buttonSound = null;
@@ -79,13 +84,28 @@ public class JoinActivity extends AppCompatActivity {
         // TODO : maybe refactor this in the future
         docRef.collection(COLLECTION_NAME).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            public void onComplete(@NonNull final Task<QuerySnapshot> task) {
                 Log.d(LOG_TAG, String.valueOf(Objects.requireNonNull(task.getResult()).size()));
                 if (task.getResult().size() > 0 && task.getResult().size() < MAX_PLAYERS) {
                     docRef.collection(COLLECTION_NAME).add(join_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Log.d(LOG_TAG, "User adaugat cu success");
+                            docRef.collection(START_PATH).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                    if (error != null) {
+                                        Log.d(LOG_TAG, "Problem while retriving new data");
+                                    } else {
+                                        assert value != null;
+                                        for (DocumentChange documentChange : value.getDocumentChanges()) {
+                                            if (documentChange.getDocument().getData().get("start") != null) {
+                                                Log.d(LOG_TAG, String.valueOf(documentChange.getDocument().getData()));
+                                            }
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override

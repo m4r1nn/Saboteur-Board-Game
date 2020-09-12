@@ -53,6 +53,7 @@ public class HostActivity extends AppCompatActivity {
     private final String LOG_TAG = HostActivity.class.getSimpleName();
     private final String DATABASE_NAME = "users";
     private final String COLLECTION_NAME = "test";
+    private final String START_PATH = "start";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     TextView hostUserView;
     TextView codeRoomView;
@@ -65,6 +66,8 @@ public class HostActivity extends AppCompatActivity {
     private ArrayList<TextView> playerNames;
     private int playersCount = 0; // increment every time a player joins
     private boolean hostNameRemoved = false;
+
+    private String roomCode;
 
     private ArrayList<Integer> icons;
     private int index = 0;
@@ -92,8 +95,6 @@ public class HostActivity extends AppCompatActivity {
         playerNames.add((TextView) findViewById(R.id.player7_view));
         playerNames.add((TextView) findViewById(R.id.player8_view));
         playerNames.add((TextView) findViewById(R.id.player9_view));
-
-        icons = prepareIcons();
     }
 
     public static String generateRandomString(int length) {
@@ -166,12 +167,12 @@ public class HostActivity extends AppCompatActivity {
             usernameView.setVisibility(View.INVISIBLE);
             playButton.setVisibility(View.VISIBLE);
             int hostCode = 4;
-            String codeRoom = generateRandomString(hostCode);
-            codeRoomView.setText(codeRoom.replaceAll(".(?!$)", "$0\n"));
+            roomCode = generateRandomString(hostCode);
+            codeRoomView.setText(roomCode.replaceAll(".(?!$)", "$0\n"));
             codeRoomView.setVisibility(View.VISIBLE);
 
-            addHostToDB(username, codeRoom);
-            waitForPlayers(codeRoom);
+            addHostToDB(username, roomCode);
+            waitForPlayers(roomCode);
         }
     }
 
@@ -197,53 +198,56 @@ public class HostActivity extends AppCompatActivity {
         return intent;
     }
 
+
     public void playGame(View view) {
         buttonSound.initSound();
         buttonSound.start();
 
-        Log.d(LOG_TAG, codeRoomView.getText().toString().replaceAll("\n", ""));
 
-        listener.remove(); // TODO : RADU
+        Log.d(LOG_TAG, roomCode);
 
-        db.collection(DATABASE_NAME).document(codeRoomView.getText().toString().replaceAll("\n", ""))
-                .collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        listener.remove();
+
+        db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                Log.d(LOG_TAG, "Avem" + queryDocumentSnapshots.getDocuments().size());
+                icons = prepareIcons();
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-                    DocumentReference documentReference = db.collection(DATABASE_NAME)
-                            .document(codeRoomView.getText().toString().replaceAll("\n", ""))
-                            .collection(COLLECTION_NAME).document(documentSnapshot.getId());
-                   documentReference.update("photo", String.valueOf(icons.get(index++)));
-
+                    String docId = documentSnapshot.getId();
+                    Log.d(LOG_TAG, String.valueOf(index));
+                    db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).document(docId).update("photo", icons.get(index++)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(LOG_TAG, "Updated the photo in the database");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(LOG_TAG, String.format("Problem while updating the photo in the db for player %d", index), e);
+                        }
+                    });
                 }
+
+                Map <String, Object> start = new HashMap<>();
+                start.put("start", 1);
+
+                db.collection(DATABASE_NAME).document(roomCode).collection(START_PATH).add(start).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+
+                        // TODO : MAYBE A REFACTOR?
+
+                        startActivity(prepareIntent(new Intent(HostActivity.this, GameActivity.class)));
+                    }
+                });
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(LOG_TAG, "EROAARE", e);
+                Log.d(LOG_TAG, "Problem while retrieving data from roomCode", e);
             }
         });
-
-//        db.collection(DATABASE_NAME).document(codeRoomView.getText().toString().replaceAll("\n", "")).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//            @Override
-//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
-//                    Log.d(LOG_TAG, String.valueOf(documentSnapshot.getData()));
-//                }
-//            }
-//        });
-
-
-        db.collection(DATABASE_NAME).document("DA09").collection(COLLECTION_NAME).document("jUGdb9jPtaBWo5XVj59G").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Log.d(LOG_TAG, String.valueOf(documentSnapshot.getData()));
-            }
-        });
-
-        // TODO send to other players message to start game
-       startActivity(prepareIntent(new Intent(this, GameActivity.class)));
     }
 
     @Override
