@@ -6,4 +6,12 @@ public class Card {
     public Card(CardType type) {
         this.type = type;
     }
+
+    public CardType getCard() {
+        return type;
+    }
+
+    public String getCardString() {
+        return type.toString();
+    }
 }

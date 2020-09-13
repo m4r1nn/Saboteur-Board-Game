@@ -1,5 +1,7 @@
 package com.example.saboteur.utils.engine.cards;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -54,6 +56,10 @@ public final class Deck {
         cards.add(new Card(CardType.BlockType.HORIZONTAL_1));
         cards.add(new Card(CardType.BlockType.HORIZONTAL_2));
         Collections.shuffle(cards);
+    }
+
+    public ArrayList<Card> getCards() {
+        return cards;
     }
 
     public static Deck getInstance() {
