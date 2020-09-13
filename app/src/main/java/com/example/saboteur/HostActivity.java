@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.AtomicFile;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,11 +31,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -44,10 +49,11 @@ import java.util.Random;
 
 public class HostActivity extends AppCompatActivity {
 
-    private final int HostCode = 4;
+    private final int MAX_PLAYERS = 10;
     private final String LOG_TAG = HostActivity.class.getSimpleName();
     private final String DATABASE_NAME = "users";
     private final String COLLECTION_NAME = "test";
+    private final String START_PATH = "start";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     TextView hostUserView;
     TextView codeRoomView;
@@ -60,6 +66,11 @@ public class HostActivity extends AppCompatActivity {
     private ArrayList<TextView> playerNames;
     private int playersCount = 0; // increment every time a player joins
     private boolean hostNameRemoved = false;
+
+    private String roomCode;
+
+    private ArrayList<Integer> icons;
+    private int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +95,6 @@ public class HostActivity extends AppCompatActivity {
         playerNames.add((TextView) findViewById(R.id.player7_view));
         playerNames.add((TextView) findViewById(R.id.player8_view));
         playerNames.add((TextView) findViewById(R.id.player9_view));
-        playerNames.add((TextView) findViewById(R.id.player10_view));
     }
 
     public static String generateRandomString(int length) {
@@ -133,7 +143,7 @@ public class HostActivity extends AppCompatActivity {
                             hostNameRemoved = true;
                             return;
                         }
-                        if (playersCount == 10) {
+                        if (playersCount == MAX_PLAYERS - 1) {
                             Log.d(LOG_TAG, "No room");
                             return;
                         }
@@ -156,20 +166,88 @@ public class HostActivity extends AppCompatActivity {
             createRoomButton.setVisibility(View.INVISIBLE);
             usernameView.setVisibility(View.INVISIBLE);
             playButton.setVisibility(View.VISIBLE);
-            String codeRoom = generateRandomString(HostCode);
-            codeRoomView.setText(codeRoom.replaceAll(".(?!$)", "$0\n"));
+            int hostCode = 4;
+            roomCode = generateRandomString(hostCode);
+            codeRoomView.setText(roomCode.replaceAll(".(?!$)", "$0\n"));
             codeRoomView.setVisibility(View.VISIBLE);
 
-            addHostToDB(username, codeRoom);
-            waitForPlayers(codeRoom);
+            addHostToDB(username, roomCode);
+            waitForPlayers(roomCode);
         }
     }
+
+    private ArrayList<Integer> prepareIcons() {
+        ArrayList<String> fileNames = new ArrayList<>();
+        icons = new ArrayList<>();
+        for (int i = 1; i <= 49; i++) {
+            fileNames.add("icon_" + i);
+        }
+        Collections.shuffle(fileNames);
+        for (int i = 0; i <= playersCount; i++) {
+            Log.d(LOG_TAG, fileNames.get(i));
+            icons.add(getResources().getIdentifier(fileNames.get(i), "drawable", getPackageName()));
+        }
+        return icons;
+    }
+
+    public Intent prepareIntent(Intent intent) {
+        Bundle bundle = new Bundle();
+        bundle.putString("roomCode", codeRoomView.getText().toString().replaceAll("\n", ""));
+        bundle.putString("username", usernameView.getText().toString());
+        intent.putExtras(bundle);
+        return intent;
+    }
+
 
     public void playGame(View view) {
         buttonSound.initSound();
         buttonSound.start();
-        // TODO send to other players message to start game
-        startActivity(new Intent(this, GameActivity.class));
+
+
+        Log.d(LOG_TAG, roomCode);
+
+        listener.remove();
+
+        db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                icons = prepareIcons();
+                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                    String docId = documentSnapshot.getId();
+                    Log.d(LOG_TAG, String.valueOf(index));
+                    db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).document(docId).update("photo", String.valueOf(icons.get(index++))).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(LOG_TAG, "Updated the photo in the database");
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(LOG_TAG, String.format("Problem while updating the photo in the db for player %d", index), e);
+                        }
+                    });
+                }
+
+                Map <String, Object> start = new HashMap<>();
+                start.put("start", 1);
+
+                db.collection(DATABASE_NAME).document(roomCode).collection(START_PATH).add(start).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+
+                        // TODO : MAYBE A REFACTOR?
+
+                        startActivity(prepareIntent(new Intent(HostActivity.this, GameActivity.class)));
+                    }
+                });
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(LOG_TAG, "Problem while retrieving data from roomCode", e);
+            }
+        });
     }
 
     @Override
