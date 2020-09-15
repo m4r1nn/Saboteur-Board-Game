@@ -271,6 +271,7 @@ public class HostActivity extends AppCompatActivity {
                         db.collection(DATABASE_NAME).document(roomCode).collection(START_PATH).add(start).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentReference> task) {
+                                finish();
                                 startActivity(prepareIntent(new Intent(HostActivity.this, GameActivity.class)));
                             }
                         });

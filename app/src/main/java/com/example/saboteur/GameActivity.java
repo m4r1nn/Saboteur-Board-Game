@@ -1,9 +1,11 @@
 package com.example.saboteur;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.saboteur.utils.Sound;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentChange;
@@ -29,6 +32,7 @@ import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity {
 
+    private Sound buttonSound = null;
     private static final int MAX_PLAYERS = 10;
 
     private final String LOG_TAG = GameActivity.class.getSimpleName();
@@ -47,6 +51,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        buttonSound = new Sound(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.button_sound));
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -116,5 +121,45 @@ public class GameActivity extends AppCompatActivity {
 
     public void exitGame(View view) {
         // TODO Radu :)
+        showExitDialog();
+    }
+
+    public void showExitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog dialog = builder.setMessage("Are you sure?")
+                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        buttonSound.initSound();
+                        buttonSound.start();
+                        finish();
+                        startActivity(new Intent(GameActivity.this, MainActivity.class));
+                    }
+                })
+                .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        buttonSound.initSound();
+                        buttonSound.start();
+                        dialogInterface.cancel();
+                    }
+                })
+                .create();
+        dialog.show();
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(R.drawable.bgd_dialog);
+    }
+
+    @Override
+    public void onBackPressed() {
+        showExitDialog();
+        buttonSound.initSound();
+        buttonSound.start();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(LOG_TAG, "onStop");
+        buttonSound.stopSound();
     }
 }
