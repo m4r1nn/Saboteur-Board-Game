@@ -8,13 +8,14 @@
     tools:context=".GameActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="85dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:orientation="vertical"
         android:background="@drawable/players_layout_background"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,9 +31,9 @@
                 android:id="@+id/icon_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
-                android:layout_marginStart="2dp"
                 android:layout_weight="4"
                 tools:ignore="NestedWeights" />
 
@@ -41,9 +42,9 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="4dp"
-                android:gravity="center_vertical"
                 android:layout_weight="1"
                 android:fontFamily="casual"
+                android:gravity="center_vertical"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -303,6 +304,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="85dp"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
@@ -491,5 +493,829 @@
 
         </GridLayout>
     </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/map_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/players_layout_background"
+        android:columnCount="11"
+        android:rowCount="7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/card_0_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_1_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_2_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_3_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_4_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="4"
+            android:layout_columnWeight="1"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_5_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="5"
+            android:layout_columnWeight="1"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_6_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="6"
+            android:layout_columnWeight="1"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_7_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="7"
+            android:layout_columnWeight="1"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_8_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="8"
+            android:layout_columnWeight="1"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_9_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="9"
+            android:layout_columnWeight="1"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_10_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="10"
+            android:layout_columnWeight="1"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_0_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_1_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_2_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_3_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_4_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="4"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_5_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="5"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_6_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="6"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_7_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="7"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_8_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="8"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_9_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="9"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_10_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="10"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_0_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_1_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_2_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_3_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_4_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="4"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_5_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="5"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_6_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="6"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_7_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="7"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_8_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="8"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_9_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="9"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_10_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="2"
+            android:layout_rowWeight="1"
+            android:layout_column="10"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_0_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="3"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_1_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="3"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_2_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="3"
+            android:layout_rowWeight="1"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_3_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="3"
+            android:layout_rowWeight="1"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_4_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="3"
+            android:layout_rowWeight="1"
+            android:layout_column="4"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_5_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="3"
+            android:layout_rowWeight="1"
+            android:layout_column="5"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_6_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="3"
+            android:layout_rowWeight="1"
+            android:layout_column="6"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_7_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="3"
+            android:layout_rowWeight="1"
+            android:layout_column="7"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_8_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="3"
+            android:layout_rowWeight="1"
+            android:layout_column="8"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_9_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="3"
+            android:layout_rowWeight="1"
+            android:layout_column="9"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_10_3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="3"
+            android:layout_rowWeight="1"
+            android:layout_column="10"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_0_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="4"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_1_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="4"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_2_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="4"
+            android:layout_rowWeight="1"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_3_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="4"
+            android:layout_rowWeight="1"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_4_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="4"
+            android:layout_rowWeight="1"
+            android:layout_column="4"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_5_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="4"
+            android:layout_rowWeight="1"
+            android:layout_column="5"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_6_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="4"
+            android:layout_rowWeight="1"
+            android:layout_column="6"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_7_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="4"
+            android:layout_rowWeight="1"
+            android:layout_column="7"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_8_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="4"
+            android:layout_rowWeight="1"
+            android:layout_column="8"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_9_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="4"
+            android:layout_rowWeight="1"
+            android:layout_column="9"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_10_4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="4"
+            android:layout_rowWeight="1"
+            android:layout_column="10"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_0_5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="5"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_1_5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="5"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_2_5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="5"
+            android:layout_rowWeight="1"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_3_5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="5"
+            android:layout_rowWeight="1"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_4_5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="5"
+            android:layout_rowWeight="1"
+            android:layout_column="4"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_5_5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="5"
+            android:layout_rowWeight="1"
+            android:layout_column="5"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_6_5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="5"
+            android:layout_rowWeight="1"
+            android:layout_column="6"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_7_5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="5"
+            android:layout_rowWeight="1"
+            android:layout_column="7"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_8_5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="5"
+            android:layout_rowWeight="1"
+            android:layout_column="8"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_9_5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="5"
+            android:layout_rowWeight="1"
+            android:layout_column="9"
+            android:layout_columnWeight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_10_5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="5"
+            android:layout_rowWeight="1"
+            android:layout_column="10"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_0_6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_1_6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_2_6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_rowWeight="1"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_3_6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_rowWeight="1"
+            android:layout_column="3"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_4_6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_rowWeight="1"
+            android:layout_column="4"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_5_6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_rowWeight="1"
+            android:layout_column="5"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_6_6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_rowWeight="1"
+            android:layout_column="6"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_7_6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_rowWeight="1"
+            android:layout_column="7"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_8_6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_rowWeight="1"
+            android:layout_column="8"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_9_6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_rowWeight="1"
+            android:layout_column="9"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/card_10_6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_rowWeight="1"
+            android:layout_column="10"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY" />
+
+    </GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

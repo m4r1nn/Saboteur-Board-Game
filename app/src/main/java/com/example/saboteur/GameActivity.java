@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,15 +41,47 @@ public class GameActivity extends AppCompatActivity {
     ArrayList<Integer> icons = new ArrayList<>();
     ArrayList<ImageView> images = new ArrayList<>();
     ArrayList<TextView> texts = new ArrayList<>();
+    ArrayList<ArrayList<ImageView>> cards = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        try {
+            display.getRealSize(size);
+        } catch (NoSuchMethodError err) {
+            display.getSize(size);
+        }
+
+        GridLayout mapLayout = findViewById(R.id.map_layout);
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mapLayout.getLayoutParams();
+        params.height = size.y - 96;
+        params.leftMargin = params.rightMargin = (size.x - 2 * (85 + 8) - params.height * 11 / 7) / 2;
+        mapLayout.setLayoutParams(params);
+
         for (int i = 1; i <= MAX_PLAYERS; i++) {
             images.add((ImageView) findViewById(getResources().getIdentifier("icon_" + i, "id", getPackageName())));
             texts.add((TextView) findViewById(getResources().getIdentifier("name_" + i, "id", getPackageName())));
         }
+
+        for (int i = 0; i < 7; i++) {
+            ArrayList<ImageView> temp = new ArrayList<>();
+            for (int j = 0; j < 11; j++) {
+                temp.add((ImageView) findViewById(getResources().getIdentifier("card_" + j + "_" + i, "id", getPackageName())));
+            }
+            cards.add(temp);
+        }
+
+//        for (int i = 0; i < 7; i++) {
+//            for (int j = 0; j < 11; j++) {
+//                cards.get(i).get(j).setImageResource(R.drawable.card_road_cross);
+//            }
+//        }
+//
+//        cards.get(2).get(3).setImageResource(R.drawable.card_block_cross);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -57,16 +92,13 @@ public class GameActivity extends AppCompatActivity {
         Log.d(LOG_TAG, roomCode);
 
 
-        db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (DocumentChange documentSnapshot : queryDocumentSnapshots.getDocumentChanges()) {
-                    Log.d(LOG_TAG, String.valueOf(documentSnapshot.getDocument().getData()));
-                    names.add(Objects.requireNonNull(documentSnapshot.getDocument().get("user")).toString());
-                    icons.add(Integer.parseInt(Objects.requireNonNull(documentSnapshot.getDocument().get("photo")).toString()));
-                }
-                fillPlayersNames();
+        db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (DocumentChange documentSnapshot : queryDocumentSnapshots.getDocumentChanges()) {
+                Log.d(LOG_TAG, String.valueOf(documentSnapshot.getDocument().getData()));
+                names.add(Objects.requireNonNull(documentSnapshot.getDocument().get("user")).toString());
+                icons.add(Integer.parseInt(Objects.requireNonNull(documentSnapshot.getDocument().get("photo")).toString()));
             }
+            fillPlayersNames();
         });
     }
 
