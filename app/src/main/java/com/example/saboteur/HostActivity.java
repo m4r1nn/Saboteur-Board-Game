@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.saboteur.utils.Sound;
 import com.example.saboteur.utils.engine.cards.Card;
@@ -62,7 +63,6 @@ public class HostActivity extends AppCompatActivity {
     private final String COLLECTION_NAME = "test";
     private final String START_PATH = "start";
     private final String DECK_PATH = "deck";
-    private final int numberCards = 5;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     TextView hostUserView;
     TextView codeRoomView;
@@ -211,8 +211,16 @@ public class HostActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void addCardsToDb() {
         Deck deck = Deck.getInstance();
-        List<String > names = playerNames.stream().filter((TextView tv) -> !tv.getText().toString().equals("")).collect(Collectors.toList()).stream().map(((TextView tv) -> tv.getText().toString())).collect(Collectors.toList());
+        List<String> names = playerNames.stream().filter((TextView tv) -> !tv.getText().toString().equals("")).collect(Collectors.toList()).stream().map(((TextView tv) -> tv.getText().toString())).collect(Collectors.toList());
         names.add(hostUserView.getText().toString());
+        int numberCards;
+        if (playersCount < 5) {
+            numberCards = 6;
+        } else if (playersCount < 7) {
+            numberCards = 5;
+        } else {
+            numberCards = 4;
+        }
         for (int i = 0; i < names.size(); i++) {
             ArrayList<String> cardTypes = new ArrayList<>();
             for (int j = 0; j < numberCards; j++) {
@@ -240,6 +248,10 @@ public class HostActivity extends AppCompatActivity {
         buttonSound.initSound();
         buttonSound.start();
         Log.d(LOG_TAG, roomCode);
+//        if (playersCount < 3) {
+//            Toast.makeText(this, "Too few players", Toast.LENGTH_LONG).show();
+//            return;
+//        }
         listener.remove();
         db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
