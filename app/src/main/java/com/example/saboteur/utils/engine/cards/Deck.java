@@ -1,12 +1,9 @@
 package com.example.saboteur.utils.engine.cards;
 
-import androidx.annotation.NonNull;
-
 import com.example.saboteur.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -19,6 +16,7 @@ public final class Deck {
     private ArrayList<Card> cards;
 
     private BiMap<CardType, Integer> type2Id = null;
+    private BiMap<CardType, String> type2String;
 
     private Deck() {
         cards = new ArrayList<>();
@@ -63,7 +61,52 @@ public final class Deck {
         Collections.shuffle(cards);
     }
 
-    private void buildMap() {
+    public ArrayList<String> getEndCards() {
+        ArrayList<String> endCards = new ArrayList<>();
+        endCards.add(CardType.EndType.FINISH_TREASURE.getName());
+        endCards.add(CardType.EndType.FINISH_TURN_LEFT.getName());
+        endCards.add(CardType.EndType.FINISH_TURN_RIGHT.getName());
+        Collections.shuffle(endCards);
+        return endCards;
+    }
+
+    private void buildType2StringMap() {
+        type2String = HashBiMap.create();
+        type2String.put(CardType.StartType.START, CardType.StartType.START.getName());
+        type2String.put(CardType.EndType.FINISH_TREASURE, CardType.EndType.FINISH_TREASURE.getName());
+        type2String.put(CardType.EndType.FINISH_TURN_LEFT, CardType.EndType.FINISH_TURN_LEFT.getName());
+        type2String.put(CardType.EndType.FINISH_TURN_RIGHT, CardType.EndType.FINISH_TURN_RIGHT.getName());
+        type2String.put(CardType.ActionType.SpecialType.ACTION_AVALANCHE, CardType.ActionType.SpecialType.ACTION_AVALANCHE.getName());
+        type2String.put(CardType.ActionType.SpecialType.ACTION_MAP, CardType.ActionType.SpecialType.ACTION_MAP.getName());
+        type2String.put(CardType.ActionType.BlockType.ACTION_BLOCK_CART, CardType.ActionType.BlockType.ACTION_BLOCK_CART.getName());
+        type2String.put(CardType.ActionType.BlockType.ACTION_BLOCK_LAMP, CardType.ActionType.BlockType.ACTION_BLOCK_LAMP.getName());
+        type2String.put(CardType.ActionType.BlockType.ACTION_BLOCK_PICKAXE, CardType.ActionType.BlockType.ACTION_BLOCK_PICKAXE.getName());
+        type2String.put(CardType.ActionType.UnblockType.ACTION_UNBLOCK_CART, CardType.ActionType.UnblockType.ACTION_UNBLOCK_CART.getName());
+        type2String.put(CardType.ActionType.UnblockType.ACTION_UNBLOCK_LAMP, CardType.ActionType.UnblockType.ACTION_UNBLOCK_LAMP.getName());
+        type2String.put(CardType.ActionType.UnblockType.ACTION_UNBLOCK_PICKAXE, CardType.ActionType.UnblockType.ACTION_UNBLOCK_PICKAXE.getName());
+        type2String.put(CardType.ActionType.UnblockType.ACTION_UNBLOCK_CART_LAMP, CardType.ActionType.UnblockType.ACTION_UNBLOCK_CART_LAMP.getName());
+        type2String.put(CardType.ActionType.UnblockType.ACTION_UNBLOCK_LAMP_PICKAXE, CardType.ActionType.UnblockType.ACTION_UNBLOCK_LAMP_PICKAXE.getName());
+        type2String.put(CardType.ActionType.UnblockType.ACTION_UNBLOCK_PICKAXE_CART, CardType.ActionType.UnblockType.ACTION_UNBLOCK_PICKAXE_CART.getName());
+        type2String.put(CardType.RoadType.ROAD_CORNER_LEFT, CardType.RoadType.ROAD_CORNER_LEFT.getName());
+        type2String.put(CardType.RoadType.ROAD_CORNER_RIGHT, CardType.RoadType.ROAD_CORNER_RIGHT.getName());
+        type2String.put(CardType.RoadType.ROAD_CROSS, CardType.RoadType.ROAD_CROSS.getName());
+        type2String.put(CardType.RoadType.ROAD_VERTICAL_1_HORIZONTAL_2, CardType.RoadType.ROAD_VERTICAL_1_HORIZONTAL_2.getName());
+        type2String.put(CardType.RoadType.ROAD_VERTICAL_2, CardType.RoadType.ROAD_VERTICAL_2.getName());
+        type2String.put(CardType.RoadType.ROAD_VERTICAL_2_HORIZONTAL_1, CardType.RoadType.ROAD_VERTICAL_2_HORIZONTAL_1.getName());
+        type2String.put(CardType.RoadType.ROAD_HORIZONTAL_2, CardType.RoadType.ROAD_HORIZONTAL_2.getName());
+        type2String.put(CardType.BlockType.BLOCK_CORNER_LEFT, CardType.BlockType.BLOCK_CORNER_LEFT.getName());
+        type2String.put(CardType.BlockType.BLOCK_CORNER_RIGHT, CardType.BlockType.BLOCK_CORNER_RIGHT.getName());
+        type2String.put(CardType.BlockType.BLOCK_CROSS, CardType.BlockType.BLOCK_CROSS.getName());
+        type2String.put(CardType.BlockType.BLOCK_VERTICAL_2, CardType.BlockType.BLOCK_VERTICAL_2.getName());
+        type2String.put(CardType.BlockType.BLOCK_VERTICAL_2_HORIZONTAL_1, CardType.BlockType.BLOCK_VERTICAL_2_HORIZONTAL_1.getName());
+        type2String.put(CardType.BlockType.BLOCK_VERTICAL_1_HORIZONTAL_2, CardType.BlockType.BLOCK_VERTICAL_1_HORIZONTAL_2.getName());
+        type2String.put(CardType.BlockType.BLOCK_VERTICAL_1, CardType.BlockType.BLOCK_VERTICAL_1.getName());
+        type2String.put(CardType.BlockType.BLOCK_HORIZONTAL_1, CardType.BlockType.BLOCK_HORIZONTAL_1.getName());
+        type2String.put(CardType.BlockType.BLOCK_HORIZONTAL_2, CardType.BlockType.BLOCK_HORIZONTAL_2.getName());
+        type2String.put(CardType.Back.BACK_FINISH, CardType.Back.BACK_FINISH.getName());
+    }
+
+    private void buildType2IdMap() {
         type2Id = HashBiMap.create();
         type2Id.put(CardType.StartType.START, R.drawable.card_road_start);
         type2Id.put(CardType.EndType.FINISH_TREASURE, R.drawable.card_end_win);
@@ -100,8 +143,19 @@ public final class Deck {
     }
 
     public BiMap<CardType, Integer> getType2Id() {
+        if (type2Id == null) {
+            buildType2IdMap();
+        }
         return type2Id;
     }
+
+    public BiMap<CardType, String> getType2String() {
+        if (type2String == null) {
+            buildType2StringMap();
+        }
+        return type2String;
+    }
+
 
     public ArrayList<Card> getCards() {
         return cards;

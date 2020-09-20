@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.example.saboteur.utils.Sound;
 import com.example.saboteur.utils.engine.cards.Card;
 import com.example.saboteur.utils.engine.cards.CardType;
+import com.example.saboteur.utils.engine.cards.Deck;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentChange;
@@ -42,7 +43,7 @@ public class GameActivity extends AppCompatActivity {
 
     private Sound buttonSound = null;
     private static final int MAX_PLAYERS = 10;
-
+    private static final int MAX_CARDS = 6;
     private final String LOG_TAG = GameActivity.class.getSimpleName();
     private final String DATABASE_NAME = "users";
     private final String COLLECTION_NAME = "test";
@@ -57,6 +58,7 @@ public class GameActivity extends AppCompatActivity {
     ArrayList<TextView> texts = new ArrayList<>();
     ArrayList<ArrayList<ImageView>> cards = new ArrayList<>();
     ArrayList<Card> hand;
+    ArrayList<ImageView> handView;
     private String roomCode;
 
     @Override
@@ -74,6 +76,8 @@ public class GameActivity extends AppCompatActivity {
         showCardNumber();
 
         getHand();
+
+        getFinishCards();
     }
 
     private void setMapDimension() {
@@ -117,6 +121,29 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
+
+    private void getFinishCards() {
+        db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).
+                document("Finish").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d(LOG_TAG, Objects.requireNonNull(documentSnapshot.get("cards")).toString());
+                List<String> temp = (List<String>) documentSnapshot.get("cards");
+                finishCardIds = new ArrayList<>();
+                for (int i = 0; i < temp.size(); i++) {
+                    finishCardIds.add(Deck.getInstance().getType2Id().get(Deck.getInstance().getType2String().inverse().get(temp.get(i))));
+                }
+
+                Log.d(LOG_TAG, String.valueOf(temp.size()));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(LOG_TAG, "fail listen", e);
+            }
+        });
+    }
+
     private void buildMap() {
         for (int i = 0; i < 7; i++) {
             ArrayList<ImageView> temp = new ArrayList<>();
@@ -127,14 +154,12 @@ public class GameActivity extends AppCompatActivity {
         }
         cards.get(3).get(1).setImageResource(R.drawable.card_road_start);
         // TODO transfer arraylist via database (same RANDOM anywhere)
-        finishCardIds = new ArrayList<>();
-        finishCardIds.add(R.drawable.card_end_turn_left);
-        finishCardIds.add(R.drawable.card_end_turn_right);
-        finishCardIds.add(R.drawable.card_end_win);
-        Collections.shuffle(finishCardIds);
+
+
         cards.get(1).get(9).setImageResource(R.drawable.card_back_end);
         cards.get(3).get(9).setImageResource(R.drawable.card_back_end);
         cards.get(5).get(9).setImageResource(R.drawable.card_back_end);
+
     }
 
     private void showCardNumber() {
@@ -161,7 +186,20 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private void showHand() {
+        for (int i = 0; i < hand.size(); i++) {
+            handView.get(i).setImageResource(Deck.getInstance().getType2Id().get(hand.get(i).getCard()));
+        }
+    }
+
     private void getHand() {
+
+        handView = new ArrayList<>();
+        hand = new ArrayList<>();
+        for (int i = 0; i < MAX_CARDS; i++ ) {
+            handView.add((ImageView) findViewById(getResources().getIdentifier("card_in_hand_" + i, "id", getPackageName())));
+        }
+
         db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).
                 document(username).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -169,8 +207,10 @@ public class GameActivity extends AppCompatActivity {
                 Log.d(LOG_TAG, Objects.requireNonNull(documentSnapshot.get("cards")).toString());
                 List<String> temp = (List<String>) documentSnapshot.get("cards");
                 for (int i = 0; i < temp.size(); i++) {
-                    // TODO map betweeen card type and string (name) and get and show hand
+                    Log.d(LOG_TAG, temp.get(i));
+                    hand.add(new Card(Deck.getInstance().getType2String().inverse().get(temp.get(i))));
                 }
+                showHand();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

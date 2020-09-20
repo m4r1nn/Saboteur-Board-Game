@@ -242,6 +242,11 @@ public class HostActivity extends AppCompatActivity {
             db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document("Available").collection("Cards").add(docData);
             c = deck.draw();
         }
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("cards", deck.getEndCards());
+        db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document("Finish").set(docData);
+
     }
 
     public void playGame(View view) {

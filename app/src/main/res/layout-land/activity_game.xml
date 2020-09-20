@@ -648,6 +648,7 @@
             android:rowCount="3">
 
             <ImageView
+                android:id="@+id/card_in_hand_0"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_row="0"
@@ -658,9 +659,10 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
-                app:srcCompat="@drawable/card_road_cross" />
+                 />
 
             <ImageView
+                android:id="@+id/card_in_hand_1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_row="0"
@@ -671,9 +673,10 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
-                app:srcCompat="@drawable/card_action_unblock_lamp_cart" />
+                />
 
             <ImageView
+                android:id="@+id/card_in_hand_2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_row="1"
@@ -684,9 +687,10 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
-                app:srcCompat="@drawable/card_action_map" />
+                 />
 
             <ImageView
+                android:id="@+id/card_in_hand_3"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_row="1"
@@ -697,9 +701,10 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
-                app:srcCompat="@drawable/card_block_corner_right" />
+                />
 
             <ImageView
+                android:id="@+id/card_in_hand_4"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_row="2"
@@ -710,9 +715,10 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
-                app:srcCompat="@drawable/card_road_vertical_2" />
+                />
 
             <ImageView
+                android:id="@+id/card_in_hand_5"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_row="2"
@@ -723,7 +729,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
-                app:srcCompat="@drawable/card_action_avalanche" />
+                 />
 
         </GridLayout>
     </LinearLayout>
