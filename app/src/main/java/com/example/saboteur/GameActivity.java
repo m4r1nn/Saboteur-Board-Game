@@ -6,8 +6,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
@@ -60,6 +62,7 @@ public class GameActivity extends AppCompatActivity {
     ArrayList<Card> hand;
     ArrayList<ImageView> handView;
     private String roomCode;
+    private ImageView selectedCard = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,7 +224,11 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void exitGame(View view) {
-        // TODO Radu :)
+        // TODO               \              /
+        // TODO                \           /
+        // TODO Radu   >:()--------------<
+        // TODO                /          \
+        // TODO              /             \
         showExitDialog();
     }
 
@@ -262,5 +269,30 @@ public class GameActivity extends AppCompatActivity {
         super.onStop();
         Log.d(LOG_TAG, "onStop");
         buttonSound.stopSound();
+    }
+
+    @SuppressLint({"UseCompatLoadingForDrawables", "ResourceAsColor"})
+    public void selectCard(View view) {
+        ImageView cardView = (ImageView) view;
+        Log.d(LOG_TAG, "" + cardView.getId());
+        if (selectedCard != null) {
+            selectedCard.setBackgroundColor(Color.TRANSPARENT);
+            selectedCard = null;
+        }
+        // TODO Marian!!!!!!!!!!!!!!!!!
+        // roteste imaginea cand este selectata deja ---> si in hand si in handview!!!
+        int index = -1;
+        for (int i = 0; i < handView.size(); i++) {
+            if (handView.get(i).getId() == cardView.getId()) {
+                selectedCard = handView.get(i);
+                index = i;
+                break;
+            }
+        }
+        if (index < cards.size()) {
+            if (selectedCard != null) {
+                selectedCard.setBackgroundColor(Color.YELLOW);
+            }
+        }
     }
 }

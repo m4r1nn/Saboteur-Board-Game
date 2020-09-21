@@ -659,6 +659,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
+                android:onClick="selectCard"
                  />
 
             <ImageView
@@ -673,6 +674,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
+                android:onClick="selectCard"
                 />
 
             <ImageView
@@ -687,6 +689,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
+                android:onClick="selectCard"
                  />
 
             <ImageView
@@ -701,6 +704,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
+                android:onClick="selectCard"
                 />
 
             <ImageView
@@ -715,6 +719,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
+                android:onClick="selectCard"
                 />
 
             <ImageView
@@ -729,6 +734,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
+                android:onClick="selectCard"
                  />
 
         </GridLayout>
