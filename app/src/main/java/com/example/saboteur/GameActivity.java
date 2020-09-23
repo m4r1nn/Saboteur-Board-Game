@@ -156,7 +156,6 @@ public class GameActivity extends AppCompatActivity {
             cards.add(temp);
         }
         cards.get(3).get(1).setImageResource(R.drawable.card_road_start);
-        // TODO transfer arraylist via database (same RANDOM anywhere)
 
 
         cards.get(1).get(9).setImageResource(R.drawable.card_back_end);
