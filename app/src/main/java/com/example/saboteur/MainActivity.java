@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         buttonSound.initSound();
         buttonSound.start();
         Intent intent = new Intent(this, HostActivity.class);
+        finish();
         startActivity(intent);
     }
 
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         buttonSound.initSound();
         buttonSound.start();
         Intent intent = new Intent(this, JoinActivity.class);
+        finish();
         startActivity(intent);
     }
 }

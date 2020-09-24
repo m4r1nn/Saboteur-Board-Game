@@ -19,6 +19,9 @@ public final class Deck {
     private BiMap<CardType, String> type2String;
 
     private Deck() {
+    }
+
+    public void buildDeck() {
         cards = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
