@@ -45,6 +45,7 @@ import java.util.Random;
 public class GameActivity extends AppCompatActivity {
 
     private Sound buttonSound = null;
+    private TextView roleText = null;
     private static final int MAX_PLAYERS = 10;
     private static final int MAX_CARDS = 6;
     private final String LOG_TAG = GameActivity.class.getSimpleName();
@@ -70,6 +71,7 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         buttonSound = new Sound(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.button_sound));
+        roleText = findViewById(R.id.role_text);
 
         setMapDimension();
 
@@ -211,6 +213,14 @@ public class GameActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 //                Log.d(LOG_TAG, Objects.requireNonNull(documentSnapshot.get("cards")).toString());
                 List<String> temp = (List<String>) documentSnapshot.get("cards");
+                String role = (String) documentSnapshot.get("role");
+                roleText.setText(role);
+                assert role != null;
+                if (role.equals("Saboteur")) {
+                    roleText.setTextColor(Color.RED);
+                } else {
+                    roleText.setTextColor(Color.BLUE);
+                }
                 assert temp != null;
                 for (int i = 0; i < temp.size(); i++) {
 //                    Log.d(LOG_TAG, temp.get(i));
@@ -304,5 +314,9 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void selectMapPlace(View view) {
+
     }
 }

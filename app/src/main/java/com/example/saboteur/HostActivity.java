@@ -221,6 +221,7 @@ public class HostActivity extends AppCompatActivity {
         } else {
             numberCards = 4;
         }
+        ArrayList<String> roles = prepareRoles();
         for (int i = 0; i < names.size(); i++) {
             ArrayList<String> cardTypes = new ArrayList<>();
             for (int j = 0; j < numberCards; j++) {
@@ -231,6 +232,7 @@ public class HostActivity extends AppCompatActivity {
             }
             Map<String, Object> docData = new HashMap<>();
             docData.put("cards", cardTypes);
+            docData.put("role", roles.get(i));
             db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document(names.get(i)).set(docData);
         }
 
@@ -249,7 +251,7 @@ public class HostActivity extends AppCompatActivity {
 
     }
 
-    public void addRolesToDB() {
+    public ArrayList<String> prepareRoles() {
         ArrayList<String> roles = new ArrayList<>();
         int saboteursCount = 1;
         if (playersCount > 3) {
@@ -268,7 +270,7 @@ public class HostActivity extends AppCompatActivity {
             roles.add("Dwarf");
         }
         Collections.shuffle(roles);
-        // TODO Radu --- trimite vectorul si fa ca fiecare jucator sa extraga cate o carte din el :)
+        return roles;
     }
 
     public void playGame(View view) {
