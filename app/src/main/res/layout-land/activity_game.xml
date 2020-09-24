@@ -588,55 +588,28 @@
 
         </LinearLayout>
 
-        <GridLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="4dp"
-            android:layout_weight="1.25"
-            android:background="@drawable/players_layout_background"
-            android:columnCount="2"
-            android:rowCount="2">
+            android:layout_weight="1.45"
+            android:background="@drawable/players_layout_background">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_row="0"
-                android:layout_rowWeight="1"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:srcCompat="@drawable/mini_pickaxe" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_row="0"
-                android:layout_rowWeight="1"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:srcCompat="@drawable/mini_cart" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_row="1"
-                android:layout_rowWeight="1"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:srcCompat="@drawable/mini_lamp" />
-
-        </GridLayout>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:gravity="center_horizontal"
+                android:text="Saboteur"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <GridLayout
             android:layout_width="match_parent"

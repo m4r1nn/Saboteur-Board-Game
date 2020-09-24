@@ -249,6 +249,28 @@ public class HostActivity extends AppCompatActivity {
 
     }
 
+    public void addRolesToDB() {
+        ArrayList<String> roles = new ArrayList<>();
+        int saboteursCount = 1;
+        if (playersCount > 3) {
+            saboteursCount++;
+        }
+        if (playersCount > 5) {
+            saboteursCount++;
+        }
+        if (playersCount > 8) {
+            saboteursCount++;
+        }
+        for (int i = 0; i < saboteursCount; i++) {
+            roles.add("Saboteur");
+        }
+        for (int i = saboteursCount; i <= playersCount; i++) {
+            roles.add("Dwarf");
+        }
+        Collections.shuffle(roles);
+        // TODO Radu --- trimite vectorul si fa ca fiecare jucator sa extraga cate o carte din el :)
+    }
+
     public void playGame(View view) {
         buttonSound.initSound();
         buttonSound.start();
@@ -288,6 +310,7 @@ public class HostActivity extends AppCompatActivity {
                         db.collection(DATABASE_NAME).document(roomCode).collection(START_PATH).add(start).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentReference> task) {
+                                Log.d(LOG_TAG, "players number: " + playersCount);
                                 finish();
                                 startActivity(prepareIntent(new Intent(HostActivity.this, GameActivity.class)));
                             }
