@@ -116,7 +116,7 @@ public class GameActivity extends AppCompatActivity {
 
         db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (DocumentChange documentSnapshot : queryDocumentSnapshots.getDocumentChanges()) {
-                Log.d(LOG_TAG, String.valueOf(documentSnapshot.getDocument().getData()));
+//                Log.d(LOG_TAG, String.valueOf(documentSnapshot.getDocument().getData()));
                 names.add(Objects.requireNonNull(documentSnapshot.getDocument().get("user")).toString());
                 icons.add(Integer.parseInt(Objects.requireNonNull(documentSnapshot.getDocument().get("photo")).toString()));
             }
@@ -130,19 +130,19 @@ public class GameActivity extends AppCompatActivity {
                 document("Finish").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Log.d(LOG_TAG, Objects.requireNonNull(documentSnapshot.get("cards")).toString());
+//                Log.d(LOG_TAG, Objects.requireNonNull(documentSnapshot.get("cards")).toString());
                 List<String> temp = (List<String>) documentSnapshot.get("cards");
                 finishCardIds = new ArrayList<>();
                 for (int i = 0; i < temp.size(); i++) {
                     finishCardIds.add(Deck.getInstance().getType2Id().get(Deck.getInstance().getType2String().inverse().get(temp.get(i))));
                 }
 
-                Log.d(LOG_TAG, String.valueOf(temp.size()));
+//                Log.d(LOG_TAG, String.valueOf(temp.size()));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(LOG_TAG, "fail listen", e);
+//                Log.d(LOG_TAG, "fail listen", e);
             }
         });
     }
@@ -161,6 +161,7 @@ public class GameActivity extends AppCompatActivity {
         cards.get(1).get(9).setImageResource(R.drawable.card_back_end);
         cards.get(3).get(9).setImageResource(R.drawable.card_back_end);
         cards.get(5).get(9).setImageResource(R.drawable.card_back_end);
+//        Log.d(LOG_TAG, "Background: " + cards.get(4).get(4).getBackground());
 
     }
 
@@ -179,7 +180,7 @@ public class GameActivity extends AppCompatActivity {
     private void fillPlayersNames() {
         Log.d(LOG_TAG, "size " + names.size());
         for (int i = 0; i < names.size(); i++) {
-            Log.d(LOG_TAG, i + " " + icons.get(i) + " " + names.get(i));
+//            Log.d(LOG_TAG, i + " " + icons.get(i) + " " + names.get(i));
             ImageView image = images.get(i);
             image.setImageResource(icons.get(i));
 
@@ -198,18 +199,20 @@ public class GameActivity extends AppCompatActivity {
 
         handView = new ArrayList<>();
         hand = new ArrayList<>();
-        for (int i = 0; i < MAX_CARDS; i++ ) {
+        for (int i = 0; i < MAX_CARDS; i++) {
             handView.add((ImageView) findViewById(getResources().getIdentifier("card_in_hand_" + i, "id", getPackageName())));
         }
 
         db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).
                 document(username).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
+            @SuppressWarnings("unchecked")
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Log.d(LOG_TAG, Objects.requireNonNull(documentSnapshot.get("cards")).toString());
+//                Log.d(LOG_TAG, Objects.requireNonNull(documentSnapshot.get("cards")).toString());
                 List<String> temp = (List<String>) documentSnapshot.get("cards");
+                assert temp != null;
                 for (int i = 0; i < temp.size(); i++) {
-                    Log.d(LOG_TAG, temp.get(i));
+//                    Log.d(LOG_TAG, temp.get(i));
                     hand.add(new Card(Deck.getInstance().getType2String().inverse().get(temp.get(i))));
                 }
                 showHand();
@@ -217,7 +220,7 @@ public class GameActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(LOG_TAG, "fail listen", e);
+//                Log.d(LOG_TAG, "fail listen", e);
             }
         });
     }
@@ -273,12 +276,14 @@ public class GameActivity extends AppCompatActivity {
     @SuppressLint({"UseCompatLoadingForDrawables", "ResourceAsColor"})
     public void selectCard(View view) {
         ImageView cardView = (ImageView) view;
-        Log.d(LOG_TAG, "" + cardView.getId());
+//        Log.d(LOG_TAG, "" + cardView.getId());
+        int oldSelectedId = -1;
         if (selectedCard != null) {
             selectedCard.setBackgroundColor(Color.TRANSPARENT);
+            oldSelectedId = selectedCard.getId();
             selectedCard = null;
         }
-        // TODO Marian!!!!!!!!!!!!!!!!!
+        // TODO Marian!!!!!!!!!!!!!
         // roteste imaginea cand este selectata deja ---> si in hand si in handview!!!
         int index = -1;
         for (int i = 0; i < handView.size(); i++) {
@@ -291,6 +296,11 @@ public class GameActivity extends AppCompatActivity {
         if (index < cards.size()) {
             if (selectedCard != null) {
                 selectedCard.setBackgroundColor(Color.YELLOW);
+                ImageView currentCardView = handView.get(index);
+                if (currentCardView.getId() == oldSelectedId && !(hand.get(index).getCard() instanceof CardType.ActionType)) {
+                    hand.get(index).changeRotation();
+                    currentCardView.setRotation(((int) (currentCardView.getRotation() + 180)) % 360);
+                }
             }
         }
     }
