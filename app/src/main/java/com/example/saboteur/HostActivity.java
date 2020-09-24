@@ -2,10 +2,12 @@ package com.example.saboteur;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AtomicFile;
 import android.util.Log;
@@ -13,8 +15,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.saboteur.utils.Sound;
+import com.example.saboteur.utils.engine.cards.Card;
+import com.example.saboteur.utils.engine.cards.Deck;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,9 +39,11 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -46,6 +53,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class HostActivity extends AppCompatActivity {
 
@@ -54,6 +62,7 @@ public class HostActivity extends AppCompatActivity {
     private final String DATABASE_NAME = "users";
     private final String COLLECTION_NAME = "test";
     private final String START_PATH = "start";
+    private final String DECK_PATH = "deck";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     TextView hostUserView;
     TextView codeRoomView;
@@ -199,15 +208,56 @@ public class HostActivity extends AppCompatActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void addCardsToDb() {
+        Deck deck = Deck.getInstance();
+        List<String> names = playerNames.stream().filter((TextView tv) -> !tv.getText().toString().equals("")).collect(Collectors.toList()).stream().map(((TextView tv) -> tv.getText().toString())).collect(Collectors.toList());
+        names.add(hostUserView.getText().toString());
+        int numberCards;
+        if (playersCount < 5) {
+            numberCards = 6;
+        } else if (playersCount < 7) {
+            numberCards = 5;
+        } else {
+            numberCards = 4;
+        }
+        for (int i = 0; i < names.size(); i++) {
+            ArrayList<String> cardTypes = new ArrayList<>();
+            for (int j = 0; j < numberCards; j++) {
+                Card c = deck.draw();
+                if (c != null) {
+                    cardTypes.add(c.getCard().getName());
+                }
+            }
+            Map<String, Object> docData = new HashMap<>();
+            docData.put("cards", cardTypes);
+            db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document(names.get(i)).set(docData);
+        }
+
+
+        Card c = deck.draw();
+        while (c != null) {
+            Map<String, Object> docData = new HashMap<>();
+            docData.put("card", c.getCard().getName());
+            db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document("Available").collection("Cards").add(docData);
+            c = deck.draw();
+        }
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("cards", deck.getEndCards());
+        db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document("Finish").set(docData);
+
+    }
+
     public void playGame(View view) {
         buttonSound.initSound();
         buttonSound.start();
-
-
         Log.d(LOG_TAG, roomCode);
-
+//        if (playersCount < 3) {
+//            Toast.makeText(this, "Too few players", Toast.LENGTH_LONG).show();
+//            return;
+//        }
         listener.remove();
-
         db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -220,24 +270,28 @@ public class HostActivity extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
                             Log.d(LOG_TAG, "Updated the photo in the database");
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(LOG_TAG, String.format("Problem while updating the photo in the db for player %d", index), e);
-                        }
-                    });
+                    }).addOnFailureListener(e -> Log.d(LOG_TAG, String.format("Problem while updating the photo in the db for player %d", index), e));
                 }
 
                 Map <String, Object> start = new HashMap<>();
                 start.put("start", 1);
 
                 db.collection(DATABASE_NAME).document(roomCode).collection(START_PATH).add(start).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
 
                         // TODO : MAYBE A REFACTOR?
-
-                        startActivity(prepareIntent(new Intent(HostActivity.this, GameActivity.class)));
+                        new Thread(HostActivity.this::addCardsToDb).start();
+                        Map <String, Object> start = new HashMap<>();
+                        start.put("start", 1);
+                        db.collection(DATABASE_NAME).document(roomCode).collection(START_PATH).add(start).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                finish();
+                                startActivity(prepareIntent(new Intent(HostActivity.this, GameActivity.class)));
+                            }
+                        });
                     }
                 });
 
