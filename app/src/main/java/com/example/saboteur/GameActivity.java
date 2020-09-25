@@ -2,6 +2,7 @@ package com.example.saboteur;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -13,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -21,11 +23,13 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.saboteur.utils.Sound;
 import com.example.saboteur.utils.engine.cards.Card;
 import com.example.saboteur.utils.engine.cards.CardType;
 import com.example.saboteur.utils.engine.cards.Deck;
+import com.example.saboteur.utils.engine.cards.Directions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentChange;
@@ -41,6 +45,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -132,12 +137,10 @@ public class GameActivity extends AppCompatActivity {
             }
             cards.add(temp);
         }
-        cards.get(3).get(1).setImageResource(R.drawable.card_road_start);
-
-
-        cards.get(1).get(9).setImageResource(R.drawable.card_back_end);
-        cards.get(3).get(9).setImageResource(R.drawable.card_back_end);
-        cards.get(5).get(9).setImageResource(R.drawable.card_back_end);
+        setImageResourceAndTag(cards.get(3).get(1), R.drawable.card_road_start);
+        setImageResourceAndTag(cards.get(1).get(9), R.drawable.card_back_end);
+        setImageResourceAndTag(cards.get(3).get(9), R.drawable.card_back_end);
+        setImageResourceAndTag(cards.get(5).get(9), R.drawable.card_back_end);
 
     }
 
@@ -165,7 +168,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void showHand() {
         for (int i = 0; i < hand.size(); i++) {
-            handView.get(i).setImageResource(Deck.getInstance().getType2Id().get(hand.get(i).getCard()));
+            setImageResourceAndTag(handView.get(i), Deck.getInstance().getType2Id().get(hand.get(i).getCard()));
         }
     }
 
@@ -288,7 +291,114 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void selectMapPlace(View view) {
+        ImageView cardView = (ImageView) view;
+        String temp = getResources().getResourceEntryName(cardView.getId());
+        String[] split = temp.split("_");
+        int lin = Integer.parseInt(split[2]);
+        int col = Integer.parseInt(split[1]);
+        Log.d(LOG_TAG, "line: " + lin);
+        Log.d(LOG_TAG, "column: " + col);
+        if (canMakeMove()) {
+            Log.d(LOG_TAG, "" + checkPlace(lin, col));
+        } else {
+            Toast.makeText(this, "Invalid move", Toast.LENGTH_LONG).show();
+        }
+    }
 
+    // TODO verifica daca jucatorul poate face mutarea (e tura lui si a selectat deja o carte de drum)
+    public boolean canMakeMove() {
+        return selectedCard != null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public boolean checkPlace(int lin, int col) {
+        Deck deck = Deck.getInstance();
+        ImageView card = cards.get(lin).get(col); // imageview selected from map (possibly empty)
+        Log.d(LOG_TAG, "id: " + card.getId());
+        if (card.getDrawable() != null) {
+            return false;
+        }
+        if (lin != 0) {
+            if (cards.get(lin - 1).get(col).getDrawable() != null) {
+//                Log.d(LOG_TAG, "hashmap: " + deck.getType2Id().inverse());
+//                Log.d(LOG_TAG, "type: " + deck.getType2Id().inverse().get(selectedCard.getId()));
+//                Log.d(LOG_TAG, "id: " + selectedCard.getId());
+//                Log.d(LOG_TAG, "" + handView.stream().map(image -> image.getTag()).collect(Collectors.toList()));
+                if (!hasConnection(selectedCard, cards.get(lin - 1).get(col), Directions.WEST)) {
+                    return false;
+                }
+            }
+        }
+        if (lin != 6) {
+            if (cards.get(lin + 1).get(col).getDrawable() != null) {
+                if (!hasConnection(selectedCard, cards.get(lin + 1).get(col), Directions.EAST)) {
+                    return false;
+                }
+            }
+        }
+        if (col != 0) {
+            if (cards.get(lin).get(col - 1).getDrawable() != null) {
+                if (!hasConnection(selectedCard, cards.get(lin).get(col - 1), Directions.SOUTH)) {
+                    return false;
+                }
+            }
+        }
+        if (col != 10) {
+            if (cards.get(lin).get(col + 1).getDrawable() != null) {
+                if (!hasConnection(selectedCard, cards.get(lin).get(col + 1), Directions.NORTH)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // verifica daca first se conecteaza cu second pe directia direction
+    private boolean hasConnection(ImageView first, ImageView second, Directions direction) {
+        Deck deck = Deck.getInstance();
+        List<Directions> firstDirections = deck.getType2Id().inverse().get(first.getTag()).getRoadDirections();
+        List<Directions> secondDirections = deck.getType2Id().inverse().get(second.getTag()).getRoadDirections();
+        switch (direction) {
+            case NORTH:
+                if (firstDirections.contains(Directions.NORTH) && !secondDirections.contains(Directions.SOUTH)) {
+                    return false;
+                }
+                if (!firstDirections.contains(Directions.NORTH) && secondDirections.contains(Directions.SOUTH)) {
+                    return false;
+                }
+                break;
+            case SOUTH:
+                if (firstDirections.contains(Directions.SOUTH) && !secondDirections.contains(Directions.NORTH)) {
+                    return false;
+                }
+                if (!firstDirections.contains(Directions.SOUTH) && secondDirections.contains(Directions.NORTH)) {
+                    return false;
+                }
+                break;
+            case WEST:
+                if (firstDirections.contains(Directions.WEST) && !secondDirections.contains(Directions.EAST)) {
+                    return false;
+                }
+                if (!firstDirections.contains(Directions.WEST) && secondDirections.contains(Directions.EAST)) {
+                    return false;
+                }
+                break;
+            case EAST:
+                if (firstDirections.contains(Directions.EAST) && !secondDirections.contains(Directions.WEST)) {
+                    return false;
+                }
+                if (!firstDirections.contains(Directions.EAST) && secondDirections.contains(Directions.WEST)) {
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+
+    private void setImageResourceAndTag(ImageView imageView, int id) {
+        imageView.setImageResource(id);
+        imageView.setTag(id);
     }
 }

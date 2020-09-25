@@ -26,6 +26,8 @@ public interface CardType {
 
     String getName();
 
+    public List<Directions> getRoadDirections();
+
     enum StartType implements CardType, CardEdge {
         START;
 
@@ -158,6 +160,12 @@ public interface CardType {
         public String getName() {
             return this.name();
         }
+
+        @Override
+        public List<Directions> getRoadDirections() {
+            // TODO langa cartile BACK se poate pune orice fel de carte de drum
+            return Arrays.asList(Directions.NORTH, Directions.EAST, Directions.SOUTH, Directions.WEST);
+        }
     }
 
     interface ActionType extends CardType {
@@ -168,6 +176,11 @@ public interface CardType {
             public String getName() {
                 return this.name();
             }
+
+            @Override
+            public List<Directions> getRoadDirections() {
+                return null;
+            }
         }
 
         enum BlockType implements ActionType {
@@ -176,6 +189,11 @@ public interface CardType {
             @Override
             public String getName() {
                 return this.name();
+            }
+
+            @Override
+            public List<Directions> getRoadDirections() {
+                return null;
             }
         }
 
@@ -186,6 +204,11 @@ public interface CardType {
             @Override
             public String getName() {
                 return this.name();
+            }
+
+            @Override
+            public List<Directions> getRoadDirections() {
+                return null;
             }
         }
     }
