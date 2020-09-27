@@ -143,7 +143,7 @@ public class JoinActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        listener.remove();
+//        listener.remove();
         Log.d(LOG_TAG, "onDestroy");
     }
 }
