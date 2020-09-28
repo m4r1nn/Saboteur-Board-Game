@@ -70,6 +70,7 @@ public class GameActivity extends AppCompatActivity {
     ArrayList<ImageView> handView;
     private String roomCode;
     private ImageView selectedCard = null;
+    private int selectedCardIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +101,7 @@ public class GameActivity extends AppCompatActivity {
 
         GridLayout mapLayout = findViewById(R.id.map_layout);
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mapLayout.getLayoutParams();
+        // hardcoded values, need revision
         params.height = size.y - 96;
         params.leftMargin = params.rightMargin = (size.x - 2 * (85 + 8) - params.height * 11 / 7) / 2;
         mapLayout.setLayoutParams(params);
@@ -271,20 +273,21 @@ public class GameActivity extends AppCompatActivity {
             oldSelectedId = selectedCard.getId();
             selectedCard = null;
         }
-        int index = -1;
+        selectedCardIndex = -1;
         for (int i = 0; i < handView.size(); i++) {
             if (handView.get(i).getId() == cardView.getId()) {
                 selectedCard = handView.get(i);
-                index = i;
+                selectedCardIndex = i;
                 break;
             }
         }
-        if (index < cards.size()) {
+        if (selectedCardIndex < cards.size()) {
+            // check condition
             if (selectedCard != null) {
                 selectedCard.setBackgroundColor(Color.YELLOW);
-                ImageView currentCardView = handView.get(index);
-                if (currentCardView.getId() == oldSelectedId && !(hand.get(index).getCard() instanceof CardType.ActionType)) {
-                    hand.get(index).changeRotation();
+                ImageView currentCardView = handView.get(selectedCardIndex);
+                if (currentCardView.getId() == oldSelectedId && !(hand.get(selectedCardIndex).getCard() instanceof CardType.ActionType)) {
+                    hand.get(selectedCardIndex).changeRotation();
                     currentCardView.setRotation(((int) (currentCardView.getRotation() + 180)) % 360);
                 }
             }
@@ -317,6 +320,7 @@ public class GameActivity extends AppCompatActivity {
         Deck deck = Deck.getInstance();
         ImageView card = cards.get(lin).get(col); // imageview selected from map (possibly empty)
         Log.d(LOG_TAG, "id: " + card.getId());
+        boolean rotated = hand.get(selectedCardIndex).getRotated();
         if (card.getDrawable() != null) {
             return false;
         }
@@ -326,40 +330,44 @@ public class GameActivity extends AppCompatActivity {
 //                Log.d(LOG_TAG, "type: " + deck.getType2Id().inverse().get(selectedCard.getId()));
 //                Log.d(LOG_TAG, "id: " + selectedCard.getId());
 //                Log.d(LOG_TAG, "" + handView.stream().map(image -> image.getTag()).collect(Collectors.toList()));
-                if (!hasConnection(selectedCard, cards.get(lin - 1).get(col), Directions.WEST)) {
+                if (!hasConnection(selectedCard, cards.get(lin - 1).get(col), Directions.WEST, rotated)) {
                     return false;
                 }
+//                return hasConnection(selectedCard, cards.get(lin - 1).get(col), Directions.WEST);
             }
         }
         if (lin != 6) {
             if (cards.get(lin + 1).get(col).getDrawable() != null) {
-                if (!hasConnection(selectedCard, cards.get(lin + 1).get(col), Directions.EAST)) {
+                if (!hasConnection(selectedCard, cards.get(lin + 1).get(col), Directions.EAST, rotated)) {
                     return false;
                 }
+//                return hasConnection(selectedCard, cards.get(lin + 1).get(col), Directions.EAST);
             }
         }
         if (col != 0) {
             if (cards.get(lin).get(col - 1).getDrawable() != null) {
-                if (!hasConnection(selectedCard, cards.get(lin).get(col - 1), Directions.SOUTH)) {
+                if (!hasConnection(selectedCard, cards.get(lin).get(col - 1), Directions.SOUTH, rotated)) {
                     return false;
                 }
+//                return hasConnection(selectedCard, cards.get(lin).get(col - 1), Directions.SOUTH);
             }
         }
         if (col != 10) {
             if (cards.get(lin).get(col + 1).getDrawable() != null) {
-                if (!hasConnection(selectedCard, cards.get(lin).get(col + 1), Directions.NORTH)) {
+                if (!hasConnection(selectedCard, cards.get(lin).get(col + 1), Directions.NORTH, rotated)) {
                     return false;
                 }
+//                return hasConnection(selectedCard, cards.get(lin).get(col + 1), Directions.NORTH);
             }
         }
         return true;
     }
 
     // verifica daca first se conecteaza cu second pe directia direction
-    private boolean hasConnection(ImageView first, ImageView second, Directions direction) {
+    private boolean hasConnection(ImageView first, ImageView second, Directions direction, boolean rotated) {
         Deck deck = Deck.getInstance();
-        List<Directions> firstDirections = deck.getType2Id().inverse().get(first.getTag()).getRoadDirections();
-        List<Directions> secondDirections = deck.getType2Id().inverse().get(second.getTag()).getRoadDirections();
+        List<Directions> firstDirections = deck.getType2Id().inverse().get(first.getTag()).getCardDirections(rotated);
+        List<Directions> secondDirections = deck.getType2Id().inverse().get(second.getTag()).getCardDirections(false);
         switch (direction) {
             case NORTH:
                 if (firstDirections.contains(Directions.NORTH) && !secondDirections.contains(Directions.SOUTH)) {

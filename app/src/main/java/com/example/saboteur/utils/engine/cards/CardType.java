@@ -7,6 +7,14 @@ import java.util.List;
 
 public interface CardType {
 
+    public default List<Directions> getCardDirections(boolean rotated) {
+        if (rotated) {
+            return getReverseRoadDirections();
+        } else {
+            return getRoadDirections();
+        }
+    }
+
     public default List<Directions> rotateDirections(List<Directions> directions) {
         List<Directions> res = new ArrayList<>();
         for (Directions direction : directions) {
@@ -27,6 +35,8 @@ public interface CardType {
     String getName();
 
     public List<Directions> getRoadDirections();
+
+    public List<Directions> getReverseRoadDirections();
 
     enum StartType implements CardType, CardEdge {
         START;
@@ -166,6 +176,11 @@ public interface CardType {
             // TODO langa cartile BACK se poate pune orice fel de carte de drum
             return Arrays.asList(Directions.NORTH, Directions.EAST, Directions.SOUTH, Directions.WEST);
         }
+
+        @Override
+        public List<Directions> getReverseRoadDirections() {
+            return null;
+        }
     }
 
     interface ActionType extends CardType {
@@ -179,6 +194,11 @@ public interface CardType {
 
             @Override
             public List<Directions> getRoadDirections() {
+                return null;
+            }
+
+            @Override
+            public List<Directions> getReverseRoadDirections() {
                 return null;
             }
         }
@@ -195,6 +215,11 @@ public interface CardType {
             public List<Directions> getRoadDirections() {
                 return null;
             }
+
+            @Override
+            public List<Directions> getReverseRoadDirections() {
+                return null;
+            }
         }
 
         enum UnblockType implements ActionType {
@@ -208,6 +233,11 @@ public interface CardType {
 
             @Override
             public List<Directions> getRoadDirections() {
+                return null;
+            }
+
+            @Override
+            public List<Directions> getReverseRoadDirections() {
                 return null;
             }
         }
