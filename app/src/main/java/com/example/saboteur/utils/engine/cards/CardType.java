@@ -21,12 +21,16 @@ public interface CardType {
             switch (direction) {
                 case NORTH:
                     res.add(Directions.SOUTH);
+                    break;
                 case SOUTH:
                     res.add(Directions.NORTH);
+                    break;
                 case EAST:
                     res.add(Directions.WEST);
+                    break;
                 case WEST:
                     res.add(Directions.EAST);
+                    break;
             }
         }
         return res;

@@ -12,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import android.view.Display;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,15 +35,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -62,6 +56,7 @@ public class GameActivity extends AppCompatActivity {
 
     private String username;
     ArrayList<String> names = new ArrayList<>();
+    private int moveCounter = 0;
     ArrayList<Integer> icons = new ArrayList<>();
     ArrayList<ImageView> images = new ArrayList<>();
     ArrayList<TextView> texts = new ArrayList<>();
@@ -264,8 +259,16 @@ public class GameActivity extends AppCompatActivity {
         buttonSound.stopSound();
     }
 
+    public boolean isPlayerTurn() {
+        return username.equals(names.get(moveCounter % names.size()));
+    }
+
     @SuppressLint({"UseCompatLoadingForDrawables", "ResourceAsColor"})
     public void selectCard(View view) {
+        if (!isPlayerTurn()) {
+            Toast.makeText(this, "Not your turn!", Toast.LENGTH_LONG).show();
+            return;
+        }
         ImageView cardView = (ImageView) view;
         int oldSelectedId = -1;
         if (selectedCard != null) {
@@ -281,17 +284,25 @@ public class GameActivity extends AppCompatActivity {
                 break;
             }
         }
-        if (selectedCardIndex < cards.size()) {
+        if (selectedCardIndex < hand.size()) {
             // check condition
-            if (selectedCard != null) {
-                selectedCard.setBackgroundColor(Color.YELLOW);
-                ImageView currentCardView = handView.get(selectedCardIndex);
-                if (currentCardView.getId() == oldSelectedId && !(hand.get(selectedCardIndex).getCard() instanceof CardType.ActionType)) {
+            selectedCard.setBackgroundColor(Color.YELLOW);
+            ImageView currentCardView = handView.get(selectedCardIndex);
+            if (!(hand.get(selectedCardIndex).getCard() instanceof CardType.ActionType)) {
+                if (currentCardView.getId() == oldSelectedId) {
                     hand.get(selectedCardIndex).changeRotation();
                     currentCardView.setRotation(((int) (currentCardView.getRotation() + 180)) % 360);
                 }
+            } else {
+                // action type selected
+                actionTypeSelected();
             }
         }
+    }
+
+    public void actionTypeSelected() {
+        // TODO: actions
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -306,13 +317,15 @@ public class GameActivity extends AppCompatActivity {
         if (canMakeMove()) {
             Log.d(LOG_TAG, "" + checkPlace(lin, col));
         } else {
+            // TODO: Avalanche
             Toast.makeText(this, "Invalid move", Toast.LENGTH_LONG).show();
         }
     }
 
-    // TODO verifica daca jucatorul poate face mutarea (e tura lui si a selectat deja o carte de drum)
     public boolean canMakeMove() {
-        return selectedCard != null;
+        // a card is selected + player turn + card is not action
+        return (selectedCard != null) && isPlayerTurn()
+                && !(hand.get(selectedCardIndex).getCard() instanceof CardType.ActionType);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -326,38 +339,30 @@ public class GameActivity extends AppCompatActivity {
         }
         if (lin != 0) {
             if (cards.get(lin - 1).get(col).getDrawable() != null) {
-//                Log.d(LOG_TAG, "hashmap: " + deck.getType2Id().inverse());
-//                Log.d(LOG_TAG, "type: " + deck.getType2Id().inverse().get(selectedCard.getId()));
-//                Log.d(LOG_TAG, "id: " + selectedCard.getId());
-//                Log.d(LOG_TAG, "" + handView.stream().map(image -> image.getTag()).collect(Collectors.toList()));
-                if (!hasConnection(selectedCard, cards.get(lin - 1).get(col), Directions.WEST, rotated)) {
+                if (hasConnection(selectedCard, cards.get(lin - 1).get(col), Directions.WEST, rotated)) {
                     return false;
                 }
-//                return hasConnection(selectedCard, cards.get(lin - 1).get(col), Directions.WEST);
             }
         }
         if (lin != 6) {
             if (cards.get(lin + 1).get(col).getDrawable() != null) {
-                if (!hasConnection(selectedCard, cards.get(lin + 1).get(col), Directions.EAST, rotated)) {
+                if (hasConnection(selectedCard, cards.get(lin + 1).get(col), Directions.EAST, rotated)) {
                     return false;
                 }
-//                return hasConnection(selectedCard, cards.get(lin + 1).get(col), Directions.EAST);
             }
         }
         if (col != 0) {
             if (cards.get(lin).get(col - 1).getDrawable() != null) {
-                if (!hasConnection(selectedCard, cards.get(lin).get(col - 1), Directions.SOUTH, rotated)) {
+                if (hasConnection(selectedCard, cards.get(lin).get(col - 1), Directions.SOUTH, rotated)) {
                     return false;
                 }
-//                return hasConnection(selectedCard, cards.get(lin).get(col - 1), Directions.SOUTH);
             }
         }
         if (col != 10) {
             if (cards.get(lin).get(col + 1).getDrawable() != null) {
-                if (!hasConnection(selectedCard, cards.get(lin).get(col + 1), Directions.NORTH, rotated)) {
+                if (hasConnection(selectedCard, cards.get(lin).get(col + 1), Directions.NORTH, rotated)) {
                     return false;
                 }
-//                return hasConnection(selectedCard, cards.get(lin).get(col + 1), Directions.NORTH);
             }
         }
         return true;
@@ -368,41 +373,47 @@ public class GameActivity extends AppCompatActivity {
         Deck deck = Deck.getInstance();
         List<Directions> firstDirections = deck.getType2Id().inverse().get(first.getTag()).getCardDirections(rotated);
         List<Directions> secondDirections = deck.getType2Id().inverse().get(second.getTag()).getCardDirections(false);
+        if (deck.getType2Id().inverse().get(second.getTag()) instanceof CardType.Back) {
+            // TODO: flip connected FINISH CARDS
+            return false;
+        }
+//        Log.d(LOG_TAG, String.valueOf(firstDirections));
+//        Log.d(LOG_TAG, String.valueOf(rotated));
         switch (direction) {
             case NORTH:
                 if (firstDirections.contains(Directions.NORTH) && !secondDirections.contains(Directions.SOUTH)) {
-                    return false;
+                    return true;
                 }
                 if (!firstDirections.contains(Directions.NORTH) && secondDirections.contains(Directions.SOUTH)) {
-                    return false;
+                    return true;
                 }
                 break;
             case SOUTH:
                 if (firstDirections.contains(Directions.SOUTH) && !secondDirections.contains(Directions.NORTH)) {
-                    return false;
+                    return true;
                 }
                 if (!firstDirections.contains(Directions.SOUTH) && secondDirections.contains(Directions.NORTH)) {
-                    return false;
+                    return true;
                 }
                 break;
             case WEST:
                 if (firstDirections.contains(Directions.WEST) && !secondDirections.contains(Directions.EAST)) {
-                    return false;
+                    return true;
                 }
                 if (!firstDirections.contains(Directions.WEST) && secondDirections.contains(Directions.EAST)) {
-                    return false;
+                    return true;
                 }
                 break;
             case EAST:
                 if (firstDirections.contains(Directions.EAST) && !secondDirections.contains(Directions.WEST)) {
-                    return false;
+                    return true;
                 }
                 if (!firstDirections.contains(Directions.EAST) && secondDirections.contains(Directions.WEST)) {
-                    return false;
+                    return true;
                 }
                 break;
         }
-        return true;
+        return false;
     }
 
     private void setImageResourceAndTag(ImageView imageView, int id) {
