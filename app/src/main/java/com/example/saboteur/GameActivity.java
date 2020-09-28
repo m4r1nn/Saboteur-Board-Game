@@ -38,13 +38,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity {
 
-    private Sound buttonSound = null;
-    private TextView roleText = null;
     private static final int MAX_PLAYERS = 10;
     private static final int MAX_CARDS = 6;
     private final String LOG_TAG = GameActivity.class.getSimpleName();
@@ -53,16 +53,17 @@ public class GameActivity extends AppCompatActivity {
     private final String DECK_PATH = "deck";
     ArrayList<Integer> finishCardIds;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    private String username;
     ArrayList<String> names = new ArrayList<>();
-    private int moveCounter = 0;
     ArrayList<Integer> icons = new ArrayList<>();
     ArrayList<ImageView> images = new ArrayList<>();
     ArrayList<TextView> texts = new ArrayList<>();
     ArrayList<ArrayList<ImageView>> cards = new ArrayList<>();
     ArrayList<Card> hand;
     ArrayList<ImageView> handView;
+    private Sound buttonSound = null;
+    private TextView roleText = null;
+    private String username;
+    private int moveCounter = 0;
     private String roomCode;
     private ImageView selectedCard = null;
     private int selectedCardIndex = -1;
@@ -83,6 +84,8 @@ public class GameActivity extends AppCompatActivity {
         showCardNumber();
 
         getHand();
+
+        listenForMoves();
     }
 
     private void setMapDimension() {
@@ -170,7 +173,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void getHand() {
-
         handView = new ArrayList<>();
         hand = new ArrayList<>();
         for (int i = 0; i < MAX_CARDS; i++) {
@@ -305,6 +307,48 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+    public void sendMoveToDb(int lin, int col, String type, boolean rotation) {
+        Map<String, String> docData = new HashMap<>();
+        docData.put("Line", String.valueOf(lin));
+        docData.put("Column", String.valueOf(col));
+        docData.put("Rotation", String.valueOf(rotation));
+        docData.put("Type", type);
+        // code 1 - road/block road
+        docData.put("Code", "1");
+        db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
+    }
+
+    private void doMove(Map<String, Object> info) {
+        int code = Integer.parseInt((String) Objects.requireNonNull(info.get("Code")));
+        switch (code) {
+            case 1:
+                int lin = Integer.parseInt((String) Objects.requireNonNull(info.get("Line")));
+                int col = Integer.parseInt((String) Objects.requireNonNull(info.get("Column")));
+                String type = (String) info.get("Type");
+                boolean rotation = Boolean.parseBoolean((String) info.get("Rotation"));
+                setImageResourceAndTag(cards.get(lin).get(col),
+                        Deck.getInstance().getType2Id().get(Deck.getInstance().getType2String().inverse().get(type)));
+                cards.get(lin).get(col).setRotation(rotation ? 180 : 0);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + code);
+        }
+    }
+
+    private void listenForMoves() {
+        db.collection(DATABASE_NAME).document(roomCode).collection("moves").
+                addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        assert value != null;
+                        for (DocumentChange documentChange : value.getDocumentChanges()) {
+                            doMove(documentChange.getDocument().getData());
+                            moveCounter++;
+                        }
+                    }
+                });
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void selectMapPlace(View view) {
         ImageView cardView = (ImageView) view;
@@ -315,7 +359,12 @@ public class GameActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "line: " + lin);
         Log.d(LOG_TAG, "column: " + col);
         if (canMakeMove()) {
-            Log.d(LOG_TAG, "" + checkPlace(lin, col));
+            if (checkPlace(lin, col)) {
+//                setImageResourceAndTag(cards.get(lin).get(col),
+//                        Deck.getInstance().getType2Id().get(hand.get(selectedCardIndex).getCard()));
+//                cards.get(lin).get(col).setRotation(selectedCard.getRotation());
+                sendMoveToDb(lin, col, hand.get(selectedCardIndex).getCard().getName(), selectedCard.getRotation() != 0);
+            }
         } else {
             // TODO: Avalanche
             Toast.makeText(this, "Invalid move", Toast.LENGTH_LONG).show();
@@ -339,28 +388,28 @@ public class GameActivity extends AppCompatActivity {
         }
         if (lin != 0) {
             if (cards.get(lin - 1).get(col).getDrawable() != null) {
-                if (hasConnection(selectedCard, cards.get(lin - 1).get(col), Directions.WEST, rotated)) {
+                if (notConnected(selectedCard, cards.get(lin - 1).get(col), Directions.WEST)) {
                     return false;
                 }
             }
         }
         if (lin != 6) {
             if (cards.get(lin + 1).get(col).getDrawable() != null) {
-                if (hasConnection(selectedCard, cards.get(lin + 1).get(col), Directions.EAST, rotated)) {
+                if (notConnected(selectedCard, cards.get(lin + 1).get(col), Directions.EAST)) {
                     return false;
                 }
             }
         }
         if (col != 0) {
             if (cards.get(lin).get(col - 1).getDrawable() != null) {
-                if (hasConnection(selectedCard, cards.get(lin).get(col - 1), Directions.SOUTH, rotated)) {
+                if (notConnected(selectedCard, cards.get(lin).get(col - 1), Directions.SOUTH)) {
                     return false;
                 }
             }
         }
         if (col != 10) {
             if (cards.get(lin).get(col + 1).getDrawable() != null) {
-                if (hasConnection(selectedCard, cards.get(lin).get(col + 1), Directions.NORTH, rotated)) {
+                if (notConnected(selectedCard, cards.get(lin).get(col + 1), Directions.NORTH)) {
                     return false;
                 }
             }
@@ -369,16 +418,20 @@ public class GameActivity extends AppCompatActivity {
     }
 
     // verifica daca first se conecteaza cu second pe directia direction
-    private boolean hasConnection(ImageView first, ImageView second, Directions direction, boolean rotated) {
+    private boolean notConnected(ImageView first, ImageView second, Directions direction) {
+        boolean rotated1, rotated2;
+        rotated1 = first.getRotation() != 0;
+        rotated2 = second.getRotation() != 0;
         Deck deck = Deck.getInstance();
-        List<Directions> firstDirections = deck.getType2Id().inverse().get(first.getTag()).getCardDirections(rotated);
-        List<Directions> secondDirections = deck.getType2Id().inverse().get(second.getTag()).getCardDirections(false);
+        List<Directions> firstDirections = deck.getType2Id().inverse().get(first.getTag()).getCardDirections(rotated1);
+        List<Directions> secondDirections = deck.getType2Id().inverse().get(second.getTag()).getCardDirections(rotated2);
         if (deck.getType2Id().inverse().get(second.getTag()) instanceof CardType.Back) {
             // TODO: flip connected FINISH CARDS
             return false;
         }
-//        Log.d(LOG_TAG, String.valueOf(firstDirections));
-//        Log.d(LOG_TAG, String.valueOf(rotated));
+        Log.d(LOG_TAG, String.valueOf(firstDirections));
+        Log.d(LOG_TAG, String.valueOf(secondDirections));
+        boolean notRoad = true;
         switch (direction) {
             case NORTH:
                 if (firstDirections.contains(Directions.NORTH) && !secondDirections.contains(Directions.SOUTH)) {
@@ -386,6 +439,9 @@ public class GameActivity extends AppCompatActivity {
                 }
                 if (!firstDirections.contains(Directions.NORTH) && secondDirections.contains(Directions.SOUTH)) {
                     return true;
+                }
+                if (firstDirections.contains(Directions.NORTH) && secondDirections.contains(Directions.SOUTH)) {
+                    notRoad = false;
                 }
                 break;
             case SOUTH:
@@ -395,6 +451,9 @@ public class GameActivity extends AppCompatActivity {
                 if (!firstDirections.contains(Directions.SOUTH) && secondDirections.contains(Directions.NORTH)) {
                     return true;
                 }
+                if (firstDirections.contains(Directions.SOUTH) && secondDirections.contains(Directions.NORTH)) {
+                    notRoad = false;
+                }
                 break;
             case WEST:
                 if (firstDirections.contains(Directions.WEST) && !secondDirections.contains(Directions.EAST)) {
@@ -402,6 +461,9 @@ public class GameActivity extends AppCompatActivity {
                 }
                 if (!firstDirections.contains(Directions.WEST) && secondDirections.contains(Directions.EAST)) {
                     return true;
+                }
+                if (firstDirections.contains(Directions.WEST) && secondDirections.contains(Directions.EAST)) {
+                    notRoad = false;
                 }
                 break;
             case EAST:
@@ -411,9 +473,12 @@ public class GameActivity extends AppCompatActivity {
                 if (!firstDirections.contains(Directions.EAST) && secondDirections.contains(Directions.WEST)) {
                     return true;
                 }
+                if (firstDirections.contains(Directions.EAST) && secondDirections.contains(Directions.WEST)) {
+                    notRoad = false;
+                }
                 break;
         }
-        return false;
+        return notRoad;
     }
 
     private void setImageResourceAndTag(ImageView imageView, int id) {
