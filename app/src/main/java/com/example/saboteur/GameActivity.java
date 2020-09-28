@@ -386,39 +386,52 @@ public class GameActivity extends AppCompatActivity {
         if (card.getDrawable() != null) {
             return false;
         }
+        boolean roadConnection = false;
         if (lin != 0) {
             if (cards.get(lin - 1).get(col).getDrawable() != null) {
-                if (notConnected(selectedCard, cards.get(lin - 1).get(col), Directions.WEST)) {
+                int ok = notConnected(selectedCard, cards.get(lin - 1).get(col), Directions.WEST);
+                if (ok == 1) {
                     return false;
+                } else if (ok == 0) {
+                    roadConnection = true;
                 }
             }
         }
         if (lin != 6) {
             if (cards.get(lin + 1).get(col).getDrawable() != null) {
-                if (notConnected(selectedCard, cards.get(lin + 1).get(col), Directions.EAST)) {
+                int ok = notConnected(selectedCard, cards.get(lin + 1).get(col), Directions.EAST);
+                if (ok == 1) {
                     return false;
+                } else if (ok == 0) {
+                    roadConnection = true;
                 }
             }
         }
         if (col != 0) {
             if (cards.get(lin).get(col - 1).getDrawable() != null) {
-                if (notConnected(selectedCard, cards.get(lin).get(col - 1), Directions.SOUTH)) {
+                int ok = notConnected(selectedCard, cards.get(lin).get(col - 1), Directions.SOUTH);
+                if (ok == 1) {
                     return false;
+                } else if (ok == 0) {
+                    roadConnection = true;
                 }
             }
         }
         if (col != 10) {
             if (cards.get(lin).get(col + 1).getDrawable() != null) {
-                if (notConnected(selectedCard, cards.get(lin).get(col + 1), Directions.NORTH)) {
+                int ok = notConnected(selectedCard, cards.get(lin).get(col + 1), Directions.NORTH);
+                if (ok == 1) {
                     return false;
+                } else if (ok == 0) {
+                    roadConnection = true;
                 }
             }
         }
-        return true;
+        return roadConnection;
     }
 
     // verifica daca first se conecteaza cu second pe directia direction
-    private boolean notConnected(ImageView first, ImageView second, Directions direction) {
+    private int notConnected(ImageView first, ImageView second, Directions direction) {
         boolean rotated1, rotated2;
         rotated1 = first.getRotation() != 0;
         rotated2 = second.getRotation() != 0;
@@ -426,58 +439,60 @@ public class GameActivity extends AppCompatActivity {
         List<Directions> firstDirections = deck.getType2Id().inverse().get(first.getTag()).getCardDirections(rotated1);
         List<Directions> secondDirections = deck.getType2Id().inverse().get(second.getTag()).getCardDirections(rotated2);
         if (deck.getType2Id().inverse().get(second.getTag()) instanceof CardType.Back) {
-            // TODO: flip connected FINISH CARDS
-            return false;
+            // TODO: flip connected FINISH CARDS + return code
+            return 0;
         }
         Log.d(LOG_TAG, String.valueOf(firstDirections));
         Log.d(LOG_TAG, String.valueOf(secondDirections));
-        boolean notRoad = true;
+        int notRoad = 2;
+        Log.d(LOG_TAG, String.valueOf(direction));
         switch (direction) {
             case NORTH:
                 if (firstDirections.contains(Directions.NORTH) && !secondDirections.contains(Directions.SOUTH)) {
-                    return true;
+                    return 1;
                 }
                 if (!firstDirections.contains(Directions.NORTH) && secondDirections.contains(Directions.SOUTH)) {
-                    return true;
+                    return 1;
                 }
                 if (firstDirections.contains(Directions.NORTH) && secondDirections.contains(Directions.SOUTH)) {
-                    notRoad = false;
+                    notRoad = 0;
                 }
                 break;
             case SOUTH:
                 if (firstDirections.contains(Directions.SOUTH) && !secondDirections.contains(Directions.NORTH)) {
-                    return true;
+                    return 1;
                 }
                 if (!firstDirections.contains(Directions.SOUTH) && secondDirections.contains(Directions.NORTH)) {
-                    return true;
+                    return 1;
                 }
                 if (firstDirections.contains(Directions.SOUTH) && secondDirections.contains(Directions.NORTH)) {
-                    notRoad = false;
+                    notRoad = 0;
                 }
                 break;
             case WEST:
                 if (firstDirections.contains(Directions.WEST) && !secondDirections.contains(Directions.EAST)) {
-                    return true;
+                    return 1;
                 }
                 if (!firstDirections.contains(Directions.WEST) && secondDirections.contains(Directions.EAST)) {
-                    return true;
+                    return 1;
                 }
                 if (firstDirections.contains(Directions.WEST) && secondDirections.contains(Directions.EAST)) {
-                    notRoad = false;
+                    notRoad = 0;
                 }
                 break;
             case EAST:
                 if (firstDirections.contains(Directions.EAST) && !secondDirections.contains(Directions.WEST)) {
-                    return true;
+                    return 1;
                 }
                 if (!firstDirections.contains(Directions.EAST) && secondDirections.contains(Directions.WEST)) {
-                    return true;
+                    return 1;
                 }
                 if (firstDirections.contains(Directions.EAST) && secondDirections.contains(Directions.WEST)) {
-                    notRoad = false;
+                    notRoad = 0;
                 }
                 break;
         }
+        Log.d(LOG_TAG, String.valueOf(notRoad));
         return notRoad;
     }
 
