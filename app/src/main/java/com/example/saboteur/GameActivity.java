@@ -381,7 +381,7 @@ public class GameActivity extends AppCompatActivity {
     public boolean checkPlace(int lin, int col) {
         Deck deck = Deck.getInstance();
         ImageView card = cards.get(lin).get(col); // imageview selected from map (possibly empty)
-        Log.d(LOG_TAG, "id: " + card.getId());
+//        Log.d(LOG_TAG, "id: " + card.getId());
         boolean rotated = hand.get(selectedCardIndex).getRotated();
         if (card.getDrawable() != null) {
             return false;
@@ -440,12 +440,9 @@ public class GameActivity extends AppCompatActivity {
         List<Directions> secondDirections = deck.getType2Id().inverse().get(second.getTag()).getCardDirections(rotated2);
         if (deck.getType2Id().inverse().get(second.getTag()) instanceof CardType.Back) {
             // TODO: flip connected FINISH CARDS + return code
-            return 0;
+            return 2;
         }
-        Log.d(LOG_TAG, String.valueOf(firstDirections));
-        Log.d(LOG_TAG, String.valueOf(secondDirections));
         int notRoad = 2;
-        Log.d(LOG_TAG, String.valueOf(direction));
         switch (direction) {
             case NORTH:
                 if (firstDirections.contains(Directions.NORTH) && !secondDirections.contains(Directions.SOUTH)) {
@@ -492,7 +489,6 @@ public class GameActivity extends AppCompatActivity {
                 }
                 break;
         }
-        Log.d(LOG_TAG, String.valueOf(notRoad));
         return notRoad;
     }
 

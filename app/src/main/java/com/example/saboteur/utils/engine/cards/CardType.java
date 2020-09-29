@@ -42,7 +42,7 @@ public interface CardType {
 
     public List<Directions> getReverseRoadDirections();
 
-    enum StartType implements CardType, CardEdge {
+    enum StartType implements CardType {
         START;
 
         @Override
@@ -61,7 +61,7 @@ public interface CardType {
         }
     }
 
-    enum EndType implements CardType, CardEdge {
+    enum EndType implements CardType {
         FINISH_TREASURE, FINISH_TURN_LEFT, FINISH_TURN_RIGHT;
 
         @Override
@@ -89,7 +89,7 @@ public interface CardType {
         }
     }
 
-    enum RoadType implements CardType, CardEdge {
+    enum RoadType implements CardType {
         ROAD_CORNER_LEFT, ROAD_CORNER_RIGHT, ROAD_CROSS, ROAD_HORIZONTAL_2,
         ROAD_VERTICAL_1_HORIZONTAL_2, ROAD_VERTICAL_2, ROAD_VERTICAL_2_HORIZONTAL_1;
 
@@ -126,7 +126,7 @@ public interface CardType {
         }
     }
 
-    enum BlockType implements CardType, CardEdge {
+    enum BlockType implements CardType {
         BLOCK_CORNER_LEFT, BLOCK_CORNER_RIGHT, BLOCK_CROSS, BLOCK_HORIZONTAL_2,
         BLOCK_VERTICAL_1_HORIZONTAL_2, BLOCK_VERTICAL_2, BLOCK_VERTICAL_2_HORIZONTAL_1, BLOCK_VERTICAL_1, BLOCK_HORIZONTAL_1;
 
