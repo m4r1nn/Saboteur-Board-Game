@@ -50,6 +50,7 @@
                 />
 
             <LinearLayout
+                android:id="@+id/attributes_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
@@ -106,8 +107,9 @@
                 android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="51dp"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
@@ -158,6 +160,7 @@
                 android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
@@ -210,6 +213,7 @@
                 android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
@@ -262,6 +266,7 @@
                 android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
@@ -314,6 +319,7 @@
                 android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
@@ -366,6 +372,7 @@
                 android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
@@ -418,6 +425,7 @@
                 android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
@@ -470,6 +478,7 @@
                 android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_9"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
@@ -522,6 +531,7 @@
                 android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_10"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"

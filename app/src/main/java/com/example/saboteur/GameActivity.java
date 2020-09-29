@@ -21,6 +21,7 @@ import android.view.Display;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +65,8 @@ public class GameActivity extends AppCompatActivity {
     ArrayList<ArrayList<ImageView>> cards = new ArrayList<>();
     ArrayList<Card> hand;
     ArrayList<ImageView> handView;
+    ArrayList<String> blockTypes = new ArrayList<>();
+    ArrayList<LinearLayout> attributes = new ArrayList<>();
     private Sound buttonSound = null;
     private TextView roleText = null;
     private String username;
@@ -111,8 +114,9 @@ public class GameActivity extends AppCompatActivity {
 
     private void getPlayersInfo() {
         for (int i = 1; i <= MAX_PLAYERS; i++) {
-            images.add((ImageView) findViewById(getResources().getIdentifier("icon_" + i, "id", getPackageName())));
-            texts.add((TextView) findViewById(getResources().getIdentifier("name_" + i, "id", getPackageName())));
+            images.add(findViewById(getResources().getIdentifier("icon_" + i, "id", getPackageName())));
+            texts.add(findViewById(getResources().getIdentifier("name_" + i, "id", getPackageName())));
+            attributes.add(findViewById(getResources().getIdentifier("attributes_" + i, "id", getPackageName())));
         }
 
         Intent intent = getIntent();
@@ -603,5 +607,43 @@ public class GameActivity extends AppCompatActivity {
             Toast.makeText(this, "No user selected", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (!isPlayerTurn()) {
+            Toast.makeText(this, "Not your turn", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        CardType selectedType = hand.get(selectedCardIndex).getCard();
+        // type != (un)block
+        if (!(selectedType instanceof CardType.ActionType) ||
+                (selectedType instanceof CardType.ActionType.SpecialType)) {
+            Toast.makeText(this, "Invalid place", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int index = -1;
+        for (int i = 0; i < names.size(); ++i) {
+            if (textView.getText().toString().equals(names.get(i))) {
+                index = i;
+                break;
+            }
+        }
+        LinearLayout selectedLayout = attributes.get(index);
+
+        // type = block
+        if (selectedType instanceof CardType.ActionType.BlockType) {
+            CardType.ActionType.BlockType selectedBlock = (CardType.ActionType.BlockType) selectedType;
+            switch (selectedBlock) {
+                case ACTION_BLOCK_CART:
+
+                    break;
+                case ACTION_BLOCK_LAMP:
+                    break;
+                case ACTION_BLOCK_PICKAXE:
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + selectedBlock);
+            }
+            return;
+        }
+        // type = unblock
+        CardType.ActionType.UnblockType selectedUnblock = (CardType.ActionType.UnblockType) selectedType;
     }
 }
