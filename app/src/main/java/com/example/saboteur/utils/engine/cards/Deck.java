@@ -62,6 +62,7 @@ public final class Deck {
         cards.add(new Card(CardType.BlockType.BLOCK_HORIZONTAL_1));
         cards.add(new Card(CardType.BlockType.BLOCK_HORIZONTAL_2));
         Collections.shuffle(cards);
+        cards.add(new Card(CardType.ActionType.SpecialType.ACTION_MAP));
     }
 
     public ArrayList<String> getEndCards() {

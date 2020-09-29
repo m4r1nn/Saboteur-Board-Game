@@ -15,6 +15,7 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -295,16 +296,8 @@ public class GameActivity extends AppCompatActivity {
                     hand.get(selectedCardIndex).changeRotation();
                     currentCardView.setRotation(((int) (currentCardView.getRotation() + 180)) % 360);
                 }
-            } else {
-                // action type selected
-                actionTypeSelected();
             }
         }
-    }
-
-    public void actionTypeSelected() {
-        // TODO: actions
-
     }
 
     public void sendMoveToDb(int lin, int col, String type, boolean rotation) {
@@ -318,17 +311,43 @@ public class GameActivity extends AppCompatActivity {
         db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
     }
 
+    public void sendMoveToDb(int lin, int col, String code) {
+        Map<String, String> docData = new HashMap<>();
+        docData.put("Line", String.valueOf(lin));
+        docData.put("Column", String.valueOf(col));
+        // code 2 - ACTION MAP
+        // code 3 - AVALANCHE
+        docData.put("Code", code);
+        db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
+    }
+
     private void doMove(Map<String, Object> info) {
         int code = Integer.parseInt((String) Objects.requireNonNull(info.get("Code")));
+        int lin, col;
         switch (code) {
             case 1:
-                int lin = Integer.parseInt((String) Objects.requireNonNull(info.get("Line")));
-                int col = Integer.parseInt((String) Objects.requireNonNull(info.get("Column")));
+                // build road
+                lin = Integer.parseInt((String) Objects.requireNonNull(info.get("Line")));
+                col = Integer.parseInt((String) Objects.requireNonNull(info.get("Column")));
                 String type = (String) info.get("Type");
                 boolean rotation = Boolean.parseBoolean((String) info.get("Rotation"));
                 setImageResourceAndTag(cards.get(lin).get(col),
                         Deck.getInstance().getType2Id().get(Deck.getInstance().getType2String().inverse().get(type)));
                 cards.get(lin).get(col).setRotation(rotation ? 180 : 0);
+                break;
+            case 2:
+                // action map
+                lin = Integer.parseInt((String) Objects.requireNonNull(info.get("Line")));
+                col = Integer.parseInt((String) Objects.requireNonNull(info.get("Column")));
+                if (!isPlayerTurn()) {
+                    setImageResourceAndTag(cards.get(lin).get(col), R.drawable.card_action_map);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            setImageResourceAndTag(cards.get(lin).get(col), R.drawable.card_back_end);
+                        }
+                    }, 5000);
+                }
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + code);
@@ -359,22 +378,49 @@ public class GameActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "line: " + lin);
         Log.d(LOG_TAG, "column: " + col);
         if (canMakeMove()) {
+            Toast.makeText(this, "Not your turn", Toast.LENGTH_LONG).show();
+            return;
+        }
+        // if selected card is road
+        if (!(hand.get(selectedCardIndex).getCard() instanceof CardType.ActionType)) {
             if (checkPlace(lin, col)) {
 //                setImageResourceAndTag(cards.get(lin).get(col),
 //                        Deck.getInstance().getType2Id().get(hand.get(selectedCardIndex).getCard()));
 //                cards.get(lin).get(col).setRotation(selectedCard.getRotation());
                 sendMoveToDb(lin, col, hand.get(selectedCardIndex).getCard().getName(), selectedCard.getRotation() != 0);
+            } else {
+                Toast.makeText(this, "Invalid place", Toast.LENGTH_LONG).show();
             }
-        } else {
-            // TODO: Avalanche
-            Toast.makeText(this, "Invalid move", Toast.LENGTH_LONG).show();
+            return;
+        }
+        // if selected card is action
+        if (hand.get(selectedCardIndex).getCard() == CardType.ActionType.SpecialType.ACTION_MAP) {
+//            Log.d(LOG_TAG, "SELECTED ACTION MAP");
+            actionMapSelected(lin, col);
         }
     }
 
-    public boolean canMakeMove() {
-        // a card is selected + player turn + card is not action
-        return (selectedCard != null) && isPlayerTurn()
-                && !(hand.get(selectedCardIndex).getCard() instanceof CardType.ActionType);
+    private void actionMapSelected(int lin, int col) {
+        if (cards.get(lin).get(col).getTag() == null) {
+            Toast.makeText(this, "Invalid place", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if ((Integer) cards.get(lin).get(col).getTag() == R.drawable.card_back_end) {
+            Log.d(LOG_TAG, "selected back card");
+            sendMoveToDb(lin, col, "2");
+            setImageResourceAndTag(cards.get(lin).get(col), finishCardIds.get((lin - 1) / 2));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setImageResourceAndTag(cards.get(lin).get(col), R.drawable.card_back_end);
+                }
+            }, 5000);
+        }
+    }
+
+    private boolean canMakeMove() {
+        // a card is selected + player turn
+        return (selectedCard == null) || !isPlayerTurn();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
