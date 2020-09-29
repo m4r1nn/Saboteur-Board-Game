@@ -349,6 +349,13 @@ public class GameActivity extends AppCompatActivity {
                     }, 5000);
                 }
                 break;
+            case 3:
+                // avalanche
+                lin = Integer.parseInt((String) Objects.requireNonNull(info.get("Line")));
+                col = Integer.parseInt((String) Objects.requireNonNull(info.get("Column")));
+                cards.get(lin).get(col).setImageDrawable(null);
+                cards.get(lin).get(col).setTag(null);
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + code);
         }
@@ -395,9 +402,22 @@ public class GameActivity extends AppCompatActivity {
         }
         // if selected card is action
         if (hand.get(selectedCardIndex).getCard() == CardType.ActionType.SpecialType.ACTION_MAP) {
-//            Log.d(LOG_TAG, "SELECTED ACTION MAP");
             actionMapSelected(lin, col);
+            return;
         }
+        if (hand.get(selectedCardIndex).getCard() == CardType.ActionType.SpecialType.ACTION_AVALANCHE) {
+            actionAvalancheSelected(lin, col);
+        }
+    }
+
+    private void actionAvalancheSelected(int lin, int col) {
+        ImageView cardView = cards.get(lin).get(col);
+        if (cardView.getTag() == null || (Integer) cardView.getTag() == R.drawable.card_road_start
+                || (Integer) cardView.getTag() == R.drawable.card_back_end) {
+            Toast.makeText(this, "Invalid place", Toast.LENGTH_LONG).show();
+            return;
+        }
+        sendMoveToDb(lin, col, "3");
     }
 
     private void actionMapSelected(int lin, int col) {
