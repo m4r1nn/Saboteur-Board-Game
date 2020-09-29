@@ -29,13 +29,16 @@ import com.example.saboteur.utils.engine.cards.Card;
 import com.example.saboteur.utils.engine.cards.CardType;
 import com.example.saboteur.utils.engine.cards.Deck;
 import com.example.saboteur.utils.engine.cards.Directions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -269,7 +272,7 @@ public class GameActivity extends AppCompatActivity {
     @SuppressLint({"UseCompatLoadingForDrawables", "ResourceAsColor"})
     public void selectCard(View view) {
         if (!isPlayerTurn()) {
-            Toast.makeText(this, "Not your turn!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
             return;
         }
         ImageView cardView = (ImageView) view;
@@ -359,6 +362,37 @@ public class GameActivity extends AppCompatActivity {
             default:
                 throw new IllegalStateException("Unexpected value: " + code);
         }
+        if (isPlayerTurn()) {
+            drawCardFromDeck();
+        }
+    }
+
+    public void drawCardFromDeck() {
+        TextView cardNumberText = findViewById(R.id.cardNumberText);
+        if (Integer.parseInt(cardNumberText.getText().toString()) > 0) {
+            db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).
+                    document("Available").collection("Cards").
+                    limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : Objects.requireNonNull(task.getResult())) {
+                        Log.d(LOG_TAG, (String) Objects.requireNonNull(queryDocumentSnapshot.getData().get("card")));
+                        db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).
+                                document("Available").collection("Cards").
+                                document(queryDocumentSnapshot.getId()).delete();
+                        handView.get(selectedCardIndex).setRotation(0);
+                        setImageResourceAndTag(handView.get(selectedCardIndex),
+                                Objects.requireNonNull(Deck.getInstance().getType2Id().get(Deck.getInstance().getType2String().inverse().
+                                        get(Objects.requireNonNull(queryDocumentSnapshot.getData().get("card"))))));
+                        hand.set(selectedCardIndex, new Card(Deck.getInstance().getType2String().inverse().
+                                get(Objects.requireNonNull(queryDocumentSnapshot.getData().get("card")))));
+                        selectedCard.setBackgroundColor(Color.TRANSPARENT);
+                        selectedCard = null;
+                        selectedCardIndex = -1;
+                    }
+                }
+            });
+        }
     }
 
     private void listenForMoves() {
@@ -385,7 +419,7 @@ public class GameActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "line: " + lin);
         Log.d(LOG_TAG, "column: " + col);
         if (canMakeMove()) {
-            Toast.makeText(this, "Not your turn", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Not your turn", Toast.LENGTH_SHORT).show();
             return;
         }
         // if selected card is road
@@ -396,7 +430,7 @@ public class GameActivity extends AppCompatActivity {
 //                cards.get(lin).get(col).setRotation(selectedCard.getRotation());
                 sendMoveToDb(lin, col, hand.get(selectedCardIndex).getCard().getName(), selectedCard.getRotation() != 0);
             } else {
-                Toast.makeText(this, "Invalid place", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Invalid place", Toast.LENGTH_SHORT).show();
             }
             return;
         }
@@ -414,7 +448,7 @@ public class GameActivity extends AppCompatActivity {
         ImageView cardView = cards.get(lin).get(col);
         if (cardView.getTag() == null || (Integer) cardView.getTag() == R.drawable.card_road_start
                 || (Integer) cardView.getTag() == R.drawable.card_back_end) {
-            Toast.makeText(this, "Invalid place", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Invalid place", Toast.LENGTH_SHORT).show();
             return;
         }
         sendMoveToDb(lin, col, "3");
@@ -422,7 +456,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void actionMapSelected(int lin, int col) {
         if (cards.get(lin).get(col).getTag() == null) {
-            Toast.makeText(this, "Invalid place", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Invalid place", Toast.LENGTH_SHORT).show();
             return;
         }
         if ((Integer) cards.get(lin).get(col).getTag() == R.drawable.card_back_end) {
@@ -561,5 +595,13 @@ public class GameActivity extends AppCompatActivity {
     private void setImageResourceAndTag(ImageView imageView, int id) {
         imageView.setImageResource(id);
         imageView.setTag(id);
+    }
+
+    public void selectUser(View view) {
+        TextView textView = (TextView) view;
+        if (textView.getText().toString().equals("")) {
+            Toast.makeText(this, "No user selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 }

@@ -63,7 +63,7 @@ public final class Deck {
         cards.add(new Card(CardType.BlockType.BLOCK_HORIZONTAL_2));
         Collections.shuffle(cards);
         // TODO - DELETE THIS LINE
-        cards.add(new Card(CardType.ActionType.SpecialType.ACTION_AVALANCHE));
+//        cards.add(new Card(CardType.ActionType.SpecialType.ACTION_AVALANCHE));
     }
 
     public ArrayList<String> getEndCards() {
