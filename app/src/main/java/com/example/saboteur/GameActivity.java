@@ -58,7 +58,7 @@ public class GameActivity extends AppCompatActivity {
     private final String DECK_PATH = "deck";
     ArrayList<Integer> finishCardIds;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    ArrayList<String> names = new ArrayList<>();
+    volatile ArrayList<String> names = new ArrayList<>();
     ArrayList<Integer> icons = new ArrayList<>();
     ArrayList<ImageView> images = new ArrayList<>();
     ArrayList<TextView> texts = new ArrayList<>();
@@ -72,8 +72,8 @@ public class GameActivity extends AppCompatActivity {
     private String username;
     private int moveCounter = 0;
     private String roomCode;
-    private ImageView selectedCard = null;
-    private int selectedCardIndex = -1;
+    volatile public ImageView selectedCard = null;
+    volatile public int selectedCardIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,17 +82,20 @@ public class GameActivity extends AppCompatActivity {
         buttonSound = new Sound(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.button_sound));
         roleText = findViewById(R.id.role_text);
 
-        setMapDimension();
 
-        getPlayersInfo();
 
-        buildMap();
+        synchronized (this) {
+            setMapDimension();
+            getPlayersInfo();
+            buildMap();
+            showCardNumber();
+            getHand();
+        }
 
-        showCardNumber();
 
-        getHand();
 
-        listenForMoves();
+        Log.d(LOG_TAG, "SIZE IN on create final" + names.size());
+
     }
 
     private void setMapDimension() {
@@ -112,7 +115,7 @@ public class GameActivity extends AppCompatActivity {
         mapLayout.setLayoutParams(params);
     }
 
-    private void getPlayersInfo() {
+    synchronized private void getPlayersInfo() {
         for (int i = 1; i <= MAX_PLAYERS; i++) {
             images.add(findViewById(getResources().getIdentifier("icon_" + i, "id", getPackageName())));
             texts.add(findViewById(getResources().getIdentifier("name_" + i, "id", getPackageName())));
@@ -127,14 +130,17 @@ public class GameActivity extends AppCompatActivity {
         assert roomCode != null;
         Log.d(LOG_TAG, roomCode);
 
-
+        Log.d(LOG_TAG, "SIZE IN get players info" + names.size());
         db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (DocumentChange documentSnapshot : queryDocumentSnapshots.getDocumentChanges()) {
                 names.add(Objects.requireNonNull(documentSnapshot.getDocument().get("user")).toString());
                 icons.add(Integer.parseInt(Objects.requireNonNull(documentSnapshot.getDocument().get("photo")).toString()));
             }
             fillPlayersNames();
+            listenForMoves();
+            Log.d(LOG_TAG, "SIZE IN  cred ca 2 final" + names.size());
         });
+        Log.d(LOG_TAG, "SIZE IN get cred ca 0  final" + names.size());
     }
 
     private void buildMap() {
@@ -180,7 +186,8 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void getHand() {
+    synchronized private void getHand() {
+        Log.d(LOG_TAG, "SIZE IN get getHand" + names.size());
         handView = new ArrayList<>();
         hand = new ArrayList<>();
         for (int i = 0; i < MAX_CARDS; i++) {
@@ -191,11 +198,11 @@ public class GameActivity extends AppCompatActivity {
                 document(username).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             @SuppressWarnings("unchecked")
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
                 List<String> temp = (List<String>) documentSnapshot.get("cards");
                 String role = (String) documentSnapshot.get("role");
-                roleText.setText(role);
                 assert role != null;
+                roleText.setText(role);
                 if (role.equals("Saboteur")) {
                     roleText.setTextColor(Color.RED);
                 } else {
@@ -219,6 +226,8 @@ public class GameActivity extends AppCompatActivity {
                 Log.d(LOG_TAG, "fail listen", e);
             }
         });
+        Log.d(LOG_TAG, "SIZE IN get hand final" + names.size());
+
     }
 
     public void exitGame(View view) {
@@ -274,7 +283,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @SuppressLint({"UseCompatLoadingForDrawables", "ResourceAsColor"})
-    public void selectCard(View view) {
+    synchronized public void selectCard(View view) {
+        Log.d(LOG_TAG, "SIZE IN SELECTEDCARD" + names.size());
         if (!isPlayerTurn()) {
             Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
             return;
@@ -294,7 +304,7 @@ public class GameActivity extends AppCompatActivity {
                 break;
             }
         }
-        if (selectedCardIndex < hand.size()) {
+        if (selectedCardIndex < hand.size() && selectedCardIndex != -1) {
             // check condition
             selectedCard.setBackgroundColor(Color.YELLOW);
             ImageView currentCardView = handView.get(selectedCardIndex);
@@ -305,32 +315,45 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         }
+        Log.d(LOG_TAG, "SIZE IN SELECTEDCARD final" + names.size());
     }
 
-    public void sendMoveToDb(int lin, int col, String type, boolean rotation) {
+    public void sendMoveToDb(int lin, int col, String type, boolean rotation, int index) {
+        Log.d(LOG_TAG, "SIZE IN send" + names.size());
         Map<String, String> docData = new HashMap<>();
         docData.put("Line", String.valueOf(lin));
         docData.put("Column", String.valueOf(col));
         docData.put("Rotation", String.valueOf(rotation));
         docData.put("Type", type);
+        docData.put("Index", String.valueOf(index));
         // code 1 - road/block road
         docData.put("Code", "1");
         db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
+        Log.d(LOG_TAG, "SIZE IN sendtoDb final" + names.size());
+
     }
 
-    public void sendMoveToDb(int lin, int col, String code) {
+    public void sendMoveToDb(int lin, int col, String code, int index) {
         Map<String, String> docData = new HashMap<>();
         docData.put("Line", String.valueOf(lin));
         docData.put("Column", String.valueOf(col));
         // code 2 - ACTION MAP
         // code 3 - AVALANCHE
         docData.put("Code", code);
+        docData.put("Index", String.valueOf(index));
         db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
     }
 
     private void doMove(Map<String, Object> info) {
+        Log.d(LOG_TAG, "SIZE IN get doMove1" + names.size());
         int code = Integer.parseInt((String) Objects.requireNonNull(info.get("Code")));
+        Log.d(LOG_TAG, "SIZE IN get doMove2" + names.size());
         int lin, col;
+        Log.d(LOG_TAG, "SIZE IN get doMove3" + names.size());
+        if (isPlayerTurn()) {
+            selectedCardIndex = Integer.parseInt((String) Objects.requireNonNull(info.get("Index")));
+            selectedCard = handView.get(selectedCardIndex);
+        }
         switch (code) {
             case 1:
                 // build road
@@ -338,9 +361,11 @@ public class GameActivity extends AppCompatActivity {
                 col = Integer.parseInt((String) Objects.requireNonNull(info.get("Column")));
                 String type = (String) info.get("Type");
                 boolean rotation = Boolean.parseBoolean((String) info.get("Rotation"));
+                Log.d(LOG_TAG, "SIZE IN get doMove4" + names.size());
                 setImageResourceAndTag(cards.get(lin).get(col),
                         Deck.getInstance().getType2Id().get(Deck.getInstance().getType2String().inverse().get(type)));
                 cards.get(lin).get(col).setRotation(rotation ? 180 : 0);
+                Log.d(LOG_TAG, "SIZE IN get doMove5" + names.size());
                 break;
             case 2:
                 // action map
@@ -366,12 +391,15 @@ public class GameActivity extends AppCompatActivity {
             default:
                 throw new IllegalStateException("Unexpected value: " + code);
         }
+
+
         if (isPlayerTurn()) {
+            Log.d(LOG_TAG, "gigel" + String.valueOf(selectedCardIndex));
             drawCardFromDeck();
         }
     }
 
-    public void drawCardFromDeck() {
+    synchronized public void drawCardFromDeck() {
         TextView cardNumberText = findViewById(R.id.cardNumberText);
         if (Integer.parseInt(cardNumberText.getText().toString()) > 0) {
             db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).
@@ -384,6 +412,8 @@ public class GameActivity extends AppCompatActivity {
                         db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).
                                 document("Available").collection("Cards").
                                 document(queryDocumentSnapshot.getId()).delete();
+                        Log.d(LOG_TAG, String.valueOf(handView.size()));
+                        Log.d(LOG_TAG, String.valueOf(selectedCardIndex));
                         handView.get(selectedCardIndex).setRotation(0);
                         setImageResourceAndTag(handView.get(selectedCardIndex),
                                 Objects.requireNonNull(Deck.getInstance().getType2Id().get(Deck.getInstance().getType2String().inverse().
@@ -399,13 +429,16 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void listenForMoves() {
+    synchronized private void listenForMoves() {
+        Log.d(LOG_TAG, "SIZE IN get listen for move" + names.size());
         db.collection(DATABASE_NAME).document(roomCode).collection("moves").
                 addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        Log.d(LOG_TAG, "SIZE IN get listen for move2" + names.size());
                         assert value != null;
                         for (DocumentChange documentChange : value.getDocumentChanges()) {
+                            Log.d(LOG_TAG, "SIZE IN get listen for move3" + names.size());
                             doMove(documentChange.getDocument().getData());
                             moveCounter++;
                         }
@@ -432,7 +465,7 @@ public class GameActivity extends AppCompatActivity {
 //                setImageResourceAndTag(cards.get(lin).get(col),
 //                        Deck.getInstance().getType2Id().get(hand.get(selectedCardIndex).getCard()));
 //                cards.get(lin).get(col).setRotation(selectedCard.getRotation());
-                sendMoveToDb(lin, col, hand.get(selectedCardIndex).getCard().getName(), selectedCard.getRotation() != 0);
+                sendMoveToDb(lin, col, hand.get(selectedCardIndex).getCard().getName(), selectedCard.getRotation() != 0, selectedCardIndex);
             } else {
                 Toast.makeText(this, "Invalid place", Toast.LENGTH_SHORT).show();
             }
@@ -455,7 +488,7 @@ public class GameActivity extends AppCompatActivity {
             Toast.makeText(this, "Invalid place", Toast.LENGTH_SHORT).show();
             return;
         }
-        sendMoveToDb(lin, col, "3");
+        sendMoveToDb(lin, col, "3", selectedCardIndex);
     }
 
     private void actionMapSelected(int lin, int col) {
@@ -465,7 +498,7 @@ public class GameActivity extends AppCompatActivity {
         }
         if ((Integer) cards.get(lin).get(col).getTag() == R.drawable.card_back_end) {
             Log.d(LOG_TAG, "selected back card");
-            sendMoveToDb(lin, col, "2");
+            sendMoveToDb(lin, col, "2", selectedCardIndex);
             setImageResourceAndTag(cards.get(lin).get(col), finishCardIds.get((lin - 1) / 2));
             new Handler().postDelayed(new Runnable() {
                 @Override
