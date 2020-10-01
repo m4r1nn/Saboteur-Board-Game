@@ -109,7 +109,7 @@
             <LinearLayout
                 android:id="@+id/attributes_2"
                 android:layout_width="match_parent"
-                android:layout_height="51dp"
+                android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 

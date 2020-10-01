@@ -180,6 +180,7 @@ public class GameActivity extends AppCompatActivity {
             TextView text = texts.get(i);
             text.setText(names.get(i));
         }
+        texts.get(0).setTextColor(Color.YELLOW);
     }
 
     private void showHand() {
@@ -475,7 +476,9 @@ public class GameActivity extends AppCompatActivity {
                         assert value != null;
                         for (DocumentChange documentChange : value.getDocumentChanges()) {
                             doMove(documentChange.getDocument().getData());
+                            texts.get(moveCounter % names.size()).setTextColor(Color.BLACK);
                             moveCounter++;
+                            texts.get(moveCounter % names.size()).setTextColor(Color.YELLOW);
                         }
                     }
                 });
