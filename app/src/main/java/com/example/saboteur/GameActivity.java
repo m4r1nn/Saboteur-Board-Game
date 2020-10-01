@@ -58,7 +58,7 @@ public class GameActivity extends AppCompatActivity {
     private final String DECK_PATH = "deck";
     ArrayList<Integer> finishCardIds;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    volatile static ArrayList<String> names = new ArrayList<>();
+    volatile ArrayList<String> names = new ArrayList<>();
     ArrayList<Integer> icons = new ArrayList<>();
     ArrayList<ImageView> images = new ArrayList<>();
     ArrayList<TextView> texts = new ArrayList<>();
@@ -341,10 +341,21 @@ public class GameActivity extends AppCompatActivity {
         db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
     }
 
-    public void sendMoveToDb(String code) {
+    public void sendMoveToDb(String code, int index) {
         Map<String, String> docData = new HashMap<>();
         // code 4 - Burn card
         docData.put("Code", code);
+        docData.put("Index", String.valueOf(index));
+        db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
+    }
+
+    public void sendMoveToDb(String code, int index, int drawable, String user) {
+        Map<String, String> docData = new HashMap<>();
+        // code 5 - (Un)Block card
+        docData.put("Code", code);
+        docData.put("Index", String.valueOf(index));
+        docData.put("drawable",String.valueOf(drawable));
+        docData.put("user", user);
         db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
     }
 
@@ -391,6 +402,30 @@ public class GameActivity extends AppCompatActivity {
             case 4:
                 if (!isPlayerTurn()) {
                     Toast.makeText(this, "Burn card", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case 5:
+                String user = (String) Objects.requireNonNull(info.get("user"));
+                int drawable = Integer.parseInt((String) Objects.requireNonNull(info.get("drawable")));
+                int index = -1;
+                for (int i = 0; i < texts.size(); i++) {
+                    if (texts.get(i).getText().equals(user)) {
+                        index = i;
+                        break;
+                    }
+                }
+                switch (drawable) {
+                    case R.drawable.card_action_block_pickaxe:
+                        setImageResourceAndTag(pickaxes.get(index), R.drawable.mini_pickaxe);
+                        break;
+                    case R.drawable.card_action_block_cart:
+                        setImageResourceAndTag(carts.get(index), R.drawable.mini_cart);
+                        break;
+                    case R.drawable.card_action_block_lamp:
+                        setImageResourceAndTag(lamps.get(index), R.drawable.mini_lamp);
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + drawable);
                 }
                 break;
             default:
@@ -465,10 +500,11 @@ public class GameActivity extends AppCompatActivity {
         }
         // if selected card is road
         if (!(hand.get(selectedCardIndex).getCard() instanceof CardType.ActionType)) {
+            if (isBlocked()) {
+                Toast.makeText(this, "You're blocked", Toast.LENGTH_LONG).show();
+                return;
+            }
             if (checkPlace(lin, col)) {
-//                setImageResourceAndTag(cards.get(lin).get(col),
-//                        Deck.getInstance().getType2Id().get(hand.get(selectedCardIndex).getCard()));
-//                cards.get(lin).get(col).setRotation(selectedCard.getRotation());
                 sendMoveToDb(lin, col, hand.get(selectedCardIndex).getCard().getName(), selectedCard.getRotation() != 0, selectedCardIndex);
             } else {
                 Toast.makeText(this, "Invalid place", Toast.LENGTH_SHORT).show();
@@ -635,7 +671,8 @@ public class GameActivity extends AppCompatActivity {
 
     public void selectUser(View view) {
         TextView textView = (TextView) view;
-        if (textView.getText().toString().equals("")) {
+        String user = textView.getText().toString();
+        if (user.equals("")) {
             Toast.makeText(this, "No user selected", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -670,21 +707,21 @@ public class GameActivity extends AppCompatActivity {
                         Toast.makeText(this, "Already blocked", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    setImageResourceAndTag(cart, R.drawable.mini_cart);
+                    sendMoveToDb("5", selectedCardIndex, R.drawable.card_action_block_cart, user);
                     break;
                 case ACTION_BLOCK_LAMP:
                     if (lamp.getDrawable() != null) {
                         Toast.makeText(this, "Already blocked", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    setImageResourceAndTag(lamp, R.drawable.mini_lamp);
+                    sendMoveToDb("5", selectedCardIndex, R.drawable.card_action_block_lamp, user);
                     break;
                 case ACTION_BLOCK_PICKAXE:
                     if (pickaxe.getDrawable() != null) {
                         Toast.makeText(this, "Already blocked", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    setImageResourceAndTag(pickaxe, R.drawable.mini_pickaxe);
+                    sendMoveToDb("5", selectedCardIndex, R.drawable.card_action_block_pickaxe, user);
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + selectedBlock);
@@ -693,6 +730,29 @@ public class GameActivity extends AppCompatActivity {
         }
         // type = unblock
         CardType.ActionType.UnblockType selectedUnblock = (CardType.ActionType.UnblockType) selectedType;
+    }
+
+    public boolean isBlocked() {
+        int index = -1;
+        for (int i = 0; i < texts.size(); i++) {
+            if (username.equals(texts.get(i).getText().toString())) {
+                index = i;
+                break;
+            }
+        }
+        Log.d(LOG_TAG, "pickaxe: " + pickaxes.get(index).getDrawable());
+        Log.d(LOG_TAG, "cart: " + carts.get(index).getDrawable());
+        Log.d(LOG_TAG, "lamp: " + lamps.get(index).getDrawable());
+        if (pickaxes.get(index).getDrawable() != null) {
+            return true;
+        }
+        if (lamps.get(index).getDrawable() != null) {
+            return true;
+        }
+        if (carts.get(index).getDrawable() != null) {
+            return true;
+        }
+        return false;
     }
 
     public void burnCard(View view) {
@@ -704,6 +764,6 @@ public class GameActivity extends AppCompatActivity {
             Toast.makeText(this, "No card selected", Toast.LENGTH_LONG).show();
             return;
         }
-        sendMoveToDb("4");
+        sendMoveToDb("4", selectedCardIndex);
     }
 }
