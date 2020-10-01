@@ -24,25 +24,25 @@ public final class Deck {
     public void buildDeck() {
         cards = new ArrayList<>();
 
-//        for (int i = 0; i < 3; i++) {
-//            cards.add(new Card(CardType.ActionType.SpecialType.ACTION_AVALANCHE));
-//        }
+        for (int i = 0; i < 3; i++) {
+            cards.add(new Card(CardType.ActionType.SpecialType.ACTION_AVALANCHE));
+        }
         for (int i = 0; i < 6; i++) {
             cards.add(new Card(CardType.ActionType.SpecialType.ACTION_MAP));
         }
-//        for (int i = 0; i < 3; i++) {
-//            cards.add(new Card(CardType.ActionType.BlockType.ACTION_BLOCK_CART));
-//            cards.add(new Card(CardType.ActionType.BlockType.ACTION_BLOCK_LAMP));
-//            cards.add(new Card(CardType.ActionType.BlockType.ACTION_BLOCK_PICKAXE));
-//        }
-//        for (int i = 0; i < 2; i++) {
-//            cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_CART));
-//            cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_LAMP));
-//            cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_PICKAXE));
-//        }
-//        cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_CART_LAMP));
-//        cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_LAMP_PICKAXE));
-//        cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_PICKAXE_CART));
+        for (int i = 0; i < 3; i++) {
+            cards.add(new Card(CardType.ActionType.BlockType.ACTION_BLOCK_CART));
+            cards.add(new Card(CardType.ActionType.BlockType.ACTION_BLOCK_LAMP));
+            cards.add(new Card(CardType.ActionType.BlockType.ACTION_BLOCK_PICKAXE));
+        }
+        for (int i = 0; i < 2; i++) {
+            cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_CART));
+            cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_LAMP));
+            cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_PICKAXE));
+        }
+        cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_CART_LAMP));
+        cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_LAMP_PICKAXE));
+        cards.add(new Card(CardType.ActionType.UnblockType.ACTION_UNBLOCK_PICKAXE_CART));
         for (int i = 0; i < 5; i++) {
             cards.add(new Card(CardType.RoadType.ROAD_CORNER_LEFT));
             cards.add(new Card(CardType.RoadType.ROAD_CORNER_RIGHT));
@@ -52,15 +52,15 @@ public final class Deck {
             cards.add(new Card(CardType.RoadType.ROAD_VERTICAL_2_HORIZONTAL_1));
             cards.add(new Card(CardType.RoadType.ROAD_HORIZONTAL_2));
         }
-//        cards.add(new Card(CardType.BlockType.BLOCK_CORNER_LEFT));
-//        cards.add(new Card(CardType.BlockType.BLOCK_CORNER_RIGHT));
-//        cards.add(new Card(CardType.BlockType.BLOCK_CROSS));
-//        cards.add(new Card(CardType.BlockType.BLOCK_VERTICAL_2));
-//        cards.add(new Card(CardType.BlockType.BLOCK_VERTICAL_2_HORIZONTAL_1));
-//        cards.add(new Card(CardType.BlockType.BLOCK_VERTICAL_1_HORIZONTAL_2));
-//        cards.add(new Card(CardType.BlockType.BLOCK_VERTICAL_1));
-//        cards.add(new Card(CardType.BlockType.BLOCK_HORIZONTAL_1));
-//        cards.add(new Card(CardType.BlockType.BLOCK_HORIZONTAL_2));
+        cards.add(new Card(CardType.BlockType.BLOCK_CORNER_LEFT));
+        cards.add(new Card(CardType.BlockType.BLOCK_CORNER_RIGHT));
+        cards.add(new Card(CardType.BlockType.BLOCK_CROSS));
+        cards.add(new Card(CardType.BlockType.BLOCK_VERTICAL_2));
+        cards.add(new Card(CardType.BlockType.BLOCK_VERTICAL_2_HORIZONTAL_1));
+        cards.add(new Card(CardType.BlockType.BLOCK_VERTICAL_1_HORIZONTAL_2));
+        cards.add(new Card(CardType.BlockType.BLOCK_VERTICAL_1));
+        cards.add(new Card(CardType.BlockType.BLOCK_HORIZONTAL_1));
+        cards.add(new Card(CardType.BlockType.BLOCK_HORIZONTAL_2));
         Collections.shuffle(cards);
         // TODO - DELETE THIS LINE
 //        cards.add(new Card(CardType.ActionType.SpecialType.ACTION_AVALANCHE));
