@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Display;
 import android.view.View;
 import android.widget.GridLayout;
@@ -44,9 +45,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Queue;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -240,6 +243,97 @@ public class GameActivity extends AppCompatActivity {
         showExitDialog();
     }
 
+    public boolean checkWin (int row, int column) {
+        for (int i = 0; i < finishCardIds.size(); i++) {
+            int x = 2 * i  + 1;
+            int y = 9;
+            if (finishCardIds.get(i) == R.drawable.card_end_win && x == row && y == column) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public boolean checkCardConnectivity() {
+        boolean [][] visited = new boolean[7][11];
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 11; j++) {
+                visited[i][j] = false;
+            }
+        }
+        Queue<Pair<Integer, Integer>> q = new LinkedList<>();
+        q.add(new Pair<>(3, 1));
+        while (!q.isEmpty()) {
+            Pair<Integer, Integer> top = q.peek();
+            q.remove();
+            assert top != null;
+            int x = top.first;
+            int y = top.second;
+            Log.d(LOG_TAG, "" + x + " " + y);
+            visited[x][y] = true;
+            ImageView currentCard = cards.get(x).get(y);
+            int imageId = (int) currentCard.getTag();
+            if ((x == 1 || x == 3 ||  x == 5) && y == 9) {
+                setImageResourceAndTag(cards.get(x).get(y), finishCardIds.get((x - 1) / 2));
+                if (checkWin(x, y)) {
+                    Toast.makeText(this, "Dwarves won", Toast.LENGTH_LONG).show();
+                    return true;
+                } else {
+                    // TODO : apeleaza functie care schimba cartea
+                    if (cards.get(x - 1).get(y).getDrawable() != null && Deck.getInstance().getType2Id().inverse().get(cards.get(x - 1).get(y).getTag()) instanceof CardType.RoadType) {
+                        if ((notConnected(cards.get(x - 1).get(y), currentCard, Directions.EAST) == 0)) {
+                            if (imageId == R.drawable.card_end_turn_right) {
+                                cards.get(x).get(y).setRotation(180);
+                            }
+                        }
+                    }
+
+                    if (cards.get(x + 1).get(y).getDrawable() != null && Deck.getInstance().getType2Id().inverse().get(cards.get(x + 1).get(y).getTag()) instanceof CardType.RoadType) {
+                        if ((notConnected(cards.get(x + 1).get(y), currentCard, Directions.WEST) == 0)) {
+                            if (imageId == R.drawable.card_end_turn_left) {
+                                cards.get(x).get(y).setRotation(180);
+                            }
+                        }
+                    }
+
+                    Log.d(LOG_TAG, "inainte de if");
+                    if (cards.get(x).get(y + 1).getDrawable() != null && Deck.getInstance().getType2Id().inverse().get(cards.get(x).get(y + 1).getTag()) instanceof CardType.RoadType) {
+                        Log.d(LOG_TAG, "primu");
+                        if ((notConnected(cards.get(x).get(y + 1), currentCard, Directions.SOUTH) == 0)) {
+                            Log.d(LOG_TAG, "al doilea");
+                            cards.get(x).get(y).setRotation(180);
+                        }
+                    }
+                }
+            }
+            if (Deck.getInstance().getType2Id().inverse().get(imageId) instanceof CardType.RoadType || Deck.getInstance().getType2Id().inverse().get(imageId) instanceof CardType.StartType
+                || Deck.getInstance().getType2Id().inverse().get(imageId) instanceof CardType.EndType) {
+                if (x - 1 >= 0 && y >= 0 && x - 1 < 7 && y < 11 && cards.get(x - 1).get(y).getDrawable() != null && !visited[x - 1][y]
+                        && notConnected(currentCard, cards.get(x - 1).get(y), Directions.WEST) == 0) {
+                    q.add(new Pair<>(x - 1, y));
+                }
+
+                if (x + 1 >= 0 && y >= 0 && x + 1 < 7 && y < 11 && cards.get(x + 1).get(y).getDrawable() != null && !visited[x + 1][y]
+                        && notConnected(currentCard, cards.get(x + 1).get(y), Directions.EAST) == 0) {
+                    q.add(new Pair<>(x + 1, y));
+                }
+
+                if (x >= 0 && y - 1 >= 0 && x < 7 && y - 1 < 11 && cards.get(x).get(y - 1).getDrawable() != null && !visited[x][y - 1]
+                        && notConnected(currentCard, cards.get(x).get(y - 1), Directions.SOUTH) == 0) {
+                    q.add(new Pair<>(x, y - 1));
+                }
+
+                if (x >= 0 && y + 1 >= 0 && x  < 7 && y + 1 < 11 && cards.get(x).get(y + 1).getDrawable() != null && !visited[x][y + 1]
+                        && notConnected(currentCard, cards.get(x).get(y + 1), Directions.NORTH) == 0) {
+                    q.add(new Pair<>(x, y + 1));
+                }
+            }
+        }
+
+        return false;
+    }
+
     public void showExitDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         AlertDialog dialog = builder.setMessage("Are you sure?")
@@ -385,6 +479,9 @@ public class GameActivity extends AppCompatActivity {
                 setImageResourceAndTag(cards.get(lin).get(col),
                         Deck.getInstance().getType2Id().get(Deck.getInstance().getType2String().inverse().get(type)));
                 cards.get(lin).get(col).setRotation(rotation ? 180 : 0);
+                if (checkCardConnectivity()) {
+                    Log.d(LOG_TAG, "Finish");
+                }
                 break;
             case 2:
                 // action map
@@ -654,6 +751,28 @@ public class GameActivity extends AppCompatActivity {
         List<Directions> secondDirections = deck.getType2Id().inverse().get(second.getTag()).getCardDirections(rotated2);
         if (deck.getType2Id().inverse().get(second.getTag()) instanceof CardType.Back) {
             // TODO: flip connected FINISH CARDS + return code
+            switch (direction) {
+                case NORTH:
+                    if (firstDirections.contains(Directions.NORTH)) {
+                        return 0;
+                    }
+                    break;
+                case SOUTH:
+                    if (firstDirections.contains(Directions.SOUTH)) {
+                        return 0;
+                    }
+                    break;
+                case WEST:
+                    if (firstDirections.contains(Directions.WEST)) {
+                        return 0;
+                    }
+                    break;
+                case EAST:
+                    if (firstDirections.contains(Directions.EAST)) {
+                        return 0;
+                    }
+                    break;
+            }
             return 2;
         }
         int notRoad = 2;
