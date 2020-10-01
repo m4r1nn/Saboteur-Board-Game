@@ -64,21 +64,21 @@ public class HostActivity extends AppCompatActivity {
     private final String START_PATH = "start";
     private final String DECK_PATH = "deck";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    TextView hostUserView;
-    TextView codeRoomView;
-    EditText usernameView;
-    Button createRoomButton;
-    Button playButton;
+    TextView hostUserView = null;
+    TextView codeRoomView = null;
+    EditText usernameView = null;
+    Button createRoomButton = null;
+    Button playButton = null;
     private Sound buttonSound = null;
     private ListenerRegistration listener = null;
 
-    private ArrayList<TextView> playerNames;
+    private ArrayList<TextView> playerNames = null;
     private int playersCount = 0; // increment every time a player joins
     private boolean hostNameRemoved = false;
 
-    private String roomCode;
+    private String roomCode = null;
 
-    private ArrayList<Integer> icons;
+    private ArrayList<Integer> icons = null;
     private int index = 0;
 
     @Override
@@ -145,15 +145,12 @@ public class HostActivity extends AppCompatActivity {
                 } else {
                     assert value != null;
                     for (DocumentChange document : value.getDocumentChanges()) {
-                        Log.d(LOG_TAG, String.valueOf(document.getDocument().getData()));
-                        // TODO : call the function to add player to vector
                         Map<String, Object> user = document.getDocument().getData();
                         if (!hostNameRemoved) {
                             hostNameRemoved = true;
                             return;
                         }
                         if (playersCount == MAX_PLAYERS - 1) {
-                            Log.d(LOG_TAG, "No room");
                             return;
                         }
                         playerNames.get(playersCount++).setText(Objects.requireNonNull(user.get("user")).toString());
@@ -193,7 +190,6 @@ public class HostActivity extends AppCompatActivity {
         }
         Collections.shuffle(fileNames);
         for (int i = 0; i <= playersCount; i++) {
-            Log.d(LOG_TAG, fileNames.get(i));
             icons.add(getResources().getIdentifier(fileNames.get(i), "drawable", getPackageName()));
         }
         return icons;
@@ -211,6 +207,7 @@ public class HostActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void addCardsToDb() {
         Deck deck = Deck.getInstance();
+        deck.buildDeck();
         List<String> names = playerNames.stream().filter((TextView tv) -> !tv.getText().toString().equals("")).collect(Collectors.toList()).stream().map(((TextView tv) -> tv.getText().toString())).collect(Collectors.toList());
         names.add(hostUserView.getText().toString());
         int numberCards;
@@ -221,6 +218,8 @@ public class HostActivity extends AppCompatActivity {
         } else {
             numberCards = 4;
         }
+        ArrayList<String> roles = prepareRoles();
+        ArrayList<String> endCards = deck.getEndCards();
         for (int i = 0; i < names.size(); i++) {
             ArrayList<String> cardTypes = new ArrayList<>();
             for (int j = 0; j < numberCards; j++) {
@@ -231,6 +230,8 @@ public class HostActivity extends AppCompatActivity {
             }
             Map<String, Object> docData = new HashMap<>();
             docData.put("cards", cardTypes);
+            docData.put("role", roles.get(i));
+            docData.put("endCards", endCards);
             db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document(names.get(i)).set(docData);
         }
 
@@ -242,11 +243,28 @@ public class HostActivity extends AppCompatActivity {
             db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document("Available").collection("Cards").add(docData);
             c = deck.draw();
         }
+    }
 
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("cards", deck.getEndCards());
-        db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document("Finish").set(docData);
-
+    public ArrayList<String> prepareRoles() {
+        ArrayList<String> roles = new ArrayList<>();
+        int saboteursCount = 1;
+        if (playersCount > 3) {
+            saboteursCount++;
+        }
+        if (playersCount > 5) {
+            saboteursCount++;
+        }
+        if (playersCount > 8) {
+            saboteursCount++;
+        }
+        for (int i = 0; i < saboteursCount; i++) {
+            roles.add("Saboteur");
+        }
+        for (int i = saboteursCount; i <= playersCount; i++) {
+            roles.add("Dwarf");
+        }
+        Collections.shuffle(roles);
+        return roles;
     }
 
     public void playGame(View view) {
@@ -264,7 +282,6 @@ public class HostActivity extends AppCompatActivity {
                 icons = prepareIcons();
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                     String docId = documentSnapshot.getId();
-                    Log.d(LOG_TAG, String.valueOf(index));
                     db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).document(docId).update("photo", String.valueOf(icons.get(index++))).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -281,7 +298,6 @@ public class HostActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
 
-                        // TODO : MAYBE A REFACTOR?
                         new Thread(HostActivity.this::addCardsToDb).start();
                         Map <String, Object> start = new HashMap<>();
                         start.put("start", 1);
@@ -294,7 +310,6 @@ public class HostActivity extends AppCompatActivity {
                         });
                     }
                 });
-
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

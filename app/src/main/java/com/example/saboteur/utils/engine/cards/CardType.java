@@ -7,18 +7,30 @@ import java.util.List;
 
 public interface CardType {
 
+    public default List<Directions> getCardDirections(boolean rotated) {
+        if (rotated) {
+            return getReverseRoadDirections();
+        } else {
+            return getRoadDirections();
+        }
+    }
+
     public default List<Directions> rotateDirections(List<Directions> directions) {
         List<Directions> res = new ArrayList<>();
         for (Directions direction : directions) {
             switch (direction) {
                 case NORTH:
                     res.add(Directions.SOUTH);
+                    break;
                 case SOUTH:
                     res.add(Directions.NORTH);
+                    break;
                 case EAST:
                     res.add(Directions.WEST);
+                    break;
                 case WEST:
                     res.add(Directions.EAST);
+                    break;
             }
         }
         return res;
@@ -26,7 +38,11 @@ public interface CardType {
 
     String getName();
 
-    enum StartType implements CardType, CardEdge {
+    public List<Directions> getRoadDirections();
+
+    public List<Directions> getReverseRoadDirections();
+
+    enum StartType implements CardType {
         START;
 
         @Override
@@ -45,7 +61,7 @@ public interface CardType {
         }
     }
 
-    enum EndType implements CardType, CardEdge {
+    enum EndType implements CardType {
         FINISH_TREASURE, FINISH_TURN_LEFT, FINISH_TURN_RIGHT;
 
         @Override
@@ -73,7 +89,7 @@ public interface CardType {
         }
     }
 
-    enum RoadType implements CardType, CardEdge {
+    enum RoadType implements CardType {
         ROAD_CORNER_LEFT, ROAD_CORNER_RIGHT, ROAD_CROSS, ROAD_HORIZONTAL_2,
         ROAD_VERTICAL_1_HORIZONTAL_2, ROAD_VERTICAL_2, ROAD_VERTICAL_2_HORIZONTAL_1;
 
@@ -110,7 +126,7 @@ public interface CardType {
         }
     }
 
-    enum BlockType implements CardType, CardEdge {
+    enum BlockType implements CardType {
         BLOCK_CORNER_LEFT, BLOCK_CORNER_RIGHT, BLOCK_CROSS, BLOCK_HORIZONTAL_2,
         BLOCK_VERTICAL_1_HORIZONTAL_2, BLOCK_VERTICAL_2, BLOCK_VERTICAL_2_HORIZONTAL_1, BLOCK_VERTICAL_1, BLOCK_HORIZONTAL_1;
 
@@ -158,6 +174,17 @@ public interface CardType {
         public String getName() {
             return this.name();
         }
+
+        @Override
+        public List<Directions> getRoadDirections() {
+            // TODO langa cartile BACK se poate pune orice fel de carte de drum
+            return Arrays.asList(Directions.NORTH, Directions.EAST, Directions.SOUTH, Directions.WEST);
+        }
+
+        @Override
+        public List<Directions> getReverseRoadDirections() {
+            return null;
+        }
     }
 
     interface ActionType extends CardType {
@@ -168,6 +195,16 @@ public interface CardType {
             public String getName() {
                 return this.name();
             }
+
+            @Override
+            public List<Directions> getRoadDirections() {
+                return null;
+            }
+
+            @Override
+            public List<Directions> getReverseRoadDirections() {
+                return null;
+            }
         }
 
         enum BlockType implements ActionType {
@@ -176,6 +213,16 @@ public interface CardType {
             @Override
             public String getName() {
                 return this.name();
+            }
+
+            @Override
+            public List<Directions> getRoadDirections() {
+                return null;
+            }
+
+            @Override
+            public List<Directions> getReverseRoadDirections() {
+                return null;
             }
         }
 
@@ -186,6 +233,16 @@ public interface CardType {
             @Override
             public String getName() {
                 return this.name();
+            }
+
+            @Override
+            public List<Directions> getRoadDirections() {
+                return null;
+            }
+
+            @Override
+            public List<Directions> getReverseRoadDirections() {
+                return null;
             }
         }
     }

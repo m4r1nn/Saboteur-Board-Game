@@ -1,5 +1,7 @@
 package com.example.saboteur.utils.engine.cards;
 
+import java.util.List;
+
 public class Card {
     private CardType type;
     private boolean rotated = false;
@@ -17,10 +19,10 @@ public class Card {
     }
 
     public void changeRotation() {
-        if (!rotated) {
-            rotated = true;
-        } else {
-            rotated = false;
-        }
+        rotated = !rotated;
+    }
+
+    public boolean getRotated() {
+        return rotated;
     }
 }

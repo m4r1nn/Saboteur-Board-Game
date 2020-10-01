@@ -19,6 +19,9 @@ public final class Deck {
     private BiMap<CardType, String> type2String;
 
     private Deck() {
+    }
+
+    public void buildDeck() {
         cards = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
@@ -59,6 +62,8 @@ public final class Deck {
         cards.add(new Card(CardType.BlockType.BLOCK_HORIZONTAL_1));
         cards.add(new Card(CardType.BlockType.BLOCK_HORIZONTAL_2));
         Collections.shuffle(cards);
+        // TODO - DELETE THIS LINE
+//        cards.add(new Card(CardType.ActionType.SpecialType.ACTION_AVALANCHE));
     }
 
     public ArrayList<String> getEndCards() {

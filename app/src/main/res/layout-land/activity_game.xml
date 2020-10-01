@@ -45,31 +45,34 @@
                 android:layout_weight="1"
                 android:fontFamily="casual"
                 android:gravity="center_vertical"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="selectUser"
+                />
 
             <LinearLayout
+                android:id="@+id/attributes_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/mini_pickaxe" />
+                    android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/mini_lamp" />
+                    android:layout_weight="1"/>
 
                 <ImageView
+                    android:id="@+id/cart_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/mini_cart" />
+                    android:layout_weight="1"/>
 
             </LinearLayout>
 
@@ -100,25 +103,30 @@
                 android:layout_weight="1"
                 android:fontFamily="casual"
                 android:gravity="center_vertical"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -151,25 +159,30 @@
                 android:layout_weight="1"
                 android:fontFamily="casual"
                 android:gravity="center_vertical"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -202,25 +215,30 @@
                 android:layout_weight="1"
                 android:fontFamily="casual"
                 android:gravity="center_vertical"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -253,25 +271,30 @@
                 android:layout_weight="1"
                 android:fontFamily="casual"
                 android:gravity="center_vertical"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -304,25 +327,30 @@
                 android:layout_weight="1"
                 android:fontFamily="casual"
                 android:gravity="center_vertical"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -355,25 +383,30 @@
                 android:layout_weight="1"
                 android:fontFamily="casual"
                 android:gravity="center_vertical"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -406,25 +439,30 @@
                 android:layout_weight="1"
                 android:fontFamily="casual"
                 android:gravity="center_vertical"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_8"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_8"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_8"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -457,25 +495,30 @@
                 android:layout_weight="1"
                 android:fontFamily="casual"
                 android:gravity="center_vertical"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_9"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_9"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_9"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_9"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -508,25 +551,30 @@
                 android:layout_weight="1"
                 android:fontFamily="casual"
                 android:gravity="center_vertical"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="selectUser" />
 
             <LinearLayout
+                android:id="@+id/attributes_10"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_10"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_10"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_10"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -574,7 +622,8 @@
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/card_back_normal"
-                tools:ignore="NestedWeights" />
+                tools:ignore="NestedWeights"
+                android:onClick="burnCard"/>
 
             <TextView
                 android:id="@+id/cardNumberText"
@@ -588,55 +637,26 @@
 
         </LinearLayout>
 
-        <GridLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="4dp"
-            android:layout_weight="1.25"
-            android:background="@drawable/players_layout_background"
-            android:columnCount="2"
-            android:rowCount="2">
+            android:layout_weight="1.45"
+            android:background="@drawable/players_layout_background">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_row="0"
-                android:layout_rowWeight="1"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:srcCompat="@drawable/mini_pickaxe" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_row="0"
-                android:layout_rowWeight="1"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:srcCompat="@drawable/mini_cart" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_row="1"
-                android:layout_rowWeight="1"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:srcCompat="@drawable/mini_lamp" />
-
-        </GridLayout>
+            <TextView
+                android:id="@+id/role_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:gravity="center_horizontal"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <GridLayout
             android:layout_width="match_parent"
@@ -766,6 +786,7 @@
             android:layout_columnWeight="1"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -777,6 +798,7 @@
             android:layout_column="1"
             android:layout_columnWeight="1"
             android:layout_marginTop="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -788,6 +810,7 @@
             android:layout_column="2"
             android:layout_columnWeight="1"
             android:layout_marginTop="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -799,6 +822,7 @@
             android:layout_column="3"
             android:layout_columnWeight="1"
             android:layout_marginTop="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -810,6 +834,7 @@
             android:layout_column="4"
             android:layout_columnWeight="1"
             android:layout_marginTop="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -821,6 +846,7 @@
             android:layout_column="5"
             android:layout_columnWeight="1"
             android:layout_marginTop="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -832,6 +858,7 @@
             android:layout_column="6"
             android:layout_columnWeight="1"
             android:layout_marginTop="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -843,6 +870,7 @@
             android:layout_column="7"
             android:layout_columnWeight="1"
             android:layout_marginTop="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -854,6 +882,7 @@
             android:layout_column="8"
             android:layout_columnWeight="1"
             android:layout_marginTop="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -865,6 +894,7 @@
             android:layout_column="9"
             android:layout_columnWeight="1"
             android:layout_marginTop="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -877,6 +907,7 @@
             android:layout_columnWeight="1"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -888,6 +919,7 @@
             android:layout_column="0"
             android:layout_columnWeight="1"
             android:layout_marginStart="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -898,6 +930,7 @@
             android:layout_rowWeight="1"
             android:layout_column="1"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -908,6 +941,7 @@
             android:layout_rowWeight="1"
             android:layout_column="2"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -918,6 +952,7 @@
             android:layout_rowWeight="1"
             android:layout_column="3"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -928,6 +963,7 @@
             android:layout_rowWeight="1"
             android:layout_column="4"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -938,6 +974,7 @@
             android:layout_rowWeight="1"
             android:layout_column="5"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -948,6 +985,7 @@
             android:layout_rowWeight="1"
             android:layout_column="6"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -958,6 +996,7 @@
             android:layout_rowWeight="1"
             android:layout_column="7"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -968,6 +1007,7 @@
             android:layout_rowWeight="1"
             android:layout_column="8"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -978,6 +1018,7 @@
             android:layout_rowWeight="1"
             android:layout_column="9"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -989,6 +1030,7 @@
             android:layout_column="10"
             android:layout_columnWeight="1"
             android:layout_marginEnd="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1000,6 +1042,7 @@
             android:layout_column="0"
             android:layout_columnWeight="1"
             android:layout_marginStart="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1010,6 +1053,7 @@
             android:layout_rowWeight="1"
             android:layout_column="1"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1020,6 +1064,7 @@
             android:layout_rowWeight="1"
             android:layout_column="2"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1030,6 +1075,7 @@
             android:layout_rowWeight="1"
             android:layout_column="3"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1040,6 +1086,7 @@
             android:layout_rowWeight="1"
             android:layout_column="4"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1050,6 +1097,7 @@
             android:layout_rowWeight="1"
             android:layout_column="5"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1060,6 +1108,7 @@
             android:layout_rowWeight="1"
             android:layout_column="6"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1070,6 +1119,7 @@
             android:layout_rowWeight="1"
             android:layout_column="7"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1080,6 +1130,7 @@
             android:layout_rowWeight="1"
             android:layout_column="8"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1090,6 +1141,7 @@
             android:layout_rowWeight="1"
             android:layout_column="9"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1101,6 +1153,7 @@
             android:layout_column="10"
             android:layout_columnWeight="1"
             android:layout_marginEnd="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1112,6 +1165,7 @@
             android:layout_column="0"
             android:layout_columnWeight="1"
             android:layout_marginStart="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1122,6 +1176,7 @@
             android:layout_rowWeight="1"
             android:layout_column="1"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1132,6 +1187,7 @@
             android:layout_rowWeight="1"
             android:layout_column="2"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1142,6 +1198,7 @@
             android:layout_rowWeight="1"
             android:layout_column="3"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1152,6 +1209,7 @@
             android:layout_rowWeight="1"
             android:layout_column="4"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1162,6 +1220,7 @@
             android:layout_rowWeight="1"
             android:layout_column="5"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1172,6 +1231,7 @@
             android:layout_rowWeight="1"
             android:layout_column="6"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1182,6 +1242,7 @@
             android:layout_rowWeight="1"
             android:layout_column="7"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1192,6 +1253,7 @@
             android:layout_rowWeight="1"
             android:layout_column="8"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1202,6 +1264,7 @@
             android:layout_rowWeight="1"
             android:layout_column="9"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1213,6 +1276,7 @@
             android:layout_column="10"
             android:layout_columnWeight="1"
             android:layout_marginEnd="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1224,6 +1288,7 @@
             android:layout_column="0"
             android:layout_columnWeight="1"
             android:layout_marginStart="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1234,6 +1299,7 @@
             android:layout_rowWeight="1"
             android:layout_column="1"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1244,6 +1310,7 @@
             android:layout_rowWeight="1"
             android:layout_column="2"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1254,6 +1321,7 @@
             android:layout_rowWeight="1"
             android:layout_column="3"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1264,6 +1332,7 @@
             android:layout_rowWeight="1"
             android:layout_column="4"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1274,6 +1343,7 @@
             android:layout_rowWeight="1"
             android:layout_column="5"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1284,6 +1354,7 @@
             android:layout_rowWeight="1"
             android:layout_column="6"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1294,6 +1365,7 @@
             android:layout_rowWeight="1"
             android:layout_column="7"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1304,6 +1376,7 @@
             android:layout_rowWeight="1"
             android:layout_column="8"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1314,6 +1387,7 @@
             android:layout_rowWeight="1"
             android:layout_column="9"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1325,6 +1399,7 @@
             android:layout_column="10"
             android:layout_columnWeight="1"
             android:layout_marginEnd="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1336,6 +1411,7 @@
             android:layout_column="0"
             android:layout_columnWeight="1"
             android:layout_marginStart="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1346,6 +1422,7 @@
             android:layout_rowWeight="1"
             android:layout_column="1"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1356,6 +1433,7 @@
             android:layout_rowWeight="1"
             android:layout_column="2"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1366,6 +1444,7 @@
             android:layout_rowWeight="1"
             android:layout_column="3"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1376,6 +1455,7 @@
             android:layout_rowWeight="1"
             android:layout_column="4"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1386,6 +1466,7 @@
             android:layout_rowWeight="1"
             android:layout_column="5"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1396,6 +1477,7 @@
             android:layout_rowWeight="1"
             android:layout_column="6"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1406,6 +1488,7 @@
             android:layout_rowWeight="1"
             android:layout_column="7"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1416,6 +1499,7 @@
             android:layout_rowWeight="1"
             android:layout_column="8"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1426,6 +1510,7 @@
             android:layout_rowWeight="1"
             android:layout_column="9"
             android:layout_columnWeight="1"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1437,6 +1522,7 @@
             android:layout_column="10"
             android:layout_columnWeight="1"
             android:layout_marginEnd="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1449,6 +1535,7 @@
             android:layout_columnWeight="1"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1460,6 +1547,7 @@
             android:layout_column="1"
             android:layout_columnWeight="1"
             android:layout_marginBottom="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1471,6 +1559,7 @@
             android:layout_column="2"
             android:layout_columnWeight="1"
             android:layout_marginBottom="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1482,6 +1571,7 @@
             android:layout_column="3"
             android:layout_columnWeight="1"
             android:layout_marginBottom="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1493,6 +1583,7 @@
             android:layout_column="4"
             android:layout_columnWeight="1"
             android:layout_marginBottom="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1504,6 +1595,7 @@
             android:layout_column="5"
             android:layout_columnWeight="1"
             android:layout_marginBottom="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1515,6 +1607,7 @@
             android:layout_column="6"
             android:layout_columnWeight="1"
             android:layout_marginBottom="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1526,6 +1619,7 @@
             android:layout_column="7"
             android:layout_columnWeight="1"
             android:layout_marginBottom="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1537,6 +1631,7 @@
             android:layout_column="8"
             android:layout_columnWeight="1"
             android:layout_marginBottom="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1548,6 +1643,7 @@
             android:layout_column="9"
             android:layout_columnWeight="1"
             android:layout_marginBottom="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -1560,6 +1656,7 @@
             android:layout_columnWeight="1"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:onClick="selectMapPlace"
             android:scaleType="fitXY" />
 
     </GridLayout>

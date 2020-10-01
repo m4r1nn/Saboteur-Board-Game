@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
@@ -43,6 +44,7 @@ public class JoinActivity extends AppCompatActivity {
     private final String LOG_TAG = JoinActivity.class.getSimpleName();
 
     private Sound buttonSound = null;
+    private ListenerRegistration listener;
 
 
     @Override
@@ -54,6 +56,10 @@ public class JoinActivity extends AppCompatActivity {
         joinButton = findViewById(R.id.join_button);
 
         buttonSound = new Sound(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.button_sound));
+        if (listener != null) {
+            listener.remove();
+        }
+        listener = null;
     }
 
     public Intent prepareIntent(Intent intent) {
@@ -85,13 +91,12 @@ public class JoinActivity extends AppCompatActivity {
         docRef.collection(COLLECTION_NAME).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull final Task<QuerySnapshot> task) {
-                Log.d(LOG_TAG, String.valueOf(Objects.requireNonNull(task.getResult()).size()));
                 if (task.getResult().size() > 0 && task.getResult().size() < MAX_PLAYERS) {
                     docRef.collection(COLLECTION_NAME).add(join_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Log.d(LOG_TAG, "User adaugat cu success");
-                            docRef.collection(START_PATH).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            listener = docRef.collection(START_PATH).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                                     if (error != null) {
@@ -100,7 +105,7 @@ public class JoinActivity extends AppCompatActivity {
                                         assert value != null;
                                         for (DocumentChange documentChange : value.getDocumentChanges()) {
                                             if (documentChange.getDocument().getData().get("start") != null) {
-                                                Log.d(LOG_TAG, String.valueOf(documentChange.getDocument().getData()));
+                                                Log.d(LOG_TAG, "Intra pe aici");
                                                 finish();
                                                 startActivity(prepareIntent(new Intent(JoinActivity.this, GameActivity.class)));
                                             }
@@ -134,5 +139,12 @@ public class JoinActivity extends AppCompatActivity {
         super.onStop();
         Log.d(LOG_TAG, "onStop");
         buttonSound.stopSound();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        listener.remove();
+        Log.d(LOG_TAG, "onDestroy");
     }
 }
