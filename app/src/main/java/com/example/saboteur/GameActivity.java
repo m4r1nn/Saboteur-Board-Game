@@ -270,54 +270,62 @@ public class GameActivity extends AppCompatActivity {
             assert top != null;
             int x = top.first;
             int y = top.second;
+            Log.d(LOG_TAG, "" + x + " " + y);
             visited[x][y] = true;
             ImageView currentCard = cards.get(x).get(y);
             int imageId = (int) currentCard.getTag();
             if ((x == 1 || x == 3 ||  x == 5) && y == 9) {
+                setImageResourceAndTag(cards.get(x).get(y), finishCardIds.get((x - 1) / 2));
                 if (checkWin(x, y)) {
+                    Toast.makeText(this, "Dwarves won", Toast.LENGTH_LONG).show();
                     return true;
                 } else {
                     // TODO : apeleaza functie care schimba cartea
-                    setImageResourceAndTag(cards.get(x).get(y), finishCardIds.get((x - 1) / 2));
-                    if (cards.get(x - 1).get(y).getDrawable() != null && cards.get(x - 1).get(y).getTag() instanceof CardType.RoadType) {
-                        if ((notConnected(cards.get(x - 1).get(y), currentCard, Directions.WEST) == 0)) {
+                    if (cards.get(x - 1).get(y).getDrawable() != null && Deck.getInstance().getType2Id().inverse().get(cards.get(x - 1).get(y).getTag()) instanceof CardType.RoadType) {
+                        if ((notConnected(cards.get(x - 1).get(y), currentCard, Directions.EAST) == 0)) {
+                            if (imageId == R.drawable.card_end_turn_right) {
+                                cards.get(x).get(y).setRotation(180);
+                            }
+                        }
+                    }
+
+                    if (cards.get(x + 1).get(y).getDrawable() != null && Deck.getInstance().getType2Id().inverse().get(cards.get(x + 1).get(y).getTag()) instanceof CardType.RoadType) {
+                        if ((notConnected(cards.get(x + 1).get(y), currentCard, Directions.WEST) == 0)) {
+                            if (imageId == R.drawable.card_end_turn_left) {
+                                cards.get(x).get(y).setRotation(180);
+                            }
+                        }
+                    }
+
+                    Log.d(LOG_TAG, "inainte de if");
+                    if (cards.get(x).get(y + 1).getDrawable() != null && Deck.getInstance().getType2Id().inverse().get(cards.get(x).get(y + 1).getTag()) instanceof CardType.RoadType) {
+                        Log.d(LOG_TAG, "primu");
+                        if ((notConnected(cards.get(x).get(y + 1), currentCard, Directions.SOUTH) == 0)) {
+                            Log.d(LOG_TAG, "al doilea");
                             cards.get(x).get(y).setRotation(180);
-                        }
-                    }
-
-                    if (cards.get(x + 1).get(y).getDrawable() != null && cards.get(x + 1).get(y).getTag() instanceof CardType.RoadType) {
-                        if ((notConnected(cards.get(x + 1).get(y), currentCard, Directions.EAST) == 0)) {
-                            cards.get(x).get(y).setRotation(0);
-                        }
-                    }
-
-                    if (cards.get(x).get(y - 1).getDrawable() != null && cards.get(x).get(y - 1).getTag() instanceof CardType.RoadType) {
-                        if ((notConnected(cards.get(x).get(y - 1), currentCard, Directions.SOUTH) == 0)) {
-                            cards.get(x).get(y).setRotation(180);
-                        }
-                    }
-
-                    if (cards.get(x).get(y + 1).getDrawable() != null && cards.get(x).get(y + 1).getTag() instanceof CardType.RoadType) {
-                        if ((notConnected(cards.get(x - 1).get(y), currentCard, Directions.NORTH) == 0)) {
-                            cards.get(x).get(y).setRotation(0);
                         }
                     }
                 }
             }
-            if (Deck.getInstance().getType2Id().inverse().get(imageId) instanceof CardType.RoadType || Deck.getInstance().getType2Id().inverse().get(imageId) instanceof CardType.StartType) {
-                if (x - 1 >= 0 && y >= 0 && x - 1 < 7 && y < 11 && cards.get(x - 1).get(y).getDrawable() != null && !visited[x - 1][y]) {
+            if (Deck.getInstance().getType2Id().inverse().get(imageId) instanceof CardType.RoadType || Deck.getInstance().getType2Id().inverse().get(imageId) instanceof CardType.StartType
+                || Deck.getInstance().getType2Id().inverse().get(imageId) instanceof CardType.EndType) {
+                if (x - 1 >= 0 && y >= 0 && x - 1 < 7 && y < 11 && cards.get(x - 1).get(y).getDrawable() != null && !visited[x - 1][y]
+                        && notConnected(currentCard, cards.get(x - 1).get(y), Directions.WEST) == 0) {
                     q.add(new Pair<>(x - 1, y));
                 }
 
-                if (x + 1 >= 0 && y >= 0 && x + 1 < 7 && y < 11 && cards.get(x + 1).get(y).getDrawable() != null && !visited[x + 1][y]) {
+                if (x + 1 >= 0 && y >= 0 && x + 1 < 7 && y < 11 && cards.get(x + 1).get(y).getDrawable() != null && !visited[x + 1][y]
+                        && notConnected(currentCard, cards.get(x + 1).get(y), Directions.EAST) == 0) {
                     q.add(new Pair<>(x + 1, y));
                 }
 
-                if (x >= 0 && y - 1 >= 0 && x < 7 && y - 1 < 11 && cards.get(x).get(y - 1).getDrawable() != null && !visited[x][y - 1]) {
+                if (x >= 0 && y - 1 >= 0 && x < 7 && y - 1 < 11 && cards.get(x).get(y - 1).getDrawable() != null && !visited[x][y - 1]
+                        && notConnected(currentCard, cards.get(x).get(y - 1), Directions.SOUTH) == 0) {
                     q.add(new Pair<>(x, y - 1));
                 }
 
-                if (x >= 0 && y + 1 >= 0 && x  < 7 && y + 1 < 11 && cards.get(x).get(y + 1).getDrawable() != null && !visited[x][y + 1]) {
+                if (x >= 0 && y + 1 >= 0 && x  < 7 && y + 1 < 11 && cards.get(x).get(y + 1).getDrawable() != null && !visited[x][y + 1]
+                        && notConnected(currentCard, cards.get(x).get(y + 1), Directions.NORTH) == 0) {
                     q.add(new Pair<>(x, y + 1));
                 }
             }
@@ -743,6 +751,28 @@ public class GameActivity extends AppCompatActivity {
         List<Directions> secondDirections = deck.getType2Id().inverse().get(second.getTag()).getCardDirections(rotated2);
         if (deck.getType2Id().inverse().get(second.getTag()) instanceof CardType.Back) {
             // TODO: flip connected FINISH CARDS + return code
+            switch (direction) {
+                case NORTH:
+                    if (firstDirections.contains(Directions.NORTH)) {
+                        return 0;
+                    }
+                    break;
+                case SOUTH:
+                    if (firstDirections.contains(Directions.SOUTH)) {
+                        return 0;
+                    }
+                    break;
+                case WEST:
+                    if (firstDirections.contains(Directions.WEST)) {
+                        return 0;
+                    }
+                    break;
+                case EAST:
+                    if (firstDirections.contains(Directions.EAST)) {
+                        return 0;
+                    }
+                    break;
+            }
             return 2;
         }
         int notRoad = 2;
