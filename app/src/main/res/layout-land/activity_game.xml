@@ -57,22 +57,22 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/mini_pickaxe" />
+                    android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/mini_lamp" />
+                    android:layout_weight="1"/>
 
                 <ImageView
+                    android:id="@+id/cart_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/mini_cart" />
+                    android:layout_weight="1"/>
 
             </LinearLayout>
 
@@ -114,16 +114,19 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -167,16 +170,19 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -220,16 +226,19 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -273,16 +282,19 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -326,16 +338,19 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -379,16 +394,19 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -432,16 +450,19 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_8"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_8"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_8"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -485,16 +506,19 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_9"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_9"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_9"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -538,16 +562,19 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/pickaxe_10"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/lamp_10"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/cart_10"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
@@ -595,7 +622,8 @@
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/card_back_normal"
-                tools:ignore="NestedWeights" />
+                tools:ignore="NestedWeights"
+                android:onClick="burnCard"/>
 
             <TextView
                 android:id="@+id/cardNumberText"

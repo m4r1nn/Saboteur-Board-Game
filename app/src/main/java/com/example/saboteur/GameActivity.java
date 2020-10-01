@@ -58,7 +58,7 @@ public class GameActivity extends AppCompatActivity {
     private final String DECK_PATH = "deck";
     ArrayList<Integer> finishCardIds;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    volatile ArrayList<String> names = new ArrayList<>();
+    volatile static ArrayList<String> names = new ArrayList<>();
     ArrayList<Integer> icons = new ArrayList<>();
     ArrayList<ImageView> images = new ArrayList<>();
     ArrayList<TextView> texts = new ArrayList<>();
@@ -66,7 +66,9 @@ public class GameActivity extends AppCompatActivity {
     ArrayList<Card> hand;
     ArrayList<ImageView> handView;
     ArrayList<String> blockTypes = new ArrayList<>();
-    ArrayList<LinearLayout> attributes = new ArrayList<>();
+    ArrayList<ImageView> pickaxes = new ArrayList<>();
+    ArrayList<ImageView> lamps = new ArrayList<>();
+    ArrayList<ImageView> carts = new ArrayList<>();
     private Sound buttonSound = null;
     private TextView roleText = null;
     private String username;
@@ -119,7 +121,9 @@ public class GameActivity extends AppCompatActivity {
         for (int i = 1; i <= MAX_PLAYERS; i++) {
             images.add(findViewById(getResources().getIdentifier("icon_" + i, "id", getPackageName())));
             texts.add(findViewById(getResources().getIdentifier("name_" + i, "id", getPackageName())));
-            attributes.add(findViewById(getResources().getIdentifier("attributes_" + i, "id", getPackageName())));
+            pickaxes.add(findViewById(getResources().getIdentifier("pickaxe_" + i, "id", getPackageName())));
+            lamps.add(findViewById(getResources().getIdentifier("lamp_" + i, "id", getPackageName())));
+            carts.add(findViewById(getResources().getIdentifier("cart_" + i, "id", getPackageName())));
         }
 
         Intent intent = getIntent();
@@ -130,7 +134,7 @@ public class GameActivity extends AppCompatActivity {
         assert roomCode != null;
         Log.d(LOG_TAG, roomCode);
 
-        Log.d(LOG_TAG, "SIZE IN get players info" + names.size());
+
         db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (DocumentChange documentSnapshot : queryDocumentSnapshots.getDocumentChanges()) {
                 names.add(Objects.requireNonNull(documentSnapshot.getDocument().get("user")).toString());
@@ -138,9 +142,7 @@ public class GameActivity extends AppCompatActivity {
             }
             fillPlayersNames();
             listenForMoves();
-            Log.d(LOG_TAG, "SIZE IN  cred ca 2 final" + names.size());
         });
-        Log.d(LOG_TAG, "SIZE IN get cred ca 0  final" + names.size());
     }
 
     private void buildMap() {
@@ -226,8 +228,6 @@ public class GameActivity extends AppCompatActivity {
                 Log.d(LOG_TAG, "fail listen", e);
             }
         });
-        Log.d(LOG_TAG, "SIZE IN get hand final" + names.size());
-
     }
 
     public void exitGame(View view) {
@@ -315,7 +315,6 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         }
-        Log.d(LOG_TAG, "SIZE IN SELECTEDCARD final" + names.size());
     }
 
     public void sendMoveToDb(int lin, int col, String type, boolean rotation, int index) {
@@ -329,8 +328,6 @@ public class GameActivity extends AppCompatActivity {
         // code 1 - road/block road
         docData.put("Code", "1");
         db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
-        Log.d(LOG_TAG, "SIZE IN sendtoDb final" + names.size());
-
     }
 
     public void sendMoveToDb(int lin, int col, String code, int index) {
@@ -344,10 +341,15 @@ public class GameActivity extends AppCompatActivity {
         db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
     }
 
+    public void sendMoveToDb(String code) {
+        Map<String, String> docData = new HashMap<>();
+        // code 4 - Burn card
+        docData.put("Code", code);
+        db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
+    }
+
     private void doMove(Map<String, Object> info) {
-        Log.d(LOG_TAG, "SIZE IN get doMove1" + names.size());
         int code = Integer.parseInt((String) Objects.requireNonNull(info.get("Code")));
-        Log.d(LOG_TAG, "SIZE IN get doMove2" + names.size());
         int lin, col;
         Log.d(LOG_TAG, "SIZE IN get doMove3" + names.size());
         if (isPlayerTurn()) {
@@ -361,11 +363,9 @@ public class GameActivity extends AppCompatActivity {
                 col = Integer.parseInt((String) Objects.requireNonNull(info.get("Column")));
                 String type = (String) info.get("Type");
                 boolean rotation = Boolean.parseBoolean((String) info.get("Rotation"));
-                Log.d(LOG_TAG, "SIZE IN get doMove4" + names.size());
                 setImageResourceAndTag(cards.get(lin).get(col),
                         Deck.getInstance().getType2Id().get(Deck.getInstance().getType2String().inverse().get(type)));
                 cards.get(lin).get(col).setRotation(rotation ? 180 : 0);
-                Log.d(LOG_TAG, "SIZE IN get doMove5" + names.size());
                 break;
             case 2:
                 // action map
@@ -388,13 +388,17 @@ public class GameActivity extends AppCompatActivity {
                 cards.get(lin).get(col).setImageDrawable(null);
                 cards.get(lin).get(col).setTag(null);
                 break;
+            case 4:
+                if (!isPlayerTurn()) {
+                    Toast.makeText(this, "Burn card", Toast.LENGTH_LONG).show();
+                }
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + code);
         }
 
 
         if (isPlayerTurn()) {
-            Log.d(LOG_TAG, "gigel" + String.valueOf(selectedCardIndex));
             drawCardFromDeck();
         }
     }
@@ -412,8 +416,6 @@ public class GameActivity extends AppCompatActivity {
                         db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).
                                 document("Available").collection("Cards").
                                 document(queryDocumentSnapshot.getId()).delete();
-                        Log.d(LOG_TAG, String.valueOf(handView.size()));
-                        Log.d(LOG_TAG, String.valueOf(selectedCardIndex));
                         handView.get(selectedCardIndex).setRotation(0);
                         setImageResourceAndTag(handView.get(selectedCardIndex),
                                 Objects.requireNonNull(Deck.getInstance().getType2Id().get(Deck.getInstance().getType2String().inverse().
@@ -435,10 +437,8 @@ public class GameActivity extends AppCompatActivity {
                 addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        Log.d(LOG_TAG, "SIZE IN get listen for move2" + names.size());
                         assert value != null;
                         for (DocumentChange documentChange : value.getDocumentChanges()) {
-                            Log.d(LOG_TAG, "SIZE IN get listen for move3" + names.size());
                             doMove(documentChange.getDocument().getData());
                             moveCounter++;
                         }
@@ -455,8 +455,12 @@ public class GameActivity extends AppCompatActivity {
         int col = Integer.parseInt(split[1]);
         Log.d(LOG_TAG, "line: " + lin);
         Log.d(LOG_TAG, "column: " + col);
-        if (canMakeMove()) {
+        if (!isPlayerTurn()) {
             Toast.makeText(this, "Not your turn", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (selectedCard == null) {
+            Toast.makeText(this, "No card selected", Toast.LENGTH_SHORT).show();
             return;
         }
         // if selected card is road
@@ -507,11 +511,6 @@ public class GameActivity extends AppCompatActivity {
                 }
             }, 5000);
         }
-    }
-
-    private boolean canMakeMove() {
-        // a card is selected + player turn
-        return (selectedCard == null) || !isPlayerTurn();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -658,18 +657,34 @@ public class GameActivity extends AppCompatActivity {
                 break;
             }
         }
-        LinearLayout selectedLayout = attributes.get(index);
+        ImageView pickaxe = pickaxes.get(index);
+        ImageView lamp = lamps.get(index);
+        ImageView cart = carts.get(index);
 
         // type = block
         if (selectedType instanceof CardType.ActionType.BlockType) {
             CardType.ActionType.BlockType selectedBlock = (CardType.ActionType.BlockType) selectedType;
             switch (selectedBlock) {
                 case ACTION_BLOCK_CART:
-
+                    if (cart.getDrawable() != null) {
+                        Toast.makeText(this, "Already blocked", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    setImageResourceAndTag(cart, R.drawable.mini_cart);
                     break;
                 case ACTION_BLOCK_LAMP:
+                    if (lamp.getDrawable() != null) {
+                        Toast.makeText(this, "Already blocked", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    setImageResourceAndTag(lamp, R.drawable.mini_lamp);
                     break;
                 case ACTION_BLOCK_PICKAXE:
+                    if (pickaxe.getDrawable() != null) {
+                        Toast.makeText(this, "Already blocked", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    setImageResourceAndTag(pickaxe, R.drawable.mini_pickaxe);
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + selectedBlock);
@@ -678,5 +693,17 @@ public class GameActivity extends AppCompatActivity {
         }
         // type = unblock
         CardType.ActionType.UnblockType selectedUnblock = (CardType.ActionType.UnblockType) selectedType;
+    }
+
+    public void burnCard(View view) {
+        if (!isPlayerTurn()) {
+            Toast.makeText(this, "Not your turn", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (selectedCard == null) {
+            Toast.makeText(this, "No card selected", Toast.LENGTH_LONG).show();
+            return;
+        }
+        sendMoveToDb("4");
     }
 }
