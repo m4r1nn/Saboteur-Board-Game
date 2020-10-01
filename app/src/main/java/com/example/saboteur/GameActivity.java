@@ -292,7 +292,7 @@ public class GameActivity extends AppCompatActivity {
         }
         ImageView cardView = (ImageView) view;
         int oldSelectedId = -1;
-        if (selectedCard != null) {
+        if (selectedCard != null && selectedCard.getDrawable() != null) {
             selectedCard.setBackgroundColor(Color.TRANSPARENT);
             oldSelectedId = selectedCard.getId();
             selectedCard = null;
@@ -305,7 +305,7 @@ public class GameActivity extends AppCompatActivity {
                 break;
             }
         }
-        if (selectedCardIndex < hand.size() && selectedCardIndex != -1) {
+        if (selectedCardIndex < hand.size() && selectedCardIndex != -1 && selectedCard.getDrawable() != null) {
             // check condition
             selectedCard.setBackgroundColor(Color.YELLOW);
             ImageView currentCardView = handView.get(selectedCardIndex);
@@ -315,6 +315,10 @@ public class GameActivity extends AppCompatActivity {
                     currentCardView.setRotation(((int) (currentCardView.getRotation() + 180)) % 360);
                 }
             }
+        }
+        if (selectedCard.getDrawable() == null) {
+            selectedCard = null;
+            selectedCardIndex = -1;
         }
     }
 
@@ -352,7 +356,8 @@ public class GameActivity extends AppCompatActivity {
 
     public void sendMoveToDb(String code, int index, int drawable, String user) {
         Map<String, String> docData = new HashMap<>();
-        // code 5 - (Un)Block card
+        // code 5 - Block card
+        // code 6 - Unblock card
         docData.put("Code", code);
         docData.put("Index", String.valueOf(index));
         docData.put("drawable",String.valueOf(drawable));
@@ -363,6 +368,8 @@ public class GameActivity extends AppCompatActivity {
     private void doMove(Map<String, Object> info) {
         int code = Integer.parseInt((String) Objects.requireNonNull(info.get("Code")));
         int lin, col;
+        String user;
+        int drawable, index;
         Log.d(LOG_TAG, "SIZE IN get doMove3" + names.size());
         if (isPlayerTurn()) {
             selectedCardIndex = Integer.parseInt((String) Objects.requireNonNull(info.get("Index")));
@@ -406,9 +413,9 @@ public class GameActivity extends AppCompatActivity {
                 }
                 break;
             case 5:
-                String user = (String) Objects.requireNonNull(info.get("user"));
-                int drawable = Integer.parseInt((String) Objects.requireNonNull(info.get("drawable")));
-                int index = -1;
+                user = (String) Objects.requireNonNull(info.get("user"));
+                drawable = Integer.parseInt((String) Objects.requireNonNull(info.get("drawable")));
+                index = -1;
                 for (int i = 0; i < texts.size(); i++) {
                     if (texts.get(i).getText().equals(user)) {
                         index = i;
@@ -429,10 +436,36 @@ public class GameActivity extends AppCompatActivity {
                         throw new IllegalStateException("Unexpected value: " + drawable);
                 }
                 break;
+            case 6:
+                user = (String) Objects.requireNonNull(info.get("user"));
+                drawable = Integer.parseInt((String) Objects.requireNonNull(info.get("drawable")));
+                index = -1;
+                for (int i = 0; i < texts.size(); i++) {
+                    if (texts.get(i).getText().equals(user)) {
+                        index = i;
+                        break;
+                    }
+                }
+                switch (drawable) {
+                    case R.drawable.card_action_unblock_pickaxe:
+                        pickaxes.get(index).setImageDrawable(null);
+                        pickaxes.get(index).setTag(null);
+                        break;
+                    case R.drawable.card_action_unblock_cart:
+                        carts.get(index).setImageDrawable(null);
+                        carts.get(index).setTag(null);
+                        break;
+                    case R.drawable.card_action_unblock_lamp:
+                        lamps.get(index).setImageDrawable(null);
+                        lamps.get(index).setTag(null);
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + drawable);
+                }
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + code);
         }
-
 
         if (isPlayerTurn()) {
             drawCardFromDeck();
@@ -464,6 +497,12 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }
             });
+        } else {
+            selectedCard.setBackgroundColor(Color.TRANSPARENT);
+            selectedCard.setImageDrawable(null);
+            selectedCard.setTag(null);
+            selectedCard = null;
+            selectedCardIndex = -1;
         }
     }
 
@@ -733,6 +772,109 @@ public class GameActivity extends AppCompatActivity {
         }
         // type = unblock
         CardType.ActionType.UnblockType selectedUnblock = (CardType.ActionType.UnblockType) selectedType;
+        switch (selectedUnblock) {
+            case ACTION_UNBLOCK_CART:
+                if (cart.getDrawable() == null) {
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_cart, user);
+                break;
+            case ACTION_UNBLOCK_LAMP:
+                if (lamp.getDrawable() == null) {
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_lamp, user);
+                break;
+            case ACTION_UNBLOCK_PICKAXE:
+                if (pickaxe.getDrawable() == null) {
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_pickaxe, user);
+                break;
+            case ACTION_UNBLOCK_CART_LAMP:
+                if (cart.getDrawable() == null && lamp.getDrawable() == null) {
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (cart.getDrawable() == null) {
+                    sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_lamp, user);
+                    return;
+                }
+                if (lamp.getDrawable() == null) {
+                    sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_cart, user);
+                    return;
+                }
+                showChoiceDialog("CART", "LAMP", user);
+                break;
+            case ACTION_UNBLOCK_PICKAXE_CART:
+                if (pickaxe.getDrawable() == null && cart.getDrawable() == null) {
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (pickaxe.getDrawable() == null) {
+                    sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_cart, user);
+                    return;
+                }
+                if (cart.getDrawable() == null) {
+                    sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_pickaxe, user);
+                    return;
+                }
+                showChoiceDialog("PICKAXE", "CART", user);
+                break;
+            case ACTION_UNBLOCK_LAMP_PICKAXE:
+                if (lamp.getDrawable() == null && pickaxe.getDrawable() == null) {
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (lamp.getDrawable() == null) {
+                    sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_pickaxe, user);
+                    return;
+                }
+                if (pickaxe.getDrawable() == null) {
+                    sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_lamp, user);
+                    return;
+                }
+                showChoiceDialog("LAMP", "PICKAXE", user);
+                break;
+            default:
+                throw new IllegalStateException();
+        }
+    }
+
+    public void showChoiceDialog(String option1, String option2, String user) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog dialog = builder.setMessage("")
+                .setPositiveButton(option1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        sendMoveToDb("6", selectedCardIndex, nameToId(option1), user);
+                    }
+                })
+                .setNegativeButton(option2, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        sendMoveToDb("6", selectedCardIndex, nameToId(option2), user);
+                    }
+                })
+                .create();
+        dialog.show();
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(R.drawable.bgd_dialog);
+    }
+
+    int nameToId(String name) {
+        switch (name) {
+            case "PICKAXE":
+                return R.drawable.card_action_unblock_pickaxe;
+            case "CART":
+                return R.drawable.card_action_unblock_cart;
+            case "LAMP":
+                return R.drawable.card_action_unblock_lamp;
+            default:
+                throw new IllegalStateException();
+        }
     }
 
     public boolean isBlocked() {
