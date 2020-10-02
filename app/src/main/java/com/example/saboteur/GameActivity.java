@@ -278,7 +278,7 @@ public class GameActivity extends AppCompatActivity {
             if ((x == 1 || x == 3 ||  x == 5) && y == 9) {
                 setImageResourceAndTag(cards.get(x).get(y), finishCardIds.get((x - 1) / 2));
                 if (checkWin(x, y)) {
-                    Toast.makeText(this, "Dwarves won", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Dwarves won", Toast.LENGTH_SHORT).show();
                     return true;
                 } else {
                     // TODO : apeleaza functie care schimba cartea
@@ -526,7 +526,7 @@ public class GameActivity extends AppCompatActivity {
                 break;
             case 4:
                 if (!isPlayerTurn()) {
-                    Toast.makeText(this, "Burn card", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Burn card", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case 5:
@@ -615,11 +615,13 @@ public class GameActivity extends AppCompatActivity {
                 }
             });
         } else {
-            selectedCard.setBackgroundColor(Color.TRANSPARENT);
-            selectedCard.setImageDrawable(null);
-            selectedCard.setTag(null);
-            selectedCard = null;
-            selectedCardIndex = -1;
+            if (selectedCard != null) {
+                selectedCard.setBackgroundColor(Color.TRANSPARENT);
+                selectedCard.setImageDrawable(null);
+                selectedCard.setTag(null);
+                selectedCard = null;
+                selectedCardIndex = -1;
+            }
         }
     }
 
@@ -663,7 +665,7 @@ public class GameActivity extends AppCompatActivity {
         // if selected card is road
         if (!(hand.get(selectedCardIndex).getCard() instanceof CardType.ActionType)) {
             if (isBlocked()) {
-                Toast.makeText(this, "You're blocked", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "You're blocked", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (checkPlace(lin, col)) {
@@ -888,21 +890,21 @@ public class GameActivity extends AppCompatActivity {
             switch (selectedBlock) {
                 case ACTION_BLOCK_CART:
                     if (cart.getDrawable() != null) {
-                        Toast.makeText(this, "Already blocked", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Already blocked", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     sendMoveToDb("5", selectedCardIndex, R.drawable.card_action_block_cart, user);
                     break;
                 case ACTION_BLOCK_LAMP:
                     if (lamp.getDrawable() != null) {
-                        Toast.makeText(this, "Already blocked", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Already blocked", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     sendMoveToDb("5", selectedCardIndex, R.drawable.card_action_block_lamp, user);
                     break;
                 case ACTION_BLOCK_PICKAXE:
                     if (pickaxe.getDrawable() != null) {
-                        Toast.makeText(this, "Already blocked", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Already blocked", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     sendMoveToDb("5", selectedCardIndex, R.drawable.card_action_block_pickaxe, user);
@@ -917,28 +919,28 @@ public class GameActivity extends AppCompatActivity {
         switch (selectedUnblock) {
             case ACTION_UNBLOCK_CART:
                 if (cart.getDrawable() == null) {
-                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_cart, user);
                 break;
             case ACTION_UNBLOCK_LAMP:
                 if (lamp.getDrawable() == null) {
-                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_lamp, user);
                 break;
             case ACTION_UNBLOCK_PICKAXE:
                 if (pickaxe.getDrawable() == null) {
-                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 sendMoveToDb("6", selectedCardIndex, R.drawable.card_action_unblock_pickaxe, user);
                 break;
             case ACTION_UNBLOCK_CART_LAMP:
                 if (cart.getDrawable() == null && lamp.getDrawable() == null) {
-                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (cart.getDrawable() == null) {
@@ -953,7 +955,7 @@ public class GameActivity extends AppCompatActivity {
                 break;
             case ACTION_UNBLOCK_PICKAXE_CART:
                 if (pickaxe.getDrawable() == null && cart.getDrawable() == null) {
-                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (pickaxe.getDrawable() == null) {
@@ -968,7 +970,7 @@ public class GameActivity extends AppCompatActivity {
                 break;
             case ACTION_UNBLOCK_LAMP_PICKAXE:
                 if (lamp.getDrawable() == null && pickaxe.getDrawable() == null) {
-                    Toast.makeText(this, "Not blocked", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Not blocked", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (lamp.getDrawable() == null) {
@@ -1044,11 +1046,11 @@ public class GameActivity extends AppCompatActivity {
 
     public void burnCard(View view) {
         if (!isPlayerTurn()) {
-            Toast.makeText(this, "Not your turn", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Not your turn", Toast.LENGTH_SHORT).show();
             return;
         }
         if (selectedCard == null) {
-            Toast.makeText(this, "No card selected", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No card selected", Toast.LENGTH_SHORT).show();
             return;
         }
         sendMoveToDb("4", selectedCardIndex);

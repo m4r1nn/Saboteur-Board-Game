@@ -96,6 +96,7 @@ public class JoinActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Log.d(LOG_TAG, "User adaugat cu success");
+                            Toast.makeText(JoinActivity.this, "Joined!", Toast.LENGTH_SHORT).show();
                             listener = docRef.collection(START_PATH).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
