@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -416,6 +417,15 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private boolean emptyHand() {
+        for (ImageView image : handView) {
+            if (image.getDrawable() != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void sendMoveToDb(int lin, int col, String type, boolean rotation, int index) {
         Log.d(LOG_TAG, "SIZE IN send" + names.size());
         Map<String, String> docData = new HashMap<>();
@@ -459,17 +469,27 @@ public class GameActivity extends AppCompatActivity {
         db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
     }
 
+    public void sendMoveToDb(String code) {
+        Map<String, String> docData = new HashMap<>();
+        docData.put("Code", code);
+        db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
+    }
+
     private void doMove(Map<String, Object> info) {
         int code = Integer.parseInt((String) Objects.requireNonNull(info.get("Code")));
         int lin, col;
         String user;
         int drawable, index;
         Log.d(LOG_TAG, "SIZE IN get doMove3" + names.size());
-        if (isPlayerTurn()) {
+        if (isPlayerTurn() && code != 0) {
             selectedCardIndex = Integer.parseInt((String) Objects.requireNonNull(info.get("Index")));
             selectedCard = handView.get(selectedCardIndex);
         }
         switch (code) {
+            case 0:
+                // saboteurs win!
+                Toast.makeText(this, "Saboteurs win!", Toast.LENGTH_SHORT).show();
+                break;
             case 1:
                 // build road
                 lin = Integer.parseInt((String) Objects.requireNonNull(info.get("Line")));
@@ -615,6 +635,9 @@ public class GameActivity extends AppCompatActivity {
                             texts.get(moveCounter % names.size()).setTextColor(Color.BLACK);
                             moveCounter++;
                             texts.get(moveCounter % names.size()).setTextColor(Color.YELLOW);
+                            if (isPlayerTurn() && emptyHand()) {
+                                sendMoveToDb("0");
+                            }
                         }
                     }
                 });
