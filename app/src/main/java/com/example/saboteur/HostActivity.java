@@ -271,6 +271,7 @@ public class HostActivity extends AppCompatActivity {
         buttonSound.initSound();
         buttonSound.start();
         Log.d(LOG_TAG, roomCode);
+        // TODO: uncomment this
 //        if (playersCount < 3) {
 //            Toast.makeText(this, "Too few players", Toast.LENGTH_LONG).show();
 //            return;

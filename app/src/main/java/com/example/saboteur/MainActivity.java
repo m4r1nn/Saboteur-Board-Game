@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void joinApp(View view) {
         Toast.makeText(this, "join", Toast.LENGTH_SHORT).show();
+        Log.d(LOG_TAG, "entered join activity");
         buttonSound.initSound();
         buttonSound.start();
         Intent intent = new Intent(this, JoinActivity.class);

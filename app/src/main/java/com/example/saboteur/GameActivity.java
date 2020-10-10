@@ -87,6 +87,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
         buttonSound = new Sound(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.button_sound));
         roleText = findViewById(R.id.role_text);
+        Log.d(LOG_TAG, "on_create");
 
 
 
@@ -278,7 +279,7 @@ public class GameActivity extends AppCompatActivity {
             if ((x == 1 || x == 3 ||  x == 5) && y == 9) {
                 setImageResourceAndTag(cards.get(x).get(y), finishCardIds.get((x - 1) / 2));
                 if (checkWin(x, y)) {
-                    Toast.makeText(this, "Dwarves won", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Dwarves won!", Toast.LENGTH_SHORT).show();
                     return true;
                 } else {
                     // TODO : apeleaza functie care schimba cartea
@@ -335,6 +336,12 @@ public class GameActivity extends AppCompatActivity {
         return false;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "on_resume");
+    }
+
     public void showExitDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         AlertDialog dialog = builder.setMessage("Are you sure?")
@@ -343,8 +350,8 @@ public class GameActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         buttonSound.initSound();
                         buttonSound.start();
-                        finish();
                         startActivity(new Intent(GameActivity.this, MainActivity.class));
+                        finish();
                     }
                 })
                 .setNegativeButton("no", new DialogInterface.OnClickListener() {
@@ -380,7 +387,7 @@ public class GameActivity extends AppCompatActivity {
 
     @SuppressLint({"UseCompatLoadingForDrawables", "ResourceAsColor"})
     synchronized public void selectCard(View view) {
-        Log.d(LOG_TAG, "SIZE IN SELECTEDCARD" + names.size());
+        Log.d(LOG_TAG, "SIZE IN SELECTED CARD" + names.size());
         if (!isPlayerTurn()) {
             Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
             return;
@@ -487,8 +494,8 @@ public class GameActivity extends AppCompatActivity {
         }
         switch (code) {
             case 0:
-                // saboteurs win!
-                Toast.makeText(this, "Saboteurs win!", Toast.LENGTH_SHORT).show();
+                // saboteurs won!
+                Toast.makeText(this, "Saboteurs won!", Toast.LENGTH_SHORT).show();
                 break;
             case 1:
                 // build road

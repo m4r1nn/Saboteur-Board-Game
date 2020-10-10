@@ -107,8 +107,8 @@ public class JoinActivity extends AppCompatActivity {
                                         for (DocumentChange documentChange : value.getDocumentChanges()) {
                                             if (documentChange.getDocument().getData().get("start") != null) {
                                                 Log.d(LOG_TAG, "Intra pe aici");
-                                                finish();
                                                 startActivity(prepareIntent(new Intent(JoinActivity.this, GameActivity.class)));
+                                                finish();
                                             }
                                         }
                                     }

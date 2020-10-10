@@ -11,13 +11,16 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".GameActivity"
+            android:noHistory="true"
             android:screenOrientation="landscape" />
         <activity
             android:name=".JoinActivity"
+            android:noHistory="true"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".HostActivity"
+            android:noHistory="true"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="landscape" />
         <activity
