@@ -45,12 +45,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -61,6 +63,7 @@ public class GameActivity extends AppCompatActivity {
     private final String COLLECTION_NAME = "test";
     private final String DECK_PATH = "deck";
     public String roundZero = "Round0";
+    private boolean isHost;
     ArrayList<Integer> finishCardIds;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     volatile ArrayList<String> names = new ArrayList<>();
@@ -137,6 +140,7 @@ public class GameActivity extends AppCompatActivity {
         roomCode = bundle.getString("roomCode");
         username = bundle.getString("username");
         roundZero = bundle.getString("round");
+        isHost = bundle.getBoolean("host");
         assert roomCode != null;
         Log.d(LOG_TAG, roomCode);
 
@@ -290,6 +294,7 @@ public class GameActivity extends AppCompatActivity {
                 setImageResourceAndTag(cards.get(x).get(y), finishCardIds.get((x - 1) / 2));
                 if (checkWin(x, y)) {
                     Toast.makeText(this, "Dwarves won!", Toast.LENGTH_SHORT).show();
+                    showFinishDialog("Dwarves won");
                     return true;
                 } else {
                     // TODO : apeleaza functie care schimba cartea
@@ -391,15 +396,81 @@ public class GameActivity extends AppCompatActivity {
         buttonSound.stopSound();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void addCardsToDb() {
+        Deck deck = Deck.getInstance();
+        deck.buildDeck();
+        int numberCards;
+        if (names.size() < 5) {
+            numberCards = 6;
+        } else if (names.size() < 7) {
+            numberCards = 5;
+        } else {
+            numberCards = 4;
+        }
+        ArrayList<String> roles = prepareRoles();
+        ArrayList<String> endCards = deck.getEndCards();
+        for (int i = 0; i < names.size(); i++) {
+            ArrayList<String> cardTypes = new ArrayList<>();
+            for (int j = 0; j < numberCards; j++) {
+                Card c = deck.draw();
+                if (c != null) {
+                    cardTypes.add(c.getCard().getName());
+                }
+            }
+            Map<String, Object> docData = new HashMap<>();
+            docData.put("cards", cardTypes);
+            docData.put("role", roles.get(i));
+            docData.put("endCards", endCards);
+            db.collection(roomCode).document(roundZero).collection(DECK_PATH).document(names.get(i)).set(docData);
+        }
+
+
+        Card c = deck.draw();
+        while (c != null) {
+            Map<String, Object> docData = new HashMap<>();
+            docData.put("card", c.getCard().getName());
+            db.collection(roomCode).document(roundZero).collection(DECK_PATH).document("Available").collection("Cards").add(docData);
+            c = deck.draw();
+        }
+    }
+
+    public ArrayList<String> prepareRoles() {
+        ArrayList<String> roles = new ArrayList<>();
+        int saboteursCount = 1;
+        if (names.size() > 3) {
+            saboteursCount++;
+        }
+        if (names.size() > 5) {
+            saboteursCount++;
+        }
+        if (names.size() > 8) {
+            saboteursCount++;
+        }
+        for (int i = 0; i < saboteursCount; i++) {
+            roles.add("Saboteur");
+        }
+        for (int i = saboteursCount; i <= names.size(); i++) {
+            roles.add("Dwarf");
+        }
+        Collections.shuffle(roles);
+        return roles;
+    }
+
     public void showFinishDialog(String winnerMessage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         AlertDialog dialog = builder.setMessage(winnerMessage)
                 .setPositiveButton("Play again", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         buttonSound.initSound();
                         buttonSound.start();
-
+                        if (isHost) {
+                            addCardsToDb();
+                        }
+                        startActivity(prepareIntent(new Intent(GameActivity.this, GameActivity.class)));
+                        finish();
                     }
                 })
                 .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
@@ -408,8 +479,8 @@ public class GameActivity extends AppCompatActivity {
                         buttonSound.initSound();
                         buttonSound.start();
                         startActivity(new Intent(GameActivity.this, MainActivity.class));
-                        finish();
                         dialogInterface.cancel();
+                        finish();
                     }
                 })
                 .create();

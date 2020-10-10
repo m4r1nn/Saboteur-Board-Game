@@ -201,6 +201,7 @@ public class HostActivity extends AppCompatActivity {
         bundle.putString("roomCode", codeRoomView.getText().toString().replaceAll("\n", ""));
         bundle.putString("username", usernameView.getText().toString());
         bundle.putString("round", roundZero);
+        bundle.putBoolean("host", true);
         intent.putExtras(bundle);
         return intent;
     }

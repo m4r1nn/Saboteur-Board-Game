@@ -68,6 +68,7 @@ public class JoinActivity extends AppCompatActivity {
         bundle.putString("roomCode", joinCodeVIew.getText().toString());
         bundle.putString("username", joinUserView.getText().toString());
         bundle.putString("round", roundZero);
+        bundle.putBoolean("host", false);
         intent.putExtras(bundle);
         return intent;
     }
