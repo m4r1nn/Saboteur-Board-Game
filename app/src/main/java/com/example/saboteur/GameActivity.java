@@ -60,6 +60,7 @@ public class GameActivity extends AppCompatActivity {
     private final String DATABASE_NAME = "users";
     private final String COLLECTION_NAME = "test";
     private final String DECK_PATH = "deck";
+    public String roundZero = "Round0";
     ArrayList<Integer> finishCardIds;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     volatile ArrayList<String> names = new ArrayList<>();
@@ -140,7 +141,7 @@ public class GameActivity extends AppCompatActivity {
         Log.d(LOG_TAG, roomCode);
 
 
-        db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(queryDocumentSnapshots -> {
+        db.collection(roomCode).document(roundZero).collection(COLLECTION_NAME).get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (DocumentChange documentSnapshot : queryDocumentSnapshots.getDocumentChanges()) {
                 names.add(Objects.requireNonNull(documentSnapshot.getDocument().get("user")).toString());
                 icons.add(Integer.parseInt(Objects.requireNonNull(documentSnapshot.getDocument().get("photo")).toString()));
@@ -167,7 +168,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void showCardNumber() {
         TextView cardNumberText = findViewById(R.id.cardNumberText);
-        db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document("Available")
+        db.collection(roomCode).document(roundZero).collection(DECK_PATH).document("Available")
                 .collection("Cards").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -202,7 +203,7 @@ public class GameActivity extends AppCompatActivity {
             handView.add((ImageView) findViewById(getResources().getIdentifier("card_in_hand_" + i, "id", getPackageName())));
         }
 
-        db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).
+        db.collection(roomCode).document(roundZero).collection(DECK_PATH).
                 document(username).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             @SuppressWarnings("unchecked")
@@ -469,7 +470,7 @@ public class GameActivity extends AppCompatActivity {
         docData.put("Index", String.valueOf(index));
         // code 1 - road/block road
         docData.put("Code", "1");
-        db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
+        db.collection(roomCode).document(roundZero).collection("moves").add(docData);
     }
 
     public void sendMoveToDb(int lin, int col, String code, int index) {
@@ -480,7 +481,7 @@ public class GameActivity extends AppCompatActivity {
         // code 3 - AVALANCHE
         docData.put("Code", code);
         docData.put("Index", String.valueOf(index));
-        db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
+        db.collection(roomCode).document(roundZero).collection("moves").add(docData);
     }
 
     public void sendMoveToDb(String code, int index) {
@@ -488,7 +489,7 @@ public class GameActivity extends AppCompatActivity {
         // code 4 - Burn card
         docData.put("Code", code);
         docData.put("Index", String.valueOf(index));
-        db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
+        db.collection(roomCode).document(roundZero).collection("moves").add(docData);
     }
 
     public void sendMoveToDb(String code, int index, int drawable, String user) {
@@ -499,13 +500,13 @@ public class GameActivity extends AppCompatActivity {
         docData.put("Index", String.valueOf(index));
         docData.put("drawable",String.valueOf(drawable));
         docData.put("user", user);
-        db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
+        db.collection(roomCode).document(roundZero).collection("moves").add(docData);
     }
 
     public void sendMoveToDb(String code) {
         Map<String, String> docData = new HashMap<>();
         docData.put("Code", code);
-        db.collection(DATABASE_NAME).document(roomCode).collection("moves").add(docData);
+        db.collection(roomCode).document(roundZero).collection("moves").add(docData);
     }
 
     private void doMove(Map<String, Object> info) {
@@ -625,14 +626,14 @@ public class GameActivity extends AppCompatActivity {
     synchronized public void drawCardFromDeck() {
         TextView cardNumberText = findViewById(R.id.cardNumberText);
         if (Integer.parseInt(cardNumberText.getText().toString()) > 0) {
-            db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).
+            db.collection(roomCode).document(roundZero).collection(DECK_PATH).
                     document("Available").collection("Cards").
                     limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : Objects.requireNonNull(task.getResult())) {
                         Log.d(LOG_TAG, (String) Objects.requireNonNull(queryDocumentSnapshot.getData().get("card")));
-                        db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).
+                        db.collection(roomCode).document(roundZero).collection(DECK_PATH).
                                 document("Available").collection("Cards").
                                 document(queryDocumentSnapshot.getId()).delete();
                         handView.get(selectedCardIndex).setRotation(0);
@@ -660,7 +661,7 @@ public class GameActivity extends AppCompatActivity {
 
     synchronized private void listenForMoves() {
         Log.d(LOG_TAG, "SIZE IN get listen for move" + names.size());
-        db.collection(DATABASE_NAME).document(roomCode).collection("moves").
+        db.collection(roomCode).document(roundZero).collection("moves").
                 addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {

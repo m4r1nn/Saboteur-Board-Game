@@ -41,6 +41,7 @@ public class JoinActivity extends AppCompatActivity {
     final private String COLLECTION_NAME = "test";
     final private String DATABASE_NAME = "users";
     private final String START_PATH = "start";
+    public String roundZero = "Round0";
     private final String LOG_TAG = JoinActivity.class.getSimpleName();
 
     private Sound buttonSound = null;
@@ -85,7 +86,7 @@ public class JoinActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Log.d(LOG_TAG, code);
 
-        final DocumentReference docRef = db.collection(DATABASE_NAME).document(code);
+        final DocumentReference docRef = db.collection(code).document(roundZero);
 
         // TODO : maybe refactor this in the future
         docRef.collection(COLLECTION_NAME).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
