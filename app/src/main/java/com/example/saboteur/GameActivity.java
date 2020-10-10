@@ -381,6 +381,32 @@ public class GameActivity extends AppCompatActivity {
         buttonSound.stopSound();
     }
 
+    public void showFinishDialog(String winnerMessage) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog dialog = builder.setMessage(winnerMessage)
+                .setPositiveButton("Play again", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        buttonSound.initSound();
+                        buttonSound.start();
+
+                    }
+                })
+                .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        buttonSound.initSound();
+                        buttonSound.start();
+                        startActivity(new Intent(GameActivity.this, MainActivity.class));
+                        finish();
+                        dialogInterface.cancel();
+                    }
+                })
+                .create();
+        dialog.show();
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(R.drawable.bgd_dialog);
+    }
+
     public boolean isPlayerTurn() {
         return username.equals(names.get(moveCounter % names.size()));
     }

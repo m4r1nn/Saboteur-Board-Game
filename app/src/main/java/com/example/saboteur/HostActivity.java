@@ -80,6 +80,7 @@ public class HostActivity extends AppCompatActivity {
 
     private ArrayList<Integer> icons = null;
     private int index = 0;
+    public String roundZero = "Round0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +123,7 @@ public class HostActivity extends AppCompatActivity {
         Map<String, Object> host_user = new HashMap<>();
         host_user.put("user", username);
         // create a room (document) for the host on the Cloud Firestore
-        db.collection(DATABASE_NAME).document(codeRoom).collection(COLLECTION_NAME).add(host_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection(codeRoom).document(roundZero).collection(COLLECTION_NAME).add(host_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(LOG_TAG, "Document written with id:" + documentReference.getId());
@@ -137,7 +138,7 @@ public class HostActivity extends AppCompatActivity {
 
     public void waitForPlayers(String codeRoom) {
         // event listener to wait for the rest of the players. When there's a new player, data will come
-        listener = db.collection(DATABASE_NAME).document(codeRoom).collection(COLLECTION_NAME).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        listener = db.collection(codeRoom).document(roundZero).collection(COLLECTION_NAME).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -305,8 +306,8 @@ public class HostActivity extends AppCompatActivity {
                         db.collection(DATABASE_NAME).document(roomCode).collection(START_PATH).add(start).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentReference> task) {
-                                finish();
                                 startActivity(prepareIntent(new Intent(HostActivity.this, GameActivity.class)));
+                                finish();
                             }
                         });
                     }
