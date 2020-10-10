@@ -123,7 +123,7 @@ public class HostActivity extends AppCompatActivity {
         Map<String, Object> host_user = new HashMap<>();
         host_user.put("user", username);
         // create a room (document) for the host on the Cloud Firestore
-        db.collection(codeRoom).document(roundZero).collection(COLLECTION_NAME).add(host_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection(codeRoom).document("extra").collection("users").add(host_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(LOG_TAG, "Document written with id:" + documentReference.getId());
@@ -233,7 +233,7 @@ public class HostActivity extends AppCompatActivity {
             docData.put("cards", cardTypes);
             docData.put("role", roles.get(i));
             docData.put("endCards", endCards);
-            db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document(names.get(i)).set(docData);
+            db.collection(roomCode).document(roundZero).collection(DECK_PATH).document(names.get(i)).set(docData);
         }
 
 
@@ -241,7 +241,7 @@ public class HostActivity extends AppCompatActivity {
         while (c != null) {
             Map<String, Object> docData = new HashMap<>();
             docData.put("card", c.getCard().getName());
-            db.collection(DATABASE_NAME).document(roomCode).collection(DECK_PATH).document("Available").collection("Cards").add(docData);
+            db.collection(roomCode).document(roundZero).collection(DECK_PATH).document("Available").collection("Cards").add(docData);
             c = deck.draw();
         }
     }
@@ -278,13 +278,13 @@ public class HostActivity extends AppCompatActivity {
 //            return;
 //        }
         listener.remove();
-        db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection(roomCode).document(roundZero).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 icons = prepareIcons();
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                     String docId = documentSnapshot.getId();
-                    db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).document(docId).update("photo", String.valueOf(icons.get(index++))).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    db.collection(roomCode).document("extra").collection("users").document(docId).update("photo", String.valueOf(icons.get(index++))).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d(LOG_TAG, "Updated the photo in the database");
@@ -295,7 +295,7 @@ public class HostActivity extends AppCompatActivity {
                 Map <String, Object> start = new HashMap<>();
                 start.put("start", 1);
 
-                db.collection(DATABASE_NAME).document(roomCode).collection(START_PATH).add(start).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                db.collection(roomCode).document(roundZero).collection(START_PATH).add(start).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -303,7 +303,7 @@ public class HostActivity extends AppCompatActivity {
                         new Thread(HostActivity.this::addCardsToDb).start();
                         Map <String, Object> start = new HashMap<>();
                         start.put("start", 1);
-                        db.collection(DATABASE_NAME).document(roomCode).collection(START_PATH).add(start).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        db.collection(roomCode).document(roundZero).collection(START_PATH).add(start).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentReference> task) {
                                 startActivity(prepareIntent(new Intent(HostActivity.this, GameActivity.class)));
@@ -333,12 +333,12 @@ public class HostActivity extends AppCompatActivity {
     }
 
     public void removeFromDB(final String roomCode) {
-        db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection(roomCode).document(roundZero).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
                     Log.d(LOG_TAG, "Delete document with id:" + documentSnapshot.getId() + "\n") ;
-                    db.collection(DATABASE_NAME).document(roomCode).collection(COLLECTION_NAME).document(documentSnapshot.getId()).delete();
+                    db.collection(roomCode).document(roundZero).collection(COLLECTION_NAME).document(documentSnapshot.getId()).delete();
                 }
                 Log.d(LOG_TAG, "empty db");
             }

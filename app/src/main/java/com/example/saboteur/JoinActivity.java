@@ -86,19 +86,19 @@ public class JoinActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Log.d(LOG_TAG, code);
 
-        final DocumentReference docRef = db.collection(code).document(roundZero);
+//        final DocumentReference docRef = db.collection(code).document(roundZero);
 
         // TODO : maybe refactor this in the future
-        docRef.collection(COLLECTION_NAME).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection(code).document("extra").collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull final Task<QuerySnapshot> task) {
                 if (task.getResult().size() > 0 && task.getResult().size() < MAX_PLAYERS) {
-                    docRef.collection(COLLECTION_NAME).add(join_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    db.collection(code).document("extra").collection("users").add(join_user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Log.d(LOG_TAG, "User adaugat cu success");
                             Toast.makeText(JoinActivity.this, "Joined!", Toast.LENGTH_SHORT).show();
-                            listener = docRef.collection(START_PATH).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            listener = db.collection(code).document(roundZero).collection(START_PATH).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                                     if (error != null) {

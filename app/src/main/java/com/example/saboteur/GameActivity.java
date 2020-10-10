@@ -70,7 +70,6 @@ public class GameActivity extends AppCompatActivity {
     ArrayList<ArrayList<ImageView>> cards = new ArrayList<>();
     ArrayList<Card> hand;
     ArrayList<ImageView> handView;
-    ArrayList<String> blockTypes = new ArrayList<>();
     ArrayList<ImageView> pickaxes = new ArrayList<>();
     ArrayList<ImageView> lamps = new ArrayList<>();
     ArrayList<ImageView> carts = new ArrayList<>();
@@ -141,7 +140,7 @@ public class GameActivity extends AppCompatActivity {
         Log.d(LOG_TAG, roomCode);
 
 
-        db.collection(roomCode).document(roundZero).collection(COLLECTION_NAME).get().addOnSuccessListener(queryDocumentSnapshots -> {
+        db.collection(roomCode).document("extra").collection("users").get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (DocumentChange documentSnapshot : queryDocumentSnapshots.getDocumentChanges()) {
                 names.add(Objects.requireNonNull(documentSnapshot.getDocument().get("user")).toString());
                 icons.add(Integer.parseInt(Objects.requireNonNull(documentSnapshot.getDocument().get("photo")).toString()));
