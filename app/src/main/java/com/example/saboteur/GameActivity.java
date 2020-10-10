@@ -136,6 +136,7 @@ public class GameActivity extends AppCompatActivity {
         assert bundle != null;
         roomCode = bundle.getString("roomCode");
         username = bundle.getString("username");
+        roundZero = bundle.getString("round");
         assert roomCode != null;
         Log.d(LOG_TAG, roomCode);
 
@@ -234,6 +235,15 @@ public class GameActivity extends AppCompatActivity {
                 Log.d(LOG_TAG, "fail listen", e);
             }
         });
+    }
+
+    public Intent prepareIntent(Intent intent) {
+        Bundle bundle = new Bundle();
+        bundle.putString("roomCode", roomCode);
+        bundle.putString("username", username);
+        bundle.putString("round", "Round1");
+        intent.putExtras(bundle);
+        return intent;
     }
 
     public void exitGame(View view) {

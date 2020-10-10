@@ -138,7 +138,7 @@ public class HostActivity extends AppCompatActivity {
 
     public void waitForPlayers(String codeRoom) {
         // event listener to wait for the rest of the players. When there's a new player, data will come
-        listener = db.collection(codeRoom).document(roundZero).collection(COLLECTION_NAME).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        listener = db.collection(codeRoom).document("extra").collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -200,6 +200,7 @@ public class HostActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("roomCode", codeRoomView.getText().toString().replaceAll("\n", ""));
         bundle.putString("username", usernameView.getText().toString());
+        bundle.putString("round", roundZero);
         intent.putExtras(bundle);
         return intent;
     }
@@ -278,7 +279,7 @@ public class HostActivity extends AppCompatActivity {
 //            return;
 //        }
         listener.remove();
-        db.collection(roomCode).document(roundZero).collection(COLLECTION_NAME).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection(roomCode).document("extra").collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 icons = prepareIcons();
